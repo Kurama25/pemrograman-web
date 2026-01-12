@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Statis vs Web Dinamis</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .comparison-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .web-type-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .card-icon {
+      font-size: 56px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .section-content {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .list-icon {
+      font-size: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .comparison-table {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .table-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      background: #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e3a8a;
+      padding: 18px;
+      font-weight: 700;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .table-cell {
+      background: #ffffff;
+      padding: 16px;
+      font-size: 15px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 32px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .comparison-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .web-type-card {
+        padding: 25px;
+      }
+
+      .card-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .card-icon {
+        font-size: 48px;
+      }
+
+      .card-title {
+        font-size: 26px;
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+
+      .section-content {
+        font-size: 14px;
+      }
+
+      .comparison-table {
+        padding: 20px;
+        overflow-x: auto;
+      }
+
+      .table-title {
+        font-size: 22px;
+      }
+
+      .table-header {
+        font-size: 15px;
+        padding: 12px 8px;
+      }
+
+      .table-cell {
+        font-size: 13px;
+        padding: 12px 8px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">Web Statis vs Web Dinamis</h1>
+     <p class="intro-text" id="introText">Memahami perbedaan fundamental antara website statis dan dinamis sangat penting dalam pengembangan web modern. Setiap jenis memiliki karakteristik, kelebihan, dan kasus penggunaan yang berbeda.</p>
+    </header>
+    <div class="comparison-container">
+     <div class="web-type-card">
+      <div class="card-header">
+       <div class="card-icon">
+        📄
+       </div>
+       <h2 class="card-title">Web Statis</h2>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">💡</span> Definisi</h3>
+       <p class="section-content">Website statis adalah website yang kontennya tetap dan tidak berubah kecuali dilakukan perubahan manual pada kode HTML, CSS, atau JavaScript. Setiap pengunjung akan melihat konten yang sama persis.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">⚙️</span> Cara Kerja</h3>
+       <p class="section-content">Server langsung mengirimkan file HTML, CSS, dan JavaScript yang sudah dibuat sebelumnya kepada browser pengunjung tanpa pemrosesan tambahan. Tidak ada interaksi dengan database atau server-side processing.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">✅</span> Kelebihan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🚀</span> <span>Loading sangat cepat karena tidak ada pemrosesan server</span>
+        </div>
+        <div class="list-item"><span class="list-icon">💰</span> <span>Biaya hosting murah dan mudah di-deploy</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🔒</span> <span>Lebih aman karena tidak ada koneksi database</span>
+        </div>
+        <div class="list-item"><span class="list-icon">📊</span> <span>SEO-friendly dan mudah diindex search engine</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">❌</span> Kekurangan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🔧</span> <span>Sulit untuk update konten secara massal</span>
+        </div>
+        <div class="list-item"><span class="list-icon">👥</span> <span>Tidak ada personalisasi untuk setiap user</span>
+        </div>
+        <div class="list-item"><span class="list-icon">📝</span> <span>Tidak cocok untuk website dengan konten yang sering berubah</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">🎯</span> Contoh Penggunaan</h3>
+       <p class="section-content">Landing page, portfolio, company profile, dokumentasi, blog sederhana, website informasi</p>
+      </div>
+     </div>
+     <div class="web-type-card">
+      <div class="card-header">
+       <div class="card-icon">
+        ⚡
+       </div>
+       <h2 class="card-title">Web Dinamis</h2>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">💡</span> Definisi</h3>
+       <p class="section-content">Website dinamis adalah website yang kontennya dapat berubah secara otomatis berdasarkan interaksi user, database, atau kondisi tertentu. Setiap pengunjung bisa melihat konten yang berbeda dan personal.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">⚙️</span> Cara Kerja</h3>
+       <p class="section-content">Server memproses request menggunakan server-side language (PHP, Python, Node.js), mengambil data dari database, dan men-generate HTML secara dinamis sebelum dikirim ke browser. Content Management System (CMS) sering digunakan.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">✅</span> Kelebihan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🔄</span> <span>Konten mudah diupdate melalui dashboard admin</span>
+        </div>
+        <div class="list-item"><span class="list-icon">👤</span> <span>Personalisasi konten untuk setiap user</span>
+        </div>
+        <div class="list-item"><span class="list-icon">💬</span> <span>Fitur interaktif seperti komentar, login, search</span>
+        </div>
+        <div class="list-item"><span class="list-icon">📈</span> <span>Skalabilitas tinggi untuk website besar</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">❌</span> Kekurangan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🐌</span> <span>Loading lebih lambat karena server processing</span>
+        </div>
+        <div class="list-item"><span class="list-icon">💸</span> <span>Biaya hosting lebih mahal dan kompleks</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🛡️</span> <span>Lebih rentan terhadap serangan (SQL injection, XSS)</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">🎯</span> Contoh Penggunaan</h3>
+       <p class="section-content">E-commerce, social media, forum, blog dengan CMS, aplikasi web, dashboard admin, sistem manajemen</p>
+      </div>
+     </div>
+    </div>
+    <div class="comparison-table">
+     <h2 class="table-title">📊 Perbandingan Ringkas</h2>
+     <div class="table-grid">
+      <div class="table-header">
+       Aspek
+      </div>
+      <div class="table-header">
+       Web Statis
+      </div>
+      <div class="table-header">
+       Web Dinamis
+      </div>
+      <div class="table-cell">
+       <strong>Kecepatan</strong>
+      </div>
+      <div class="table-cell">
+       ⚡ Sangat Cepat
+      </div>
+      <div class="table-cell">
+       🐢 Lebih Lambat
+      </div>
+      <div class="table-cell">
+       <strong>Biaya Hosting</strong>
+      </div>
+      <div class="table-cell">
+       💰 Murah
+      </div>
+      <div class="table-cell">
+       💸 Mahal
+      </div>
+      <div class="table-cell">
+       <strong>Keamanan</strong>
+      </div>
+      <div class="table-cell">
+       🔒 Lebih Aman
+      </div>
+      <div class="table-cell">
+       ⚠️ Perlu Perhatian Ekstra
+      </div>
+      <div class="table-cell">
+       <strong>Update Konten</strong>
+      </div>
+      <div class="table-cell">
+       🔧 Manual &amp; Sulit
+      </div>
+      <div class="table-cell">
+       ✨ Mudah via CMS
+      </div>
+      <div class="table-cell">
+       <strong>Interaktivitas</strong>
+      </div>
+      <div class="table-cell">
+       ❌ Terbatas
+      </div>
+      <div class="table-cell">
+       ✅ Tinggi
+      </div>
+      <div class="table-cell">
+       <strong>Database</strong>
+      </div>
+      <div class="table-cell">
+       ❌ Tidak Ada
+      </div>
+      <div class="table-cell">
+       ✅ Ada
+      </div>
+      <div class="table-cell">
+       <strong>Teknologi</strong>
+      </div>
+      <div class="table-cell">
+       HTML, CSS, JS
+      </div>
+      <div class="table-cell">
+       PHP, Python, Node.js + Database
+      </div>
+      <div class="table-cell">
+       <strong>Cocok Untuk</strong>
+      </div>
+      <div class="table-cell">
+       Portfolio, Landing Page
+      </div>
+      <div class="table-cell">
+       E-commerce, Social Media
+      </div>
+     </div>
+    </div>
+    <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer"> <span>←</span> <span>Kembali ke Halaman Sebelumnya</span> </a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "Web Statis vs Web Dinamis",
+      intro_text: "Memahami perbedaan fundamental antara website statis dan dinamis sangat penting dalam pengembangan web modern. Setiap jenis memiliki karakteristik, kelebihan, dan kasus penggunaan yang berbeda.",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcd755406b1ce5e',t:'MTc2ODIyOTM0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

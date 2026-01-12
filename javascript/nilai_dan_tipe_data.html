@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nilai dan Tipe Data JavaScript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .section-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .type-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    .type-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-color: #fbbf24;
+    }
+
+    .type-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .type-icon {
+      font-size: 32px;
+    }
+
+    .type-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .type-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 15px;
+    }
+
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-keyword {
+      color: #c792ea;
+    }
+
+    .code-string {
+      color: #c3e88d;
+    }
+
+    .code-number {
+      color: #f78c6c;
+    }
+
+    .code-boolean {
+      color: #ff5370;
+    }
+
+    .code-comment {
+      color: #676e95;
+      font-style: italic;
+    }
+
+    .practice-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .practice-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .practice-description {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .editor-panel {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: #0f172a;
+      color: #fbbf24;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-editor {
+      width: 100%;
+      min-height: 300px;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+
+    .output-panel {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 300px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .run-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .run-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .clear-button {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .examples-list {
+      display: grid;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .example-item {
+      background: #f8fafc;
+      border-left: 4px solid #fbbf24;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .example-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .example-desc {
+      font-size: 15px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-content {
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .video-section {
+        padding: 25px 20px;
+      }
+
+      .video-title {
+        font-size: 20px;
+        flex-direction: column;
+      }
+
+      .section-card {
+        padding: 25px 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-icon {
+        font-size: 40px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .type-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .type-name {
+        font-size: 20px;
+      }
+
+      .type-description {
+        font-size: 14px;
+      }
+
+      .code-example {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .practice-section {
+        padding: 25px 20px;
+      }
+
+      .practice-title {
+        font-size: 24px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .practice-description {
+        font-size: 14px;
+      }
+
+      .editor-container {
+        grid-template-columns: 1fr;
+      }
+
+      .code-editor {
+        min-height: 250px;
+        font-size: 13px;
+      }
+
+      .output-panel {
+        min-height: 250px;
+        font-size: 13px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .run-button, .clear-button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+        font-size: 15px;
+      }
+
+      .example-title {
+        font-size: 16px;
+      }
+
+      .example-desc {
+        font-size: 13px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+
+      .info-title {
+        font-size: 16px;
+      }
+
+      .info-content {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">📊 Nilai dan Tipe Data JavaScript</h1>
+     <p class="intro-text" id="introText">Dalam JavaScript, tipe data adalah klasifikasi yang menentukan jenis nilai yang dapat disimpan dalam variabel. Tiga tipe data dasar yang paling sering digunakan adalah Number (angka), String (teks), dan Boolean (benar/salah).</p>
+    </header>
+    <div class="section-card" style="margin-bottom: 40px;">
+     <div class="section-header">
+      <div class="section-icon">
+       🔢
+      </div>
+      <h2 class="section-title">Sistem Bilangan dalam Komputer</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Sistem Bilangan?</span>
+      </div>
+      <p class="info-content">Sistem bilangan adalah cara untuk merepresentasikan angka. Komputer menggunakan berbagai sistem bilangan untuk menyimpan dan memproses data. Sistem yang paling umum adalah Desimal (basis 10), Biner (basis 2), dan Heksadesimal (basis 16).</p>
+     </div>
+     <div class="type-grid">
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">🔟</span>
+        <h3 class="type-name">Desimal (Basis 10)</h3>
+       </div>
+       <p class="type-description">Sistem bilangan yang kita gunakan sehari-hari. Menggunakan 10 digit: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.</p>
+       <div class="code-example"><span class="code-comment">// Contoh bilangan desimal</span> <span class="code-number">0</span> <span class="code-comment">// nol</span> <span class="code-number">10</span> <span class="code-comment">// sepuluh</span> <span class="code-number">25</span> <span class="code-comment">// dua puluh lima</span> <span class="code-number">100</span> <span class="code-comment">// seratus</span> <span class="code-number">255</span> <span class="code-comment">// dua ratus lima puluh lima</span> <span class="code-number">1000</span> <span class="code-comment">// seribu</span> <span class="code-comment">// Cara kerja: setiap posisi bernilai 10^n</span> <span class="code-comment">// 255 = (2×10²) + (5×10¹) + (5×10⁰)</span> <span class="code-comment">// = 200 + 50 + 5 = 255</span>
+       </div>
+      </div>
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">💾</span>
+        <h3 class="type-name">Biner (Basis 2)</h3>
+       </div>
+       <p class="type-description">Sistem bilangan yang digunakan komputer. Hanya menggunakan 2 digit: 0 dan 1 (disebut bit).</p>
+       <div class="code-example"><span class="code-comment">// Contoh bilangan biner (awalan 0b)</span> <span class="code-number">0b0</span> <span class="code-comment">// 0 dalam desimal</span> <span class="code-number">0b1</span> <span class="code-comment">// 1 dalam desimal</span> <span class="code-number">0b10</span> <span class="code-comment">// 2 dalam desimal</span> <span class="code-number">0b11</span> <span class="code-comment">// 3 dalam desimal</span> <span class="code-number">0b100</span> <span class="code-comment">// 4 dalam desimal</span> <span class="code-number">0b1010</span> <span class="code-comment">// 10 dalam desimal</span> <span class="code-number">0b11111111</span> <span class="code-comment">// 255 dalam desimal</span> <span class="code-comment">// Cara kerja: setiap posisi bernilai 2^n</span> <span class="code-comment">// 0b1010 = (1×2³)+(0×2²)+(1×2¹)+(0×2⁰)</span> <span class="code-comment">// = 8 + 0 + 2 + 0 = 10</span>
+       </div>
+      </div>
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">🎨</span>
+        <h3 class="type-name">Heksadesimal (Basis 16)</h3>
+       </div>
+       <p class="type-description">Sistem bilangan dengan 16 digit: 0-9 dan A-F (A=10, B=11, C=12, D=13, E=14, F=15). Sering digunakan untuk warna.</p>
+       <div class="code-example"><span class="code-comment">// Contoh bilangan heksadesimal (awalan 0x)</span> <span class="code-number">0x0</span> <span class="code-comment">// 0 dalam desimal</span> <span class="code-number">0xA</span> <span class="code-comment">// 10 dalam desimal</span> <span class="code-number">0xF</span> <span class="code-comment">// 15 dalam desimal</span> <span class="code-number">0x10</span> <span class="code-comment">// 16 dalam desimal</span> <span class="code-number">0xFF</span> <span class="code-comment">// 255 dalam desimal</span> <span class="code-number">0x1A</span> <span class="code-comment">// 26 dalam desimal</span> <span class="code-comment">// Penggunaan untuk warna RGB</span> <span class="code-string">"#FF0000"</span> <span class="code-comment">// Merah (R=255, G=0, B=0)</span> <span class="code-string">"#00FF00"</span> <span class="code-comment">// Hijau (R=0, G=255, B=0)</span> <span class="code-string">"#0000FF"</span> <span class="code-comment">// Biru (R=0, G=0, B=255)</span>
+       </div>
+      </div>
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">🔄</span>
+        <h3 class="type-name">Konversi Biner ke Desimal</h3>
+       </div>
+       <p class="type-description">Cara mengubah bilangan biner menjadi desimal dengan menjumlahkan nilai setiap posisi bit.</p>
+       <div class="code-example"><span class="code-comment">// Contoh: 0b1101 ke desimal</span> <span class="code-comment">// Posisi: 3 2 1 0</span> <span class="code-comment">// Bit: 1 1 0 1</span> <span class="code-comment">// Nilai: 8 4 0 1</span> <span class="code-comment">// Total: 8 + 4 + 0 + 1 = 13</span> <span class="code-number">0b1101</span> <span class="code-comment">// = 13 desimal</span> <span class="code-number">0b1111</span> <span class="code-comment">// = 15 desimal</span> <span class="code-number">0b10000</span> <span class="code-comment">// = 16 desimal</span> <span class="code-number">0b11001</span> <span class="code-comment">// = 25 desimal</span> <span class="code-comment">// Rumus: (bit × 2^posisi) untuk setiap bit</span>
+       </div>
+      </div>
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">🔄</span>
+        <h3 class="type-name">Konversi Heksa ke Desimal</h3>
+       </div>
+       <p class="type-description">Cara mengubah bilangan heksadesimal menjadi desimal dengan menjumlahkan nilai setiap posisi digit.</p>
+       <div class="code-example"><span class="code-comment">// Contoh: 0x2F ke desimal</span> <span class="code-comment">// Posisi: 1 0</span> <span class="code-comment">// Digit: 2 F (F = 15)</span> <span class="code-comment">// Nilai: 32 15</span> <span class="code-comment">// Total: 32 + 15 = 47</span> <span class="code-number">0x2F</span> <span class="code-comment">// = 47 desimal</span> <span class="code-number">0x64</span> <span class="code-comment">// = 100 desimal</span> <span class="code-number">0xA5</span> <span class="code-comment">// = 165 desimal</span> <span class="code-number">0xFF</span> <span class="code-comment">// = 255 desimal</span> <span class="code-comment">// Rumus: (digit × 16^posisi) untuk setiap digit</span>
+       </div>
+      </div>
+      <div class="type-card">
+       <div class="type-header"><span class="type-icon">📊</span>
+        <h3 class="type-name">Tabel Konversi</h3>
+       </div>
+       <p class="type-description">Perbandingan nilai dalam berbagai sistem bilangan untuk memudahkan pemahaman.</p>
+       <div class="code-example"><span class="code-comment">Desimal | Biner | Heksadesimal</span> <span class="code-comment">--------|------------|-------------</span> <span class="code-number">0</span> | <span class="code-number">0b0000</span> | <span class="code-number">0x0</span> <span class="code-number">1</span> | <span class="code-number">0b0001</span> | <span class="code-number">0x1</span> <span class="code-number">10</span> | <span class="code-number">0b1010</span> | <span class="code-number">0xA</span> <span class="code-number">15</span> | <span class="code-number">0b1111</span> | <span class="code-number">0xF</span> <span class="code-number">16</span> | <span class="code-number">0b10000</span> | <span class="code-number">0x10</span> <span class="code-number">100</span> | <span class="code-number">0b1100100</span> | <span class="code-number">0x64</span> <span class="code-number">255</span> | <span class="code-number">0b11111111</span>| <span class="code-number">0xFF</span>
+       </div>
+      </div>
+     </div>
+     <div class="info-box" style="margin-top: 25px;">
+      <div class="info-title"><span>🎯</span> <span>Mengapa Sistem Bilangan Penting?</span>
+      </div>
+      <p class="info-content" style="margin-bottom: 10px;"><strong>Biner:</strong> Komputer menggunakan biner karena transistor hanya memiliki dua status: on (1) dan off (0).<br><br><strong>Heksadesimal:</strong> Lebih ringkas untuk merepresentasikan data biner. 1 digit heksa = 4 bit biner (contoh: F = 1111).<br><br><strong>Desimal:</strong> Mudah dipahami manusia karena kita menggunakan sistem ini dalam kehidupan sehari-hari.</p>
+     </div>
+    </div>
+    <div class="video-section">
+     <h2 class="video-title"><span>🎥</span> <span>Video Pembelajaran</span></h2>
+     <div class="video-container"><iframe src="https://www.youtube.com/embed/1FAnrYu7LCM?si=QgAH5YemDFmM0orF" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     </div>
+    </div>
+    <div class="content-grid">
+     <div class="section-card">
+      <div class="section-header">
+       <div class="section-icon">
+        🔢
+       </div>
+       <h2 class="section-title">Number (Angka)</h2>
+      </div>
+      <div class="info-box">
+       <div class="info-title"><span>💡</span> <span>Apa itu Number?</span>
+       </div>
+       <p class="info-content">Number adalah tipe data untuk merepresentasikan angka. JavaScript tidak membedakan antara bilangan bulat (integer) dan desimal (floating point) - semuanya adalah tipe Number.</p>
+      </div>
+      <div class="type-grid">
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">🔢</span>
+         <h3 class="type-name">Bilangan Bulat</h3>
+        </div>
+        <p class="type-description">Angka tanpa pecahan desimal. Dapat berupa angka positif, negatif, atau nol.</p>
+        <div class="code-example"><span class="code-number">17</span> <span class="code-number">30</span> <span class="code-number">-5</span> <span class="code-number">0</span> <span class="code-number">1000</span>
+        </div>
+       </div>
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">🔢</span>
+         <h3 class="type-name">Bilangan Desimal</h3>
+        </div>
+        <p class="type-description">Angka dengan pecahan desimal, menggunakan titik (.) sebagai pemisah desimal.</p>
+        <div class="code-example"><span class="code-number">99.99</span> <span class="code-number">175.5</span> <span class="code-number">3.14159</span> <span class="code-number">87.5</span> <span class="code-number">0.25</span>
+        </div>
+       </div>
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">🔢</span>
+         <h3 class="type-name">Contoh Number Lainnya</h3>
+        </div>
+        <p class="type-description">Number dapat berupa angka sangat besar, sangat kecil, atau angka dengan banyak desimal.</p>
+        <div class="code-example"><span class="code-number">1000000</span> <span class="code-comment">// Satu juta</span> <span class="code-number">-273.15</span> <span class="code-comment">// Suhu Celsius terendah</span> <span class="code-number">0.001</span> <span class="code-comment">// Angka sangat kecil</span> <span class="code-number">365</span> <span class="code-comment">// Hari dalam setahun</span> <span class="code-number">2024</span> <span class="code-comment">// Tahun</span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="section-card">
+      <div class="section-header">
+       <div class="section-icon">
+        📝
+       </div>
+       <h2 class="section-title">String (Teks)</h2>
+      </div>
+      <div class="info-box">
+       <div class="info-title"><span>💡</span> <span>Apa itu String?</span>
+       </div>
+       <p class="info-content">String adalah tipe data untuk merepresentasikan teks atau karakter. String ditulis dalam tanda petik tunggal (''), petik ganda (""), atau backtick (``).</p>
+      </div>
+      <div class="type-grid">
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">📝</span>
+         <h3 class="type-name">Cara Membuat String</h3>
+        </div>
+        <p class="type-description">Ada tiga cara untuk membuat string di JavaScript: menggunakan petik tunggal, petik ganda, atau backtick.</p>
+        <div class="code-example"><span class="code-comment">// Petik tunggal</span> <span class="code-string">'Budi Santoso'</span> <span class="code-comment">// Petik ganda</span> <span class="code-string">"Ani Wijaya"</span> <span class="code-comment">// Backtick (template literal)</span> <span class="code-string">`Citra Dewi`</span>
+        </div>
+       </div>
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">📏</span>
+         <h3 class="type-name">Contoh String Lainnya</h3>
+        </div>
+        <p class="type-description">String dapat berisi angka, spasi, simbol, dan berbagai karakter lainnya.</p>
+        <div class="code-example"><span class="code-string">"JavaScript 2024"</span> <span class="code-string">"Email: user@example.com"</span> <span class="code-string">"Rp 150.000"</span> <span class="code-string">"⭐⭐⭐⭐⭐"</span> <span class="code-string">""</span> <span class="code-comment">// String kosong</span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="section-card">
+      <div class="section-header">
+       <div class="section-icon">
+        ✅
+       </div>
+       <h2 class="section-title">Boolean (Benar/Salah)</h2>
+      </div>
+      <div class="info-box">
+       <div class="info-title"><span>💡</span> <span>Apa itu Boolean?</span>
+       </div>
+       <p class="info-content">Boolean adalah tipe data yang hanya memiliki dua nilai: true (benar) atau false (salah). Boolean sangat penting untuk membuat keputusan dalam program.</p>
+      </div>
+      <div class="type-grid">
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">✅</span>
+         <h3 class="type-name">Nilai Boolean</h3>
+        </div>
+        <p class="type-description">Boolean hanya memiliki dua nilai: true (benar) dan false (salah). Nilai ini tidak menggunakan tanda petik.</p>
+        <div class="code-example"><span class="code-boolean">true</span> <span class="code-boolean">false</span> <span class="code-comment">// Contoh penggunaan</span> <span class="code-boolean">true</span> <span class="code-comment">// benar/aktif/ya</span> <span class="code-boolean">false</span> <span class="code-comment">// salah/nonaktif/tidak</span>
+        </div>
+       </div>
+       <div class="type-card">
+        <div class="type-header"><span class="type-icon">✅</span>
+         <h3 class="type-name">Kapan Menggunakan Boolean?</h3>
+        </div>
+        <p class="type-description">Boolean digunakan untuk situasi yang hanya memiliki dua kemungkinan jawaban.</p>
+        <div class="code-example"><span class="code-comment">// Status aktif/nonaktif</span> <span class="code-boolean">true</span> <span class="code-comment">// lampu menyala</span> <span class="code-boolean">false</span> <span class="code-comment">// lampu mati</span> <span class="code-comment">// Jawaban ya/tidak</span> <span class="code-boolean">true</span> <span class="code-comment">// ya, setuju</span> <span class="code-boolean">false</span> <span class="code-comment">// tidak, tidak setuju</span> <span class="code-comment">// Kondisi benar/salah</span> <span class="code-boolean">true</span> <span class="code-comment">// benar</span> <span class="code-boolean">false</span> <span class="code-comment">// salah</span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer">← Kembali ke Halaman Sebelumnya</span> </a>
+     </div>
+    </div>
+   </div>
+   <footer class="footer">
+    <p class="footer-text" id="footerText">© rsensei 2025</p>
+   </footer>
+   <script>
+    const defaultConfig = {
+      page_title: "����� Nilai dan Tipe Data JavaScript",
+      intro_text: "Dalam JavaScript, tipe data adalah klasifikasi yang menentukan jenis nilai yang dapat disimpan dalam variabel. Tiga tipe data dasar yang paling sering digunakan adalah Number (angka), String (teks), dan Boolean (benar/salah).",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+  </div>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcdb407505dce45',t:'MTc2ODIzMTkxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

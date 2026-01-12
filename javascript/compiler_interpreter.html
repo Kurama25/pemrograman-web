@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Compiler dan Interpreter</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .comparison-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .type-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .card-icon {
+      font-size: 56px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .card-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .section-content {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .list-icon {
+      font-size: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .flow-diagram {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 15px;
+      border: 2px dashed #cbd5e1;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      color: #475569;
+    }
+
+    .flow-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .flow-arrow {
+      font-size: 20px;
+      color: #fbbf24;
+    }
+
+    .comparison-table {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .table-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2px;
+      background: #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e3a8a;
+      padding: 18px;
+      font-weight: 700;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .table-cell {
+      background: #ffffff;
+      padding: 16px;
+      font-size: 15px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .examples-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 25px;
+    }
+
+    .example-box {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid #cbd5e1;
+    }
+
+    .example-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-tag {
+      display: inline-block;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 32px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .video-section {
+        padding: 25px 20px;
+      }
+
+      .video-title {
+        font-size: 22px;
+        flex-direction: column;
+      }
+
+      .comparison-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .type-card {
+        padding: 25px;
+      }
+
+      .card-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .card-icon {
+        font-size: 48px;
+      }
+
+      .card-title {
+        font-size: 26px;
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+
+      .section-content {
+        font-size: 14px;
+      }
+
+      .flow-step {
+        font-size: 13px;
+      }
+
+      .comparison-table {
+        padding: 20px;
+        overflow-x: auto;
+      }
+
+      .table-title {
+        font-size: 22px;
+      }
+
+      .table-header {
+        font-size: 15px;
+        padding: 12px 8px;
+      }
+
+      .table-cell {
+        font-size: 13px;
+        padding: 12px 8px;
+      }
+
+      .examples-section {
+        padding: 25px;
+      }
+
+      .examples-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .example-title {
+        font-size: 20px;
+      }
+
+      .language-tag {
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">Compiler dan Interpreter</h1>
+     <p class="intro-text" id="introText">Compiler dan Interpreter adalah dua metode fundamental dalam menerjemahkan kode program dari bahasa tingkat tinggi ke bahasa mesin. Memahami perbedaan keduanya sangat penting dalam pengembangan perangkat lunak modern.</p>
+    </header>
+    <div class="comparison-container">
+     <div class="type-card">
+      <div class="card-header">
+       <div class="card-icon">
+        🔨
+       </div>
+       <h2 class="card-title">Compiler</h2>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">💡</span> Definisi</h3>
+       <p class="section-content">Compiler adalah program yang menerjemahkan seluruh kode sumber (source code) ke dalam bahasa mesin (machine code) sekaligus sebelum program dijalankan. Hasil terjemahan disimpan dalam file executable yang dapat dijalankan berulang kali tanpa kompilasi ulang.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">⚙️</span> Cara Kerja</h3>
+       <p class="section-content">Proses kompilasi terdiri dari beberapa tahapan:</p>
+       <div class="flow-diagram">
+        <div class="flow-step"><span class="flow-arrow">1️⃣</span> <span><strong>Lexical Analysis:</strong> Memecah kode menjadi token</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">2️⃣</span> <span><strong>Syntax Analysis:</strong> Memeriksa struktur sintaks</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">3️⃣</span> <span><strong>Semantic Analysis:</strong> Memeriksa makna logika</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">4️⃣</span> <span><strong>Code Generation:</strong> Menghasilkan machine code</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">5️⃣</span> <span><strong>Code Optimization:</strong> Mengoptimalkan kode</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">✅</span> Kelebihan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🚀</span> <span>Eksekusi sangat cepat karena sudah dalam bentuk machine code</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🔍</span> <span>Error terdeteksi sebelum program dijalankan</span>
+        </div>
+        <div class="list-item"><span class="list-icon">⚡</span> <span>Optimasi kode lebih baik untuk performa maksimal</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🔒</span> <span>Source code terlindungi (tidak perlu didistribusikan)</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">❌</span> Kekurangan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">⏳</span> <span>Proses kompilasi membutuhkan waktu lama</span>
+        </div>
+        <div class="list-item"><span class="list-icon">💾</span> <span>Membutuhkan lebih banyak memori untuk kompilasi</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🖥️</span> <span>Platform-dependent (perlu dikompilasi ulang untuk OS berbeda)</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🐛</span> <span>Debugging lebih sulit karena error baru terlihat saat runtime</span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="type-card">
+      <div class="card-header">
+       <div class="card-icon">
+        ⚡
+       </div>
+       <h2 class="card-title">Interpreter</h2>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">💡</span> Definisi</h3>
+       <p class="section-content">Interpreter adalah program yang menerjemahkan dan mengeksekusi kode sumber baris per baris secara langsung tanpa menghasilkan file executable. Proses translasi dan eksekusi terjadi secara bersamaan saat program dijalankan.</p>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">⚙️</span> Cara Kerja</h3>
+       <p class="section-content">Proses interpretasi berjalan secara real-time:</p>
+       <div class="flow-diagram">
+        <div class="flow-step"><span class="flow-arrow">1️⃣</span> <span><strong>Read:</strong> Membaca satu baris kode</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">2️⃣</span> <span><strong>Parse:</strong> Menganalisis sintaks baris tersebut</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">3️⃣</span> <span><strong>Execute:</strong> Menjalankan instruksi langsung</span>
+        </div>
+        <div class="flow-step"><span class="flow-arrow">4️⃣</span> <span><strong>Repeat:</strong> Ulangi untuk baris berikutnya</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">✅</span> Kelebihan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🎯</span> <span>Mudah untuk testing dan debugging (error langsung terlihat)</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🌍</span> <span>Platform-independent (dapat dijalankan di berbagai OS)</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🔄</span> <span>Modifikasi kode langsung bisa dijalankan tanpa kompilasi</span>
+        </div>
+        <div class="list-item"><span class="list-icon">💡</span> <span>Cocok untuk pembelajaran dan prototyping cepat</span>
+        </div>
+       </div>
+      </div>
+      <div class="section">
+       <h3 class="section-title"><span class="section-icon">❌</span> Kekurangan</h3>
+       <div class="section-content">
+        <div class="list-item"><span class="list-icon">🐌</span> <span>Eksekusi lebih lambat karena translasi real-time</span>
+        </div>
+        <div class="list-item"><span class="list-icon">📂</span> <span>Membutuhkan source code untuk dijalankan</span>
+        </div>
+        <div class="list-item"><span class="list-icon">⚠️</span> <span>Error runtime hanya terdeteksi saat baris tersebut dieksekusi</span>
+        </div>
+        <div class="list-item"><span class="list-icon">🔓</span> <span>Source code harus didistribusikan (kurang aman)</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="video-section">
+     <h2 class="video-title"><span>🎥</span> <span>Video Penjelasan</span></h2>
+     <!-- <div class="video-container"><iframe src="https://youtu.be/gCBysZKiU3Y?si=rtfa6qyOK0PodOk5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     </div> -->
+      <div class="video-container">
+          <iframe 
+              width="560" 
+              height="315" 
+              src="https://www.youtube-nocookie.com/embed/gCBysZKiU3Y" 
+              title="YouTube video player" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerpolicy="strict-origin-when-cross-origin" 
+              allowfullscreen>
+          </iframe>
+      </div>
+    </div>
+    <div class="comparison-table">
+     <h2 class="table-title">📊 Perbandingan Compiler vs Interpreter</h2>
+     <div class="table-grid">
+      <div class="table-header">
+       Aspek
+      </div>
+      <div class="table-header">
+       Compiler
+      </div>
+      <div class="table-header">
+       Interpreter
+      </div>
+      <div class="table-cell">
+       <strong>Proses Translasi</strong>
+      </div>
+      <div class="table-cell">
+       Sekaligus (seluruh kode)
+      </div>
+      <div class="table-cell">
+       Baris per baris
+      </div>
+      <div class="table-cell">
+       <strong>Kecepatan Eksekusi</strong>
+      </div>
+      <div class="table-cell">
+       ⚡ Sangat Cepat
+      </div>
+      <div class="table-cell">
+       🐢 Lebih Lambat
+      </div>
+      <div class="table-cell">
+       <strong>Waktu Kompilasi</strong>
+      </div>
+      <div class="table-cell">
+       ⏳ Lama
+      </div>
+      <div class="table-cell">
+       ✨ Tidak Ada
+      </div>
+      <div class="table-cell">
+       <strong>Deteksi Error</strong>
+      </div>
+      <div class="table-cell">
+       Sebelum eksekusi
+      </div>
+      <div class="table-cell">
+       Saat runtime
+      </div>
+      <div class="table-cell">
+       <strong>Debugging</strong>
+      </div>
+      <div class="table-cell">
+       ❌ Lebih Sulit
+      </div>
+      <div class="table-cell">
+       ✅ Lebih Mudah
+      </div>
+      <div class="table-cell">
+       <strong>Portabilitas</strong>
+      </div>
+      <div class="table-cell">
+       Platform-dependent
+      </div>
+      <div class="table-cell">
+       Platform-independent
+      </div>
+      <div class="table-cell">
+       <strong>Memory Usage</strong>
+      </div>
+      <div class="table-cell">
+       💾 Tinggi (saat kompilasi)
+      </div>
+      <div class="table-cell">
+       💚 Rendah
+      </div>
+      <div class="table-cell">
+       <strong>Keamanan Kode</strong>
+      </div>
+      <div class="table-cell">
+       ��� Lebih Aman
+      </div>
+      <div class="table-cell">
+       🔓 Kurang Aman
+      </div>
+     </div>
+    </div>
+    <div class="examples-section">
+     <h2 class="table-title">🌟 Contoh Bahasa Pemrograman</h2>
+     <div class="examples-grid">
+      <div class="example-box">
+       <h3 class="example-title"><span>🔨</span> <span>Bahasa Compiled</span></h3>
+       <div><span class="language-tag">C</span> <span class="language-tag">C++</span> <span class="language-tag">Go</span> <span class="language-tag">Rust</span> <span class="language-tag">Swift</span> <span class="language-tag">Objective-C</span> <span class="language-tag">Fortran</span> <span class="language-tag">Pascal</span>
+       </div>
+      </div>
+      <div class="example-box">
+       <h3 class="example-title"><span>⚡</span> <span>Bahasa Interpreted</span></h3>
+       <div><span class="language-tag">Python</span> <span class="language-tag">JavaScript</span> <span class="language-tag">PHP</span> <span class="language-tag">Ruby</span> <span class="language-tag">Perl</span> <span class="language-tag">Bash</span> <span class="language-tag">R</span> <span class="language-tag">MATLAB</span>
+       </div>
+      </div>
+      <div class="example-box">
+       <h3 class="example-title"><span>🔄</span> <span>Hybrid (Compiled + Interpreted)</span></h3>
+       <div><span class="language-tag">Java (JVM)</span> <span class="language-tag">C# (.NET)</span> <span class="language-tag">Kotlin (JVM)</span> <span class="language-tag">Scala (JVM)</span>
+       </div>
+       <p style="margin-top: 15px; font-size: 14px; color: #64748b;"><strong>Note:</strong> Dikompilasi ke bytecode, kemudian diinterpretasi oleh Virtual Machine</p>
+      </div>
+      <div class="example-box">
+       <h3 class="example-title"><span>⚙️</span> <span>Just-In-Time (JIT) Compilation</span></h3>
+       <div><span class="language-tag">JavaScript (V8)</span> <span class="language-tag">Python (PyPy)</span> <span class="language-tag">Java (HotSpot)</span> <span class="language-tag">.NET (CLR)</span>
+       </div>
+       <p style="margin-top: 15px; font-size: 14px; color: #64748b;"><strong>Note:</strong> Kombinasi interpretasi dan kompilasi untuk performa optimal</p>
+      </div>
+     </div>
+    </div>
+    <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer"> <span>←</span> <span>Kembali ke Halaman Sebelumnya</span> </a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "Compiler dan Interpreter",
+      intro_text: "Compiler dan Interpreter adalah dua metode fundamental dalam menerjemahkan kode program dari bahasa tingkat tinggi ke bahasa mesin. Memahami perbedaan keduanya sangat penting dalam pengembangan perangkat lunak modern.",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcd8567d45bd083',t:'MTc2ODIzMDAwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Pembelajaran Pemrograman Web</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .code-editor {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .code-editor {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+        
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .function { color: #dcdcaa; }
+        .comment { color: #6a9955; }
+        
+        .tab-active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-container" class="w-full h-full overflow-auto gradient-bg">
+   <div class="w-full min-h-full px-4 py-8"><!-- Header -->
+    <div class="max-w-6xl mx-auto mb-6 md:mb-8 text-center">
+     <h1 id="main-title" class="text-3xl md:text-5xl font-bold text-white mb-2 md:mb-3 float-animation">🚀 Pemrograman Web Kelas XI</h1>
+     <p id="subtitle" class="text-sm md:text-xl text-white opacity-90">Client Side Programming - Belajar JavaScript dengan Seru!</p>
+     <div class="mt-4 md:mt-6 progress-bar max-w-md mx-auto">
+      <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+     </div>
+     <p id="progress-text" class="text-white mt-2 text-xs md:text-sm">Progress: 0/7 Materi</p>
+    </div><!-- Navigation Tabs -->
+    <div class="max-w-6xl mx-auto mb-6"><!-- Mobile Menu Button -->
+     <div class="md:hidden mb-4"><button onclick="toggleMobileMenu()" id="mobile-menu-btn" class="w-full bg-white bg-opacity-20 backdrop-blur-sm px-6 py-4 rounded-2xl font-semibold text-white flex items-center justify-between hover:bg-opacity-30 transition-all"> <span class="flex items-center gap-2"> <span class="text-2xl">📚</span> <span id="current-menu-label">Menu Materi</span> </span> <span id="menu-icon" class="text-2xl">▼</span> </button>
+     </div><!-- Mobile Menu Dropdown -->
+     <div id="mobile-menu-dropdown" class="md:hidden hidden mb-4 bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden"><button onclick="showTab('intro')" id="tab-intro-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">📚</span> <span>Pengenalan</span> </button> <button onclick="showTab('pengertian')" id="tab-pengertian-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">📖</span> <span>Pengertian JS</span> </button> <button onclick="showTab('sejarah')" id="tab-sejarah-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">📜</span> <span>Sejarah JS</span> </button> <button onclick="showTab('dasar')" id="tab-dasar-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">���</span> <span>Dasar JS</span> </button> <button onclick="showTab('perintah')" id="tab-perintah-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">⚡</span> <span>Perintah Dasar</span> </button> <button onclick="showTab('hello')" id="tab-hello-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">👋</span> <span>Hello World</span> </button> <button onclick="showTab('game')" id="tab-game-mobile" class="w-full px-6 py-4 text-left font-semibold transition-all hover:bg-purple-100 flex items-center gap-3"> <span class="text-xl">🎮</span> <span>Game Challenge</span> </button>
+     </div><!-- Desktop Menu -->
+     <div class="hidden md:flex flex-wrap gap-2 justify-center bg-white bg-opacity-20 backdrop-blur-sm p-2 rounded-2xl"><button onclick="showTab('intro')" id="tab-intro" class="tab-active px-6 py-3 rounded-xl font-semibold transition-all"> 📚 Pengenalan </button> <button onclick="showTab('pengertian')" id="tab-pengertian" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> 📖 Pengertian JS </button> <button onclick="showTab('sejarah')" id="tab-sejarah" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> 📜 Sejarah JS </button> <button onclick="showTab('dasar')" id="tab-dasar" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> 🔧 Dasar JS </button> <button onclick="showTab('perintah')" id="tab-perintah" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> ⚡ Perintah Dasar </button> <button onclick="showTab('hello')" id="tab-hello" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> 👋 Hello World </button> <button onclick="showTab('game')" id="tab-game" class="px-6 py-3 rounded-xl font-semibold text-white transition-all hover:bg-white hover:bg-opacity-20"> ���� Game Challenge </button>
+     </div>
+    </div><!-- Content Sections -->
+    <div class="max-w-6xl mx-auto"><!-- Tab 1: Pengenalan -->
+     <div id="content-intro" class="tab-content">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">🌐 Apa itu Pemrograman Client Side?</h2>
+       <p id="welcome-text" class="text-gray-700 text-sm md:text-lg mb-6 text-justify">Pemrograman Client Side adalah pemrograman yang berjalan di browser pengguna (client). Kode dijalankan di komputer pengguna, bukan di server!</p>
+       <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 md:p-6 rounded-xl">
+         <h3 class="text-lg md:text-xl font-bold text-blue-700 mb-3">✅ Keuntungan</h3>
+         <ul class="space-y-2 text-gray-700 text-sm md:text-base">
+          <li>✨ Respon lebih cepat</li>
+          <li>🎨 Interaktif &amp; dinamis</li>
+          <li>💾 Mengurangi beban server</li>
+          <li>🚀 Pengalaman pengguna lebih baik</li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 md:p-6 rounded-xl">
+         <h3 class="text-lg md:text-xl font-bold text-purple-700 mb-3">🛠️ Teknologi Utama</h3>
+         <ul class="space-y-2 text-gray-700 text-sm md:text-base">
+          <li>📄 HTML - Struktur</li>
+          <li>🎨 CSS - Styling</li>
+          <li>⚡ JavaScript - Interaktivitas</li>
+          <li>🔧 Framework (React, Vue, dll)</li>
+         </ul>
+        </div>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('intro')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Saya Paham! Lanjut ke Pengertian JavaScript </button>
+       </div>
+      </div>
+     </div><!-- Tab 2: Pengertian JavaScript -->
+     <div id="content-pengertian" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4 md:mb-6">📖 Pengertian JavaScript</h2>
+       <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 md:p-8 rounded-xl mb-4 md:mb-6 border-l-4 border-indigo-500">
+        <h3 class="text-xl md:text-2xl font-bold text-indigo-700 mb-3 md:mb-4">🎯 Apa itu JavaScript?</h3>
+        <p class="text-gray-700 text-sm md:text-lg leading-relaxed mb-3 md:mb-4 text-justify">JavaScript adalah <strong>bahasa pemrograman tingkat tinggi</strong> yang dirancang khusus untuk membuat halaman web menjadi <strong>interaktif dan dinamis</strong>. JavaScript berjalan di browser pengguna (client-side) dan merupakan salah satu teknologi inti World Wide Web bersama HTML dan CSS.</p>
+        <p class="text-gray-700 text-sm md:text-lg leading-relaxed text-justify">Berbeda dengan HTML yang mengatur struktur dan CSS yang mengatur tampilan, JavaScript mengatur <strong>perilaku dan interaksi</strong> pada halaman web.</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 md:p-6 rounded-xl border-2 border-blue-200">
+         <h3 class="text-lg md:text-xl font-bold text-blue-700 mb-3 md:mb-4 flex items-center"><span class="text-2xl md:text-3xl mr-2 md:mr-3">🌟</span> Karakteristik JavaScript</h3>
+         <ul class="space-y-2 md:space-y-3 text-gray-700 text-xs md:text-base">
+          <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">✓</span> <span><strong>Interpreted Language:</strong> Tidak perlu dikompilasi, langsung dijalankan browser</span></li>
+          <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">✓</span> <span><strong>Dinamis:</strong> Tipe data ditentukan saat runtime</span></li>
+          <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">✓</span> <span><strong>Prototype-based:</strong> Mendukung OOP dengan prototyping</span></li>
+          <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">✓</span> <span><strong>Multi-paradigm:</strong> Mendukung prosedural, OOP, dan fungsional</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 md:p-6 rounded-xl border-2 border-purple-200">
+         <h3 class="text-lg md:text-xl font-bold text-purple-700 mb-3 md:mb-4 flex items-center"><span class="text-2xl md:text-3xl mr-2 md:mr-3">💡</span> Kegunaan JavaScript</h3>
+         <ul class="space-y-2 md:space-y-3 text-gray-700 text-xs md:text-base">
+          <li class="flex items-start"><span class="text-purple-500 mr-2">🎨</span> <span>Manipulasi konten HTML dan CSS</span></li>
+          <li class="flex items-start"><span class="text-purple-500 mr-2">🔄</span> <span>Validasi form dan data pengguna</span></li>
+          <li class="flex items-start"><span class="text-purple-500 mr-2">���</span> <span>Membuat animasi dan efek visual</span></li>
+          <li class="flex items-start"><span class="text-purple-500 mr-2">🌐</span> <span>Komunikasi dengan server (AJAX)</span></li>
+          <li class="flex items-start"><span class="text-purple-500 mr-2">📱</span> <span>Membangun aplikasi web modern (SPA)</span></li>
+         </ul>
+        </div>
+       </div>
+       <div class="bg-gradient-to-r from-orange-50 to-yellow-50 p-4 md:p-6 rounded-xl border-l-4 border-orange-400 mb-4 md:mb-6">
+        <h3 class="text-lg md:text-xl font-bold text-orange-700 mb-3">🎯 Contoh Sederhana</h3>
+        <p class="text-gray-700 text-sm md:text-base mb-3 md:mb-4 text-justify">Dengan JavaScript, kita bisa membuat tombol yang merespons klik pengguna:</p>
+        <div class="code-editor mb-3 md:mb-4"><span class="comment">// Mengubah teks saat tombol diklik</span> <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"demo"</span>).<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() { <span class="keyword">this</span>.<span class="keyword">innerHTML</span> = <span class="string">"Teks berhasil diubah!"</span>; });
+        </div><button onclick="demonstrateJSPower()" class="bg-orange-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-orange-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> 🚀 Coba Klik Saya! </button>
+       </div>
+       <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-4 md:p-6 rounded-xl">
+        <h3 class="text-lg md:text-xl font-bold text-green-700 mb-3 md:mb-4">📊 JavaScript Modern (ES6+)</h3>
+        <p class="text-gray-700 text-sm md:text-base mb-3 text-justify">JavaScript terus berkembang dengan standar ECMAScript. Versi modern (ES6/ES2015 ke atas) menambahkan fitur-fitur powerful seperti:</p>
+        <div class="grid md:grid-cols-3 gap-3 md:gap-4">
+         <div class="bg-white p-3 md:p-4 rounded-lg">
+          <p class="font-bold text-green-600 text-sm md:text-base">let &amp; const</p>
+          <p class="text-xs md:text-sm text-gray-600">Deklarasi variabel modern</p>
+         </div>
+         <div class="bg-white p-3 md:p-4 rounded-lg">
+          <p class="font-bold text-green-600 text-sm md:text-base">Arrow Functions</p>
+          <p class="text-xs md:text-sm text-gray-600">Sintaks fungsi yang lebih ringkas</p>
+         </div>
+         <div class="bg-white p-3 md:p-4 rounded-lg">
+          <p class="font-bold text-green-600 text-sm md:text-base">Promises &amp; Async/Await</p>
+          <p class="text-xs md:text-sm text-gray-600">Operasi asynchronous</p>
+         </div>
+        </div>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('pengertian')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Paham! Lanjut ke Sejarah JavaScript </button>
+       </div>
+      </div>
+     </div><!-- Tab 3: Sejarah JavaScript -->
+     <div id="content-sejarah" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4 md:mb-6">📜 Sejarah JavaScript</h2>
+       <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-4 md:p-8 rounded-xl mb-4 md:mb-6 border-l-4 border-yellow-500">
+        <h3 class="text-xl md:text-2xl font-bold text-amber-700 mb-3 md:mb-4">🎂 Kelahiran JavaScript</h3>
+        <p class="text-gray-700 text-sm md:text-lg leading-relaxed mb-3 md:mb-4 text-justify">JavaScript diciptakan oleh <strong>Brendan Eich</strong> pada tahun <strong>1995</strong> saat bekerja di Netscape Communications. Yang mengejutkan, bahasa ini dibuat hanya dalam <strong>10 hari</strong>!</p>
+        <p class="text-gray-700 text-sm md:text-lg leading-relaxed text-justify">Awalnya bernama <strong>"Mocha"</strong>, kemudian diubah menjadi <strong>"LiveScript"</strong>, dan akhirnya dinamai <strong>"JavaScript"</strong> untuk memanfaatkan popularitas bahasa Java pada saat itu.</p>
+       </div>
+       <div class="mb-4 md:mb-6">
+        <h3 class="text-xl md:text-2xl font-bold text-purple-700 mb-3 md:mb-4">⏰ Timeline Perkembangan</h3>
+        <div class="space-y-3 md:space-y-4">
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-blue-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           1995
+          </div>
+          <div class="flex-1 bg-blue-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-blue-700 text-sm md:text-base">Lahirnya JavaScript</p>
+           <p class="text-gray-700 text-xs md:text-base">Brendan Eich membuat JavaScript di Netscape Navigator 2.0</p>
+          </div>
+         </div>
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-green-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           1997
+          </div>
+          <div class="flex-1 bg-green-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-green-700 text-sm md:text-base">ECMAScript 1 (ES1)</p>
+           <p class="text-gray-700 text-xs md:text-base">JavaScript distandarisasi oleh ECMA International</p>
+          </div>
+         </div>
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-purple-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           2005
+          </div>
+          <div class="flex-1 bg-purple-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-purple-700 text-sm md:text-base">Era AJAX</p>
+           <p class="text-gray-700 text-xs md:text-base">Jesse James Garrett memperkenalkan istilah AJAX, membuat web lebih dinamis</p>
+          </div>
+         </div>
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-orange-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           2009
+          </div>
+          <div class="flex-1 bg-orange-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-orange-700 text-sm md:text-base">Node.js Lahir</p>
+           <p class="text-gray-700 text-xs md:text-base">Ryan Dahl membuat Node.js, JavaScript bisa dijalankan di server</p>
+          </div>
+         </div>
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-pink-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           2015
+          </div>
+          <div class="flex-1 bg-pink-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-pink-700 text-sm md:text-base">ECMAScript 6 (ES6)</p>
+           <p class="text-gray-700 text-xs md:text-base">Update besar dengan fitur modern: arrow functions, classes, promises, dll</p>
+          </div>
+         </div>
+         <div class="flex gap-3 md:gap-4 items-start">
+          <div class="bg-indigo-500 text-white px-3 md:px-4 py-1 md:py-2 rounded-lg font-bold min-w-[80px] md:min-w-[100px] text-center text-sm md:text-base">
+           2024
+          </div>
+          <div class="flex-1 bg-indigo-50 p-3 md:p-4 rounded-lg">
+           <p class="font-bold text-indigo-700 text-sm md:text-base">JavaScript Modern</p>
+           <p class="text-gray-700 text-xs md:text-base">Bahasa pemrograman paling populer dengan update tahunan (ES2024)</p>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+        <div class="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 md:p-6 rounded-xl">
+         <h3 class="text-lg md:text-xl font-bold text-cyan-700 mb-3 md:mb-4">🌍 Dampak JavaScript</h3>
+         <ul class="space-y-2 text-gray-700 text-xs md:text-base">
+          <li>✨ Framework populer: React, Vue, Angular</li>
+          <li>📱 Mobile development: React Native, Ionic</li>
+          <li>🖥️ Desktop apps: Electron</li>
+          <li>🤖 IoT &amp; Robotics: Johnny-Five</li>
+          <li>🎮 Game development: Phaser, Three.js</li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-rose-50 to-red-50 p-4 md:p-6 rounded-xl">
+         <h3 class="text-lg md:text-xl font-bold text-rose-700 mb-3 md:mb-4">📈 Fakta Menarik</h3>
+         <ul class="space-y-2 text-gray-700 text-xs md:text-base">
+          <li>🏆 Bahasa paling populer di GitHub</li>
+          <li>💼 Skill paling dicari di industri tech</li>
+          <li>🌐 Digunakan oleh 98% website di dunia</li>
+          <li>👥 Komunitas developer terbesar</li>
+          <li>📚 Ekosistem library terkaya (npm)</li>
+         </ul>
+        </div>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('sejarah')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Menarik! Lanjut ke Dasar-Dasar JavaScript </button>
+       </div>
+      </div>
+     </div><!-- Tab 4: Dasar-Dasar JavaScript -->
+     <div id="content-dasar" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4 md:mb-6">🔧 Dasar-Dasar Pemrograman JavaScript</h2>
+       <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 md:p-6 rounded-xl mb-4 md:mb-6 border-l-4 border-indigo-500">
+        <h3 class="text-xl md:text-2xl font-bold text-indigo-700 mb-2 md:mb-3">📝 Tiga Cara Menerapkan JavaScript</h3>
+        <p class="text-gray-700 text-sm md:text-lg text-justify">Ada 3 metode untuk menambahkan JavaScript ke dalam halaman HTML. Setiap metode memiliki kegunaan dan kelebihan masing-masing.</p>
+       </div><!-- 1. Inline JavaScript -->
+       <div class="mb-6 md:mb-8 bg-white p-4 md:p-6 rounded-xl border-2 border-orange-200">
+        <div class="flex items-center mb-3 md:mb-4"><span class="text-3xl md:text-4xl mr-2 md:mr-3">1️⃣</span>
+         <h3 class="text-xl md:text-2xl font-bold text-orange-700">Inline JavaScript</h3>
+        </div>
+        <div class="bg-orange-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="text-gray-700 text-xs md:text-base mb-2"><strong>Pengertian:</strong> JavaScript ditulis langsung di dalam atribut HTML element</p>
+         <p class="text-gray-700 text-xs md:text-base"><strong>Kapan digunakan:</strong> Untuk event handler sederhana dan cepat</p>
+        </div>
+        <div class="mb-3 md:mb-4">
+         <p class="font-semibold text-gray-700 text-sm md:text-base mb-2">📄 Contoh Kode:</p>
+         <div class="code-editor mb-3"><span class="comment">&lt;!-- Tombol dengan event onclick --&gt;</span> <span class="keyword">&lt;button</span> <span class="keyword">onclick</span>=<span class="string">"alert('Halo dari Inline JS!')"</span><span class="keyword">&gt;</span> Klik Saya <span class="keyword">&lt;/button&gt;</span> <span class="comment">&lt;!-- Input dengan event onchange --&gt;</span> <span class="keyword">&lt;input</span> <span class="keyword">type</span>=<span class="string">"text"</span> <span class="keyword">onchange</span>=<span class="string">"console.log(this.value)"</span><span class="keyword">&gt;</span>
+         </div>
+        </div>
+        <div class="bg-yellow-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="font-bold text-yellow-800 text-sm md:text-base mb-2">⚠️ Kelebihan &amp; Kekurangan:</p>
+         <div class="grid md:grid-cols-2 gap-3 text-xs md:text-sm">
+          <div>
+           <p class="font-semibold text-green-700">✓ Kelebihan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• Cepat dan mudah untuk kode simple</li>
+            <li>• Tidak perlu file terpisah</li>
+           </ul>
+          </div>
+          <div>
+           <p class="font-semibold text-red-700">✗ Kekurangan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• Sulit di-maintain</li>
+            <li>• Tidak reusable</li>
+           </ul>
+          </div>
+         </div>
+        </div><button onclick="demonstrateInline()" class="bg-orange-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-orange-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> 🎯 Coba Inline JavaScript </button>
+       </div><!-- 2. Embedded JavaScript -->
+       <div class="mb-6 md:mb-8 bg-white p-4 md:p-6 rounded-xl border-2 border-green-200">
+        <div class="flex items-center mb-3 md:mb-4"><span class="text-3xl md:text-4xl mr-2 md:mr-3">2️⃣</span>
+         <h3 class="text-xl md:text-2xl font-bold text-green-700">Embedded JavaScript (Internal)</h3>
+        </div>
+        <div class="bg-green-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="text-gray-700 text-xs md:text-base mb-2 text-justify"><strong>Pengertian:</strong> JavaScript ditulis di dalam tag <code class="bg-white px-2 py-1 rounded">&lt;script&gt;</code> dalam file HTML</p>
+         <p class="text-gray-700 text-xs md:text-base text-justify"><strong>Kapan digunakan:</strong> Untuk halaman single-page atau skrip yang spesifik untuk satu halaman</p>
+        </div>
+        <div class="mb-3 md:mb-4">
+         <p class="font-semibold text-gray-700 text-sm md:text-base mb-2">📄 Contoh Kode:</p>
+         <div class="code-editor mb-3"><span class="comment">&lt;!DOCTYPE html&gt;</span> <span class="keyword">&lt;html&gt;</span> <span class="keyword">&lt;head&gt;</span> <span class="keyword">&lt;title&gt;</span>Embedded JS<span class="keyword">&lt;/title&gt;</span> <span class="keyword">&lt;script&gt;</span> <span class="comment">// JavaScript di dalam tag script</span> <span class="keyword">function</span> <span class="function">sapa</span>() { <span class="keyword">let</span> nama = <span class="string">"Siswa"</span>; <span class="function">alert</span>(<span class="string">"Halo, "</span> + nama + <span class="string">"!"</span>); } <span class="keyword">&lt;/script&gt;</span> <span class="keyword">&lt;/head&gt;</span> <span class="keyword">&lt;body&gt;</span> <span class="keyword">&lt;button</span> <span class="keyword">onclick</span>=<span class="string">"sapa()"</span><span class="keyword">&gt;</span>Klik<span class="keyword">&lt;/button&gt;</span> <span class="keyword">&lt;/body&gt;</span> <span class="keyword">&lt;/html&gt;</span>
+         </div>
+        </div>
+        <div class="bg-cyan-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="font-bold text-cyan-800 text-sm md:text-base mb-2">💡 Tips Penempatan:</p>
+         <ul class="text-gray-700 space-y-2 text-xs md:text-base">
+          <li>• Di <code class="bg-white px-2 py-1 rounded">&lt;head&gt;</code>: Dimuat sebelum body (bisa memperlambat loading)</li>
+          <li>• Di akhir <code class="bg-white px-2 py-1 rounded">&lt;body&gt;</code>: <strong>Recommended!</strong> HTML dimuat dulu, baru JavaScript</li>
+         </ul>
+        </div>
+        <div class="bg-yellow-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="font-bold text-yellow-800 text-sm md:text-base mb-2">⚠️ Kelebihan &amp; Kekurangan:</p>
+         <div class="grid md:grid-cols-2 gap-3 text-xs md:text-sm">
+          <div>
+           <p class="font-semibold text-green-700">✓ Kelebihan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• Lebih terorganisir dari inline</li>
+            <li>• Bisa membuat fungsi reusable</li>
+            <li>• Mudah untuk debugging</li>
+           </ul>
+          </div>
+          <div>
+           <p class="font-semibold text-red-700">✗ Kekurangan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• Tidak bisa digunakan di halaman lain</li>
+            <li>• File HTML jadi besar</li>
+           </ul>
+          </div>
+         </div>
+        </div><button onclick="demonstrateEmbedded()" class="bg-green-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-green-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> 🎯 Coba Embedded JavaScript </button>
+       </div><!-- 3. External JavaScript -->
+       <div class="mb-4 md:mb-6 bg-white p-4 md:p-6 rounded-xl border-2 border-blue-200">
+        <div class="flex items-center mb-3 md:mb-4"><span class="text-3xl md:text-4xl mr-2 md:mr-3">3️⃣</span>
+         <h3 class="text-xl md:text-2xl font-bold text-blue-700">External JavaScript</h3>
+        </div>
+        <div class="bg-blue-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="text-gray-700 text-xs md:text-base mb-2 text-justify"><strong>Pengertian:</strong> JavaScript ditulis di file terpisah dengan ekstensi <code class="bg-white px-2 py-1 rounded">.js</code></p>
+         <p class="text-gray-700 text-xs md:text-base text-justify"><strong>Kapan digunakan:</strong> <strong>Best Practice!</strong> Untuk project professional dan code yang digunakan di banyak halaman</p>
+        </div>
+        <div class="mb-3 md:mb-4">
+         <p class="font-semibold text-gray-700 text-sm md:text-base mb-2">📄 Contoh Struktur:</p>
+         <div class="grid md:grid-cols-2 gap-3 md:gap-4">
+          <div>
+           <p class="text-xs md:text-sm font-semibold text-blue-600 mb-2">File: index.html</p>
+           <div class="code-editor"><span class="comment">&lt;!DOCTYPE html&gt;</span> <span class="keyword">&lt;html&gt;</span> <span class="keyword">&lt;head&gt;</span> <span class="keyword">&lt;title&gt;</span>External JS<span class="keyword">&lt;/title&gt;</span> <span class="keyword">&lt;/head&gt;</span> <span class="keyword">&lt;body&gt;</span> <span class="keyword">&lt;h1</span> <span class="keyword">id</span>=<span class="string">"judul"</span><span class="keyword">&gt;</span>Hello<span class="keyword">&lt;/h1&gt;</span> <span class="comment">&lt;!-- Link ke file external --&gt;</span> <span class="keyword">&lt;script</span> <span class="keyword">src</span>=<span class="string">"script.js"</span><span class="keyword">&gt;&lt;/script&gt;</span> <span class="keyword">&lt;/body&gt;</span> <span class="keyword">&lt;/html&gt;</span>
+           </div>
+          </div>
+          <div>
+           <p class="text-xs md:text-sm font-semibold text-blue-600 mb-2">File: script.js</p>
+           <div class="code-editor"><span class="comment">// File JavaScript terpisah</span> <span class="keyword">const</span> judul = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"judul"</span>); judul.<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() { <span class="keyword">this</span>.<span class="keyword">innerHTML</span> = <span class="string">"Diklik!"</span>; <span class="keyword">this</span>.<span class="keyword">style</span>.color = <span class="string">"red"</span>; });
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="bg-yellow-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="font-bold text-yellow-800 text-sm md:text-base mb-2">⚠️ Kelebihan &amp; Kekurangan:</p>
+         <div class="grid md:grid-cols-2 gap-3 text-xs md:text-sm">
+          <div>
+           <p class="font-semibold text-green-700">✓ Kelebihan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• <strong>Reusable</strong> di banyak halaman</li>
+            <li>• Kode lebih <strong>terorganisir</strong></li>
+            <li>• <strong>Mudah maintenance</strong></li>
+            <li>• File di-<strong>cache</strong> browser (loading lebih cepat)</li>
+            <li>• <strong>Separation of Concerns</strong></li>
+           </ul>
+          </div>
+          <div>
+           <p class="font-semibold text-red-700">✗ Kekurangan:</p>
+           <ul class="text-gray-700 ml-4">
+            <li>• Perlu HTTP request tambahan</li>
+            <li>• Harus manage banyak file</li>
+           </ul>
+          </div>
+         </div>
+        </div>
+        <div class="bg-emerald-50 p-3 md:p-4 rounded-lg mb-3 md:mb-4">
+         <p class="font-bold text-emerald-800 text-sm md:text-base mb-2">🏆 Best Practice External JS:</p>
+         <ul class="text-gray-700 space-y-2 text-xs md:text-base">
+          <li>✓ Letakkan tag <code class="bg-white px-2 py-1 rounded">&lt;script&gt;</code> sebelum penutup <code class="bg-white px-2 py-1 rounded">&lt;/body&gt;</code></li>
+          <li>✓ Gunakan nama file yang deskriptif (main.js, utils.js, app.js)</li>
+          <li>✓ Bisa load multiple files: <code class="bg-white px-2 py-1 rounded text-xs">&lt;script src="file1.js"&gt;&lt;/script&gt;</code></li>
+          <li>✓ Gunakan <code class="bg-white px-2 py-1 rounded">defer</code> atau <code class="bg-white px-2 py-1 rounded">async</code> untuk optimasi</li>
+         </ul>
+        </div><button onclick="demonstrateExternal()" class="bg-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-blue-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> 🎯 Coba External JavaScript </button>
+       </div><!-- Perbandingan -->
+       <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-4 md:p-6 rounded-xl">
+        <h3 class="text-xl md:text-2xl font-bold text-purple-700 mb-3 md:mb-4">📊 Perbandingan Ketiga Metode</h3>
+        <div class="overflow-x-auto">
+         <table class="w-full text-xs md:text-sm">
+          <thead class="bg-purple-200">
+           <tr>
+            <th class="p-2 md:p-3 text-left">Aspek</th>
+            <th class="p-2 md:p-3 text-center">Inline</th>
+            <th class="p-2 md:p-3 text-center">Embedded</th>
+            <th class="p-2 md:p-3 text-center">External</th>
+           </tr>
+          </thead>
+          <tbody class="bg-white">
+           <tr class="border-b">
+            <td class="p-2 md:p-3 font-semibold">Reusability</td>
+            <td class="p-2 md:p-3 text-center">❌</td>
+            <td class="p-2 md:p-3 text-center">⚠️</td>
+            <td class="p-2 md:p-3 text-center">✅</td>
+           </tr>
+           <tr class="border-b">
+            <td class="p-2 md:p-3 font-semibold">Maintenance</td>
+            <td class="p-2 md:p-3 text-center">❌</td>
+            <td class="p-2 md:p-3 text-center">⚠️</td>
+            <td class="p-2 md:p-3 text-center">✅</td>
+           </tr>
+           <tr class="border-b">
+            <td class="p-2 md:p-3 font-semibold">Caching</td>
+            <td class="p-2 md:p-3 text-center">❌</td>
+            <td class="p-2 md:p-3 text-center">❌</td>
+            <td class="p-2 md:p-3 text-center">✅</td>
+           </tr>
+           <tr class="border-b">
+            <td class="p-2 md:p-3 font-semibold">Kecepatan Implementasi</td>
+            <td class="p-2 md:p-3 text-center">✅</td>
+            <td class="p-2 md:p-3 text-center">⚠️</td>
+            <td class="p-2 md:p-3 text-center">❌</td>
+           </tr>
+           <tr>
+            <td class="p-2 md:p-3 font-semibold">Recommended</td>
+            <td class="p-2 md:p-3 text-center text-xs">Quick Test</td>
+            <td class="p-2 md:p-3 text-center text-xs">Single Page</td>
+            <td class="p-2 md:p-3 text-center bg-green-100 text-xs">✅ Best!</td>
+           </tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('dasar')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Mantap! Lanjut ke Perintah Dasar </button>
+       </div>
+      </div>
+     </div><!-- Tab 5: Perintah Dasar -->
+     <div id="content-perintah" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">⚡ Perintah-Perintah Dasar JavaScript</h2>
+       <div class="space-y-4 md:space-y-6"><!-- Alert -->
+        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-4 md:p-6 rounded-xl border-l-4 border-orange-400">
+         <h3 class="text-lg md:text-xl font-bold text-orange-700 mb-2">1. alert() - Menampilkan Pesan</h3>
+         <p class="text-gray-700 text-xs md:text-base mb-3">Digunakan untuk menampilkan pesan pop-up kepada pengguna</p>
+         <div class="code-editor mb-3"><span class="function">alert</span>(<span class="string">"Halo, Siswa Kelas XI!"</span>);
+         </div><button onclick="demonstrateAlert()" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-all text-sm md:text-base w-full md:w-auto"> 🔊 Coba Alert </button>
+        </div><!-- Console.log -->
+        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 md:p-6 rounded-xl border-l-4 border-blue-400">
+         <h3 class="text-lg md:text-xl font-bold text-blue-700 mb-2">2. console.log() - Debugging</h3>
+         <p class="text-gray-700 text-xs md:text-base mb-3">Menampilkan pesan di konsol browser (Developer Tools)</p>
+         <div class="code-editor mb-3"><span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Pesan untuk developer"</span>);
+         </div><button onclick="demonstrateConsole()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all text-sm md:text-base w-full md:w-auto"> 📝 Coba Console </button>
+         <div id="console-output" class="mt-3 p-3 bg-gray-800 text-green-400 rounded-lg hidden font-mono text-xs md:text-sm"></div>
+        </div><!-- Document.write -->
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 md:p-6 rounded-xl border-l-4 border-green-400">
+         <h3 class="text-lg md:text-xl font-bold text-green-700 mb-2">3. document.write() - Menulis ke Halaman</h3>
+         <p class="text-gray-700 text-xs md:text-base mb-3">Menulis langsung ke dokumen HTML</p>
+         <div class="code-editor mb-3"><span class="keyword">document</span>.<span class="function">write</span>(<span class="string">"&lt;h1&gt;Teks Dinamis&lt;/h1&gt;"</span>);
+         </div><button onclick="demonstrateWrite()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all text-sm md:text-base w-full md:w-auto"> ✍️ Coba Write </button>
+         <div id="write-output" class="mt-3 p-3 bg-white border-2 border-green-300 rounded-lg hidden"></div>
+        </div><!-- innerHTML -->
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 md:p-6 rounded-xl border-l-4 border-purple-400">
+         <h3 class="text-lg md:text-xl font-bold text-purple-700 mb-2">4. innerHTML - Memanipulasi Elemen</h3>
+         <p class="text-gray-700 text-xs md:text-base mb-3">Mengubah konten elemen HTML yang sudah ada</p>
+         <div class="code-editor mb-3"><span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"demo"</span>).<span class="keyword">innerHTML</span> = <span class="string">"Teks Baru!"</span>;
+         </div><button onclick="demonstrateInnerHTML()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-all text-sm md:text-base w-full md:w-auto"> 🔄 Coba innerHTML </button>
+         <div id="inner-output" class="mt-3 p-4 bg-white border-2 border-purple-300 rounded-lg text-center font-bold text-gray-500 text-xs md:text-base">
+          Klik tombol untuk mengubah teks ini!
+         </div>
+        </div>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('perintah')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Paham Semua! Lanjut ke Hello World </button>
+       </div>
+      </div>
+     </div><!-- Tab 6: Hello World -->
+     <div id="content-hello" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">👋 Program "Hello World" dengan JavaScript</h2>
+       <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-4 md:p-6 rounded-xl mb-4 md:mb-6">
+        <h3 class="text-lg md:text-xl font-bold text-indigo-700 mb-3">🎯 Mari Buat Program Pertama!</h3>
+        <p class="text-gray-700 text-xs md:text-base mb-3 md:mb-4 text-justify">Program "Hello World" adalah tradisi dalam belajar pemrograman. Ini adalah program pertama yang menampilkan teks ke layar.</p>
+       </div><!-- Contoh 1: Alert -->
+       <div class="mb-4 md:mb-6 bg-white p-4 md:p-6 rounded-xl border-2 border-purple-200">
+        <h4 class="text-base md:text-lg font-bold text-purple-600 mb-3">📢 Metode 1: Menggunakan Alert</h4>
+        <div class="code-editor mb-3 md:mb-4"><span class="comment">&lt;!DOCTYPE html&gt;</span> <span class="keyword">&lt;html&gt;</span> <span class="keyword">&lt;head&gt;</span> <span class="keyword">&lt;title&gt;</span>Hello World<span class="keyword">&lt;/title&gt;</span> <span class="keyword">&lt;/head&gt;</span> <span class="keyword">&lt;body&gt;</span> <span class="keyword">&lt;script&gt;</span> <span class="function">alert</span>(<span class="string">"Hello World!"</span>); <span class="keyword">&lt;/script&gt;</span> <span class="keyword">&lt;/body&gt;</span> <span class="keyword">&lt;/html&gt;</span>
+        </div><button onclick="runHelloAlert()" class="bg-purple-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-purple-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> ▶️ Jalankan Kode </button>
+       </div><!-- Contoh 2: Document.write -->
+       <div class="mb-4 md:mb-6 bg-white p-4 md:p-6 rounded-xl border-2 border-blue-200">
+        <h4 class="text-base md:text-lg font-bold text-blue-600 mb-3">✍️ Metode 2: Menggunakan document.write()</h4>
+        <div class="code-editor mb-3 md:mb-4"><span class="comment">&lt;!DOCTYPE html&gt;</span> <span class="keyword">&lt;html&gt;</span> <span class="keyword">&lt;body&gt;</span> <span class="keyword">&lt;script&gt;</span> <span class="keyword">document</span>.<span class="function">write</span>(<span class="string">"&lt;h1&gt;Hello World!&lt;/h1&gt;"</span>); <span class="keyword">document</span>.<span class="function">write</span>(<span class="string">"&lt;p&gt;Program pertamaku!&lt;/p&gt;"</span>); <span class="keyword">&lt;/script&gt;</span> <span class="keyword">&lt;/body&gt;</span> <span class="keyword">&lt;/html&gt;</span>
+        </div><button onclick="runHelloWrite()" class="bg-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-blue-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> ▶️ Jalankan Kode </button>
+        <div id="hello-write-output" class="mt-3 md:mt-4 p-3 md:p-4 bg-gray-50 rounded-lg border-2 border-blue-200 hidden"></div>
+       </div><!-- Contoh 3: innerHTML -->
+       <div class="mb-4 md:mb-6 bg-white p-4 md:p-6 rounded-xl border-2 border-green-200">
+        <h4 class="text-base md:text-lg font-bold text-green-600 mb-3">🎨 Metode 3: Menggunakan innerHTML (Paling Modern!)</h4>
+        <div class="code-editor mb-3 md:mb-4"><span class="comment">&lt;!DOCTYPE html&gt;</span> <span class="keyword">&lt;html&gt;</span> <span class="keyword">&lt;body&gt;</span> <span class="keyword">&lt;div</span> <span class="keyword">id</span>=<span class="string">"output"</span><span class="keyword">&gt;&lt;/div&gt;</span> <span class="keyword">&lt;script&gt;</span> <span class="keyword">const</span> output = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"output"</span>); output.<span class="keyword">innerHTML</span> = <span class="string">"&lt;h1&gt;Hello World!&lt;/h1&gt;"</span>; <span class="keyword">&lt;/script&gt;</span> <span class="keyword">&lt;/body&gt;</span> <span class="keyword">&lt;/html&gt;</span>
+        </div><button onclick="runHelloInner()" class="bg-green-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-green-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> ▶️ Jalankan Kode </button>
+        <div id="hello-inner-output" class="mt-3 md:mt-4 p-3 md:p-4 bg-gray-50 rounded-lg border-2 border-green-200 text-gray-400 text-center text-xs md:text-base">
+         Output akan muncul di sini...
+        </div>
+       </div><!-- Interactive Editor -->
+       <div class="bg-gradient-to-br from-yellow-50 to-amber-50 p-4 md:p-6 rounded-xl">
+        <h4 class="text-lg md:text-xl font-bold text-amber-700 mb-3">�� Coba Sendiri!</h4>
+        <p class="text-gray-700 text-xs md:text-base mb-3 md:mb-4">Ubah teks di bawah ini dan klik "Jalankan":</p><textarea id="custom-code" class="w-full p-3 md:p-4 rounded-lg border-2 border-amber-300 font-mono text-xs md:text-sm mb-3 md:mb-4" rows="3">alert("Hello World dari saya!");</textarea> <button onclick="runCustomCode()" class="bg-amber-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-amber-600 transition-all font-semibold text-sm md:text-base w-full md:w-auto"> 🚀 Jalankan Kode Saya </button>
+       </div>
+       <div class="mt-6 md:mt-8 text-center"><button onclick="completeSection('hello')" class="btn-primary text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg"> ✓ Sudah Bisa! Lanjut ke Game </button>
+       </div>
+      </div>
+     </div><!-- Tab 7: Game -->
+     <div id="content-game" class="tab-content hidden">
+      <div class="card p-4 md:p-8 mb-6">
+       <h2 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">🎮 Game Challenge: JavaScript Quiz!</h2><!-- Input Nama Siswa -->
+       <div id="name-input-section" class="mb-6">
+        <div class="bg-gradient-to-br from-indigo-100 to-purple-100 p-6 md:p-8 rounded-2xl text-center">
+         <h3 class="text-xl md:text-2xl font-bold text-purple-800 mb-3 md:mb-4">👤 Siapa Nama Kamu?</h3>
+         <p class="text-gray-700 text-sm md:text-base mb-4 md:mb-6">Masukkan nama kamu sebelum memulai quiz</p>
+         <form onsubmit="startQuiz(event)" class="max-w-md mx-auto"><label for="student-name" class="block text-left font-semibold text-purple-700 mb-2 text-sm md:text-base">Nama Lengkap:</label> <input type="text" id="student-name" class="w-full p-3 md:p-4 rounded-xl border-2 border-purple-300 focus:border-purple-500 focus:outline-none text-base md:text-lg mb-3 md:mb-4" placeholder="Contoh: Budi Santoso" required> <button type="submit" class="w-full bg-purple-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-purple-600 transition-all font-bold text-base md:text-lg"> 🚀 Mulai Quiz </button>
+         </form>
+        </div>
+       </div>
+       <div class="mb-6 hidden" id="quiz-section">
+        <div class="flex justify-between items-center mb-4">
+         <div class="text-xl md:text-2xl font-bold text-purple-600">
+          Skor: <span id="game-score">0</span>
+         </div>
+         <div class="text-base md:text-lg font-semibold text-gray-600">
+          Pertanyaan <span id="question-num">1</span>/10
+         </div>
+        </div>
+        <div id="game-container" class="space-y-4 md:space-y-6">
+         <div class="bg-gradient-to-br from-pink-100 to-purple-100 p-6 md:p-8 rounded-2xl">
+          <h3 id="question-text" class="text-base md:text-xl font-bold text-purple-800 mb-4 md:mb-6"></h3>
+          <div id="answers-container" class="space-y-2 md:space-y-3"></div>
+         </div>
+         <div id="feedback" class="hidden p-4 md:p-6 rounded-xl text-center font-bold text-base md:text-lg"></div>
+        </div>
+        <div id="game-result" class="hidden text-center">
+         <div class="bg-gradient-to-br from-yellow-100 to-orange-100 p-6 md:p-8 rounded-2xl">
+          <div class="mb-4 md:mb-6">
+           <div class="text-5xl md:text-6xl mb-3 md:mb-4">
+            🏆
+           </div>
+           <h3 class="text-2xl md:text-3xl font-bold text-orange-700 mb-2">Permainan Selesai!</h3>
+           <div class="bg-white bg-opacity-50 rounded-xl p-4 md:p-6 mb-3 md:mb-4">
+            <p class="text-sm md:text-lg text-gray-600 mb-2">Nama Siswa:</p>
+            <p class="text-2xl md:text-3xl font-bold text-purple-700 mb-3 md:mb-4" id="student-name-display"></p>
+            <p class="text-sm md:text-lg text-gray-600 mb-2">Skor Akhir:</p>
+            <p class="text-4xl md:text-5xl font-bold text-purple-600 mb-2"><span id="final-score"></span>/100</p>
+           </div>
+           <p id="result-message" class="text-lg md:text-xl text-gray-700 font-semibold mb-4 md:mb-6"></p>
+          </div><button onclick="restartGame()" class="bg-purple-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-purple-600 transition-all font-bold text-base md:text-lg w-full md:w-auto"> 🔄 Main Lagi </button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <div class="max-w-6xl mx-auto mt-8 md:mt-12 text-center text-white">
+     <p class="text-xs md:text-sm opacity-80 mb-4 md:mb-6">💡 Terus berlatih dan jangan takut mencoba! Semangat belajar! 🚀</p><a href="index.html" class="inline-block bg-white bg-opacity-20 backdrop-blur-sm text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold hover:bg-opacity-30 transition-all text-sm md:text-base mb-6 md:mb-8"> ← Kembali ke Halaman Sebelumnya </a>
+     <div class="border-t border-white border-opacity-20 pt-4 md:pt-6 mt-6 md:mt-8">
+      <p class="text-xs md:text-sm opacity-70">© rsensei 2025</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            main_title: "🚀 Pemrograman Web Kelas XI",
+            subtitle: "Client Side Programming - Belajar JavaScript dengan Seru!",
+            welcome_text: "Pemrograman Client Side adalah pemrograman yang berjalan di browser pengguna (client). Kode dijalankan di komputer pengguna, bukan di server!"
+        };
+
+        let completedSections = new Set();
+        let currentQuestion = 0;
+        let gameScore = 0;
+        let studentName = '';
+
+        const menuLabels = {
+            'intro': 'Pengenalan',
+            'pengertian': 'Pengertian JS',
+            'sejarah': 'Sejarah JS',
+            'dasar': 'Dasar JS',
+            'perintah': 'Perintah Dasar',
+            'hello': 'Hello World',
+            'game': 'Game Challenge'
+        };
+
+        const questions = [
+            {
+                question: "Apa yang dimaksud dengan pemrograman Client Side?",
+                answers: [
+                    "Pemrograman yang berjalan di server",
+                    "Pemrograman yang berjalan di browser pengguna",
+                    "Pemrograman yang berjalan di database",
+                    "Pemrograman yang berjalan di cloud"
+                ],
+                correct: 1
+            },
+            {
+                question: "Siapa yang menciptakan JavaScript dan dalam berapa hari?",
+                answers: [
+                    "Bill Gates dalam 30 hari",
+                    "Brendan Eich dalam 10 hari",
+                    "Mark Zuckerberg dalam 15 hari",
+                    "Linus Torvalds dalam 7 hari"
+                ],
+                correct: 1
+            },
+            {
+                question: "Metode penerapan JavaScript mana yang PALING RECOMMENDED untuk project professional?",
+                answers: [
+                    "Inline JavaScript",
+                    "Embedded JavaScript",
+                    "External JavaScript",
+                    "Semua metode sama bagusnya"
+                ],
+                correct: 2
+            },
+            {
+                question: "Perhatikan kode: <button onclick=\"alert('Halo')\">Klik</button>. Metode JavaScript apa yang digunakan?",
+                answers: [
+                    "Embedded JavaScript",
+                    "External JavaScript",
+                    "Inline JavaScript",
+                    "Internal JavaScript"
+                ],
+                correct: 2
+            },
+            {
+                question: "Perintah JavaScript mana yang menampilkan pesan pop-up?",
+                answers: [
+                    "console.log()",
+                    "document.write()",
+                    "alert()",
+                    "innerHTML"
+                ],
+                correct: 2
+            },
+            {
+                question: "Perintah mana yang digunakan untuk debugging di konsol browser?",
+                answers: [
+                    "alert()",
+                    "console.log()",
+                    "document.write()",
+                    "prompt()"
+                ],
+                correct: 1
+            },
+            {
+                question: "Metode mana yang paling modern untuk mengubah konten HTML?",
+                answers: [
+                    "alert()",
+                    "document.write()",
+                    "innerHTML",
+                    "console.log()"
+                ],
+                correct: 2
+            },
+            {
+                question: "Apa hasil dari kode: document.getElementById('demo').innerHTML = 'Halo';",
+                answers: [
+                    "Menampilkan popup dengan teks 'Halo'",
+                    "Mengubah isi elemen dengan id 'demo' menjadi 'Halo'",
+                    "Menulis 'Halo' di konsol browser",
+                    "Membuat error karena sintaks salah"
+                ],
+                correct: 1
+            },
+            {
+                question: "File JavaScript external memiliki ekstensi...",
+                answers: [
+                    ".javascript",
+                    ".jscript",
+                    ".js",
+                    ".java"
+                ],
+                correct: 2
+            },
+            {
+                question: "Apa keuntungan utama pemrograman Client Side?",
+                answers: [
+                    "Beban server lebih berat",
+                    "Respon lebih lambat",
+                    "Respon lebih cepat dan interaktif",
+                    "Tidak bisa digunakan tanpa internet"
+                ],
+                correct: 2
+            }
+        ];
+
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                icon.textContent = '▲';
+            } else {
+                dropdown.classList.add('hidden');
+                icon.textContent = '▼';
+            }
+        }
+
+        async function onConfigChange(config) {
+            const mainTitle = document.getElementById('main-title');
+            const subtitle = document.getElementById('subtitle');
+            const welcomeText = document.getElementById('welcome-text');
+
+            if (mainTitle) {
+                mainTitle.textContent = config.main_title || defaultConfig.main_title;
+            }
+            if (subtitle) {
+                subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+            }
+            if (welcomeText) {
+                welcomeText.textContent = config.welcome_text || defaultConfig.welcome_text;
+            }
+        }
+
+        function showTab(tabName) {
+            // Hide mobile menu after selection
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            dropdown.classList.add('hidden');
+            icon.textContent = '▼';
+            
+            // Update mobile menu label
+            document.getElementById('current-menu-label').textContent = menuLabels[tabName];
+            
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from desktop tabs
+            document.querySelectorAll('[id^="tab-"]:not([id$="-mobile"])').forEach(tab => {
+                tab.classList.remove('tab-active', 'text-purple-700');
+                tab.classList.add('text-white');
+            });
+            
+            // Show selected content
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            // Add active class to desktop tab
+            const activeTab = document.getElementById('tab-' + tabName);
+            if (activeTab) {
+                activeTab.classList.add('tab-active');
+                activeTab.classList.remove('text-white');
+                activeTab.classList.add('text-purple-700');
+            }
+
+            if (tabName === 'game') {
+                showNameInput();
+            }
+        }
+
+        function startQuiz(event) {
+            event.preventDefault();
+            
+            const nameInput = document.getElementById('student-name');
+            studentName = nameInput.value.trim();
+            
+            if (studentName) {
+                document.getElementById('name-input-section').classList.add('hidden');
+                document.getElementById('quiz-section').classList.remove('hidden');
+                loadQuestion();
+            }
+        }
+
+        function showNameInput() {
+            document.getElementById('name-input-section').classList.remove('hidden');
+            document.getElementById('quiz-section').classList.add('hidden');
+            document.getElementById('student-name').value = '';
+        }
+
+        function completeSection(section) {
+            completedSections.add(section);
+            updateProgress();
+            
+            const nextTab = {
+                'intro': 'pengertian',
+                'pengertian': 'sejarah',
+                'sejarah': 'dasar',
+                'dasar': 'perintah',
+                'perintah': 'hello',
+                'hello': 'game'
+            };
+            
+            if (nextTab[section]) {
+                showTab(nextTab[section]);
+            }
+        }
+
+        function updateProgress() {
+            const total = 7;
+            const completed = completedSections.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Progress: ${completed}/${total} Materi`;
+        }
+
+        function demonstrateAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+            alertDiv.innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-purple-700 mb-3 md:mb-4">🔊 Alert Pop-up</h3>
+                <p class="text-gray-700 text-base md:text-lg mb-4 md:mb-6">Halo, Siswa Kelas XI!</p>
+                <button onclick="this.parentElement.remove()" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 w-full font-semibold text-sm md:text-base">
+                    OK
+                </button>
+            `;
+            document.body.appendChild(alertDiv);
+        }
+
+        function demonstrateConsole() {
+            const output = document.getElementById('console-output');
+            output.textContent = '> Pesan untuk developer\n> console.log() berhasil dijalankan! ✓';
+            output.classList.remove('hidden');
+            console.log('Pesan untuk developer');
+        }
+
+        function demonstrateWrite() {
+            const output = document.getElementById('write-output');
+            output.innerHTML = '<h3 class="text-xl md:text-2xl font-bold text-green-600">Teks Dinamis</h3><p class="text-gray-700 mt-2 text-sm md:text-base">Ini ditulis menggunakan document.write()</p>';
+            output.classList.remove('hidden');
+        }
+
+        function demonstrateInnerHTML() {
+            const output = document.getElementById('inner-output');
+            const messages = [
+                "✨ Teks berhasil diubah!",
+                "🎉 innerHTML sangat powerful!",
+                "🚀 Ini adalah metode modern!",
+                "💡 Klik lagi untuk pesan lain!"
+            ];
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            output.innerHTML = `<span class="text-purple-700 text-base md:text-xl">${randomMsg}</span>`;
+        }
+
+        function demonstrateJSPower() {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = "✅ JavaScript Bekerja!";
+            btn.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = "";
+            }, 2000);
+        }
+
+        function demonstrateInline() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+            alertDiv.innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-orange-700 mb-3 md:mb-4">🔊 Inline JavaScript Demo</h3>
+                <p class="text-gray-700 text-base md:text-lg mb-4 md:mb-6">Halo dari Inline JS! Ini adalah contoh JavaScript yang ditulis langsung di atribut HTML.</p>
+                <button onclick="this.parentElement.remove()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 w-full font-semibold text-sm md:text-base">
+                    OK
+                </button>
+            `;
+            document.body.appendChild(alertDiv);
+        }
+
+        function demonstrateEmbedded() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+            
+            let nama = "Siswa Kelas XI";
+            let pesan = "Halo, " + nama + "! Ini adalah Embedded JavaScript yang ditulis di dalam tag <script>.";
+            
+            alertDiv.innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-green-700 mb-3 md:mb-4">🎯 Embedded JavaScript Demo</h3>
+                <p class="text-gray-700 text-base md:text-lg mb-4 md:mb-6">${pesan}</p>
+                <button onclick="this.parentElement.remove()" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 w-full font-semibold text-sm md:text-base">
+                    OK
+                </button>
+            `;
+            document.body.appendChild(alertDiv);
+        }
+
+        function demonstrateExternal() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+            alertDiv.innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-blue-700 mb-3 md:mb-4">🚀 External JavaScript Demo</h3>
+                <p class="text-gray-700 text-base md:text-lg mb-3 md:mb-4">Ini simulasi External JavaScript! Biasanya kode ada di file .js terpisah seperti:</p>
+                <div class="bg-gray-800 text-green-400 p-3 rounded font-mono text-xs md:text-sm mb-4 md:mb-6">
+                    script.js → index.html
+                </div>
+                <p class="text-gray-600 text-xs md:text-sm mb-4 md:mb-6">File external lebih terorganisir, reusable, dan mudah di-maintain!</p>
+                <button onclick="this.parentElement.remove()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 w-full font-semibold text-sm md:text-base">
+                    OK
+                </button>
+            `;
+            document.body.appendChild(alertDiv);
+        }
+
+        function runHelloAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+            alertDiv.innerHTML = `
+                <h3 class="text-xl md:text-2xl font-bold text-purple-700 mb-3 md:mb-4">👋 Hello World</h3>
+                <p class="text-gray-700 text-base md:text-lg mb-4 md:mb-6">Hello World!</p>
+                <button onclick="this.parentElement.remove()" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 w-full font-semibold text-sm md:text-base">
+                    OK
+                </button>
+            `;
+            document.body.appendChild(alertDiv);
+        }
+
+        function runHelloWrite() {
+            const output = document.getElementById('hello-write-output');
+            output.innerHTML = '<h1 class="text-2xl md:text-3xl font-bold text-blue-600 mb-2">Hello World!</h1><p class="text-gray-700 text-sm md:text-base">Program pertamaku!</p>';
+            output.classList.remove('hidden');
+        }
+
+        function runHelloInner() {
+            const output = document.getElementById('hello-inner-output');
+            output.innerHTML = '<h1 class="text-2xl md:text-3xl font-bold text-green-600">Hello World!</h1>';
+            output.classList.remove('text-gray-400');
+        }
+
+        function runCustomCode() {
+            const code = document.getElementById('custom-code').value.trim();
+            
+            // Parse perintah sederhana yang aman
+            if (code.includes('alert(')) {
+                const match = code.match(/alert\s*\(\s*["'](.+?)["']\s*\)/);
+                if (match) {
+                    const message = match[1];
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+                    alertDiv.innerHTML = `
+                        <h3 class="text-xl md:text-2xl font-bold text-purple-700 mb-3 md:mb-4">🔊 Alert</h3>
+                        <p class="text-gray-700 text-base md:text-lg mb-4 md:mb-6">${message}</p>
+                        <button onclick="this.parentElement.remove()" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 w-full font-semibold text-sm md:text-base">
+                            OK
+                        </button>
+                    `;
+                    document.body.appendChild(alertDiv);
+                }
+            } else if (code.includes('console.log(')) {
+                const match = code.match(/console\.log\s*\(\s*["'](.+?)["']\s*\)/);
+                if (match) {
+                    const message = match[1];
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+                    alertDiv.innerHTML = `
+                        <h3 class="text-xl md:text-2xl font-bold text-blue-700 mb-3 md:mb-4">📝 Console</h3>
+                        <div class="bg-gray-800 text-green-400 p-4 rounded-lg mb-4 md:mb-6 font-mono text-xs md:text-sm">
+                            > ${message}
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 w-full font-semibold text-sm md:text-base">
+                            OK
+                        </button>
+                    `;
+                    document.body.appendChild(alertDiv);
+                }
+            } else {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 md:p-8 rounded-2xl shadow-2xl z-50 max-w-md w-full mx-4';
+                alertDiv.innerHTML = `
+                    <h3 class="text-xl md:text-2xl font-bold text-orange-700 mb-3 md:mb-4">💡 Petunjuk</h3>
+                    <p class="text-gray-700 text-sm md:text-base mb-4 md:mb-6">Coba gunakan perintah: <br><br>
+                    <code class="bg-gray-100 px-2 py-1 rounded">alert("pesanmu");</code><br>
+                    atau<br>
+                    <code class="bg-gray-100 px-2 py-1 rounded">console.log("pesanmu");</code>
+                    </p>
+                    <button onclick="this.parentElement.remove()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 w-full font-semibold text-sm md:text-base">
+                        OK
+                    </button>
+                `;
+                document.body.appendChild(alertDiv);
+            }
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showGameResult();
+                return;
+            }
+
+            document.getElementById('game-container').classList.remove('hidden');
+            document.getElementById('game-result').classList.add('hidden');
+            document.getElementById('feedback').classList.add('hidden');
+
+            const q = questions[currentQuestion];
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('question-num').textContent = currentQuestion + 1;
+
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+
+            q.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full p-3 md:p-4 bg-white rounded-xl text-left font-semibold text-gray-700 hover:bg-purple-100 hover:shadow-lg transition-all border-2 border-transparent hover:border-purple-300 text-sm md:text-base';
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(index);
+                container.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const buttons = document.querySelectorAll('#answers-container button');
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selected === q.correct) {
+                gameScore += 10;
+                document.getElementById('game-score').textContent = gameScore;
+                feedback.className = 'p-4 md:p-6 rounded-xl text-center font-bold text-base md:text-lg bg-green-100 text-green-700';
+                feedback.innerHTML = '✅ Benar! Luar biasa!';
+                buttons[selected].classList.add('bg-green-200', 'border-green-500');
+            } else {
+                feedback.className = 'p-4 md:p-6 rounded-xl text-center font-bold text-base md:text-lg bg-red-100 text-red-700';
+                feedback.innerHTML = `❌ Kurang tepat. Jawaban yang benar: ${q.answers[q.correct]}`;
+                buttons[selected].classList.add('bg-red-200', 'border-red-500');
+                buttons[q.correct].classList.add('bg-green-200', 'border-green-500');
+            }
+
+            feedback.classList.remove('hidden');
+
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+            }, 2500);
+        }
+
+        function showGameResult() {
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('game-result').classList.remove('hidden');
+            document.getElementById('final-score').textContent = gameScore;
+            document.getElementById('student-name-display').textContent = studentName;
+
+            let message = '';
+            if (gameScore === 100) {
+                message = '🏆 Sempurna! Kamu Master JavaScript!';
+            } else if (gameScore >= 80) {
+                message = '🌟 Hebat! Kamu sangat memahami materi!';
+            } else if (gameScore >= 60) {
+                message = '👍 Bagus! Terus berlatih ya!';
+            } else {
+                message = '💪 Jangan menyerah! Coba lagi dan pasti bisa!';
+            }
+
+            document.getElementById('result-message').textContent = message;
+            completeSection('game');
+        }
+
+        function restartGame() {
+            currentQuestion = 0;
+            gameScore = 0;
+            studentName = '';
+            document.getElementById('game-score').textContent = '0';
+            showNameInput();
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["main_title", config.main_title || defaultConfig.main_title],
+                    ["subtitle", config.subtitle || defaultConfig.subtitle],
+                    ["welcome_text", config.welcome_text || defaultConfig.welcome_text]
+                ])
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.elementSdk && window.elementSdk.config) {
+                onConfigChange(window.elementSdk.config);
+            } else {
+                onConfigChange(defaultConfig);
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcdc2ab86a0fd9e',t:'MTc2ODIzMjUxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
