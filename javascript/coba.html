@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LKPD Variable JavaScript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #ffffff;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      color: #f0f0f0;
+      font-size: 20px;
+      font-weight: 500;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .project-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .project-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2d3748;
+    }
+
+    .project-difficulty {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-left: auto;
+    }
+
+    .difficulty-easy {
+      background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+      color: #065f46;
+    }
+
+    .difficulty-medium {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      color: #5b21b6;
+    }
+
+    .difficulty-hard {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: #991b1b;
+    }
+
+    .project-description {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #4a5568;
+      margin-bottom: 25px;
+      text-align: justify;
+    }
+
+    .instruction-box {
+      background: linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%);
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+
+    .instruction-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .instruction-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .instruction-list li {
+      padding: 8px 0;
+      font-size: 15px;
+      color: #1e3a8a;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      line-height: 1.6;
+    }
+
+    .instruction-list li::before {
+      content: "▸";
+      color: #3b82f6;
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .code-template {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 2px solid #334155;
+    }
+
+    .template-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-keyword {
+      color: #c792ea;
+    }
+
+    .code-string {
+      color: #c3e88d;
+    }
+
+    .code-number {
+      color: #f78c6c;
+    }
+
+    .code-operator {
+      color: #89ddff;
+    }
+
+    .code-comment {
+      color: #676e95;
+      font-style: italic;
+    }
+
+    .code-variable {
+      color: #82aaff;
+    }
+
+    .expected-output {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-left: 4px solid #10b981;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .output-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #065f46;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .output-content {
+      background: #f0fdfa;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #064e3b;
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+
+    .tips-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .tips-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tips-content {
+      font-size: 14px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+
+    .challenge-box {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      border-left: 4px solid #ec4899;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .challenge-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #9f1239;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .challenge-content {
+      font-size: 14px;
+      color: #831843;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.3);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 32px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .project-card {
+        padding: 25px 20px;
+      }
+
+      .project-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .project-icon {
+        font-size: 40px;
+      }
+
+      .project-title {
+        font-size: 24px;
+      }
+
+      .project-difficulty {
+        margin-left: 0;
+      }
+
+      .project-description {
+        font-size: 14px;
+      }
+
+      .instruction-title, .template-title, .output-title, .tips-title, .challenge-title {
+        font-size: 15px;
+      }
+
+      .instruction-list li, .tips-content, .challenge-content {
+        font-size: 13px;
+      }
+
+      .code-template, .output-content {
+        font-size: 12px;
+        padding: 15px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">🎯 LEMBAR KERJA PESERTA DIDIK</h1>
+     <p class="subtitle" id="subtitle">Proyek: Logika Kalkulator Kasir "Smart-Shop"</p>
+    </header><!-- Bagian 1: Misi Utama -->
+    <div class="project-card">
+     <div class="project-header"><span class="project-icon">🎯</span>
+      <h2 class="project-title" id="project1Title">1. Misi Utama (The Mission)</h2><span class="project-difficulty difficulty-hard">TANTANGAN</span>
+     </div>
+     <p class="project-description">Kalian adalah <strong>Junior Developer</strong>. Perusahaan baru saja memecat programmer sebelumnya karena kodenya berantakan dan tidak selesai. Tugas kalian adalah <strong>membangun ulang fungsi perhitungan kasir</strong> yang saat ini masih kosong.</p>
+     <div class="instruction-box">
+      <div class="instruction-title"><span>📦</span> <span>2. Spesifikasi Kebutuhan Data</span>
+      </div>
+      <p style="color: #1e3a8a; font-size: 15px; line-height: 1.8; margin-bottom: 15px;">Aplikasi harus memiliki variabel dengan ketentuan berikut:</p>
+      <ol class="instruction-list">
+       <li><strong>Nama Toko</strong>: (Gunakan tipe data konstan)</li>
+       <li><strong>Harga Satuan</strong>: (Input angka)</li>
+       <li><strong>Jumlah Beli</strong>: (Input angka)</li>
+       <li><strong>Status Diskon</strong>: (Boolean - true jika sedang masa promo)</li>
+       <li><strong>Besar Diskon</strong>: (Angka tetap, misal 5000)</li>
+      </ol>
+     </div>
+     <div class="tips-box">
+      <div class="tips-title"><span>⚠️</span> <span>Perhatian Penting:</span>
+      </div>
+      <p class="tips-content">• Gunakan <strong>const</strong> untuk nilai yang tidak boleh berubah<br>
+        • Gunakan <strong>let</strong> untuk nilai yang dinamis/bisa berubah<br>
+        • Nama variabel harus menggunakan standar <strong>camelCase</strong> (contoh: namaToko, hargaSatuan)<br>
+        • Jangan copy-paste! Tulis kode sendiri untuk melatih pemahaman</p>
+     </div>
+    </div><!-- Bagian 2: Instruksi Kerja -->
+    <div class="project-card">
+     <div class="project-header"><span class="project-icon">💻</span>
+      <h2 class="project-title" id="project2Title">3. Instruksi Kerja (Problem Solving)</h2><span class="project-difficulty difficulty-hard">TANTANGAN</span>
+     </div>
+     <p class="project-description">Selesaikan tiga bagian tantangan berikut untuk menyelesaikan sistem kasir Smart-Shop. Kerjakan secara mandiri dan jangan copy-paste!</p>
+     <div class="instruction-box">
+      <div class="instruction-title"><span>📝</span> <span>Bagian A: Deklarasi Mandiri</span>
+      </div>
+      <p style="color: #1e3a8a; font-size: 15px; line-height: 1.8; margin-bottom: 15px;"><strong>Jangan copy-paste.</strong> Buatlah variabel berdasarkan spesifikasi di atas dengan nama variabel menggunakan standar <strong>camelCase</strong>.</p>
+     </div>
+     <div class="code-template">
+      <div class="template-title"><span>🔨</span> <span>Area Kerja - Tulis Kode Deklarasi:</span>
+      </div>
+     </div>
+     <div class="instruction-box" style="margin-top: 30px;">
+      <div class="instruction-title"><span>🧮</span> <span>Bagian B: Tantangan Algoritma (Logika Aritmatika)</span>
+      </div>
+      <p style="color: #1e3a8a; font-size: 15px; line-height: 1.8; margin-bottom: 15px;">Tuliskan rumus matematika di JavaScript untuk menyelesaikan masalah berikut:</p>
+      <ol class="instruction-list">
+       <li>Hitung <strong>totalKotor</strong> (Harga dikali jumlah)</li>
+       <li>Hitung <strong>totalBersih</strong>. Logikanya: totalKotor dikurangi besarDiskon</li>
+       <li>Hitung <strong>pajak</strong>. Logikanya: 11% dari totalBersih (Tips: 11% sama dengan 0.11 atau 11/100)</li>
+       <li>Hitung <strong>totalAkhir</strong> yang harus dibayar pelanggan (Total bersih + pajak)</li>
+      </ol>
+     </div>
+     <div class="code-template">
+      <div class="template-title"><span>🔨</span> <span>Area Kerja - Tulis Rumus Perhitungan:</span>
+      </div>
+     </div>
+     <div class="instruction-box" style="margin-top: 30px;">
+      <div class="instruction-title"><span>🐛</span> <span>Bagian C: Debugging (Mencari Kesalahan)</span>
+      </div>
+      <p style="color: #1e3a8a; font-size: 15px; line-height: 1.8; margin-bottom: 15px;">Bayangkan ada error di sistem. Programmer sebelumnya menulis kode seperti ini:</p>
+     </div>
+     <div class="code-template">
+      <div class="template-title"><span>❌</span> <span>Kode Bermasalah:</span>
+      </div><span class="code-keyword">const</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-number">10000</span><span class="code-operator">;</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-number">12000</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">harga</span><span class="code-operator">);</span>
+     </div>
+     <div class="challenge-box">
+      <div class="challenge-title"><span>📋</span> <span>Tugas Debugging:</span>
+      </div>
+      <p class="challenge-content">1. Jalankan kode tersebut di console atau editor<br>
+        2. Amati error-nya di terminal/console<br>
+        3. Jelaskan di laporan: <strong>Kenapa kode itu salah?</strong><br>
+        4. Tuliskan cara memperbaikinya</p>
+     </div>
+     <div class="tips-box">
+      <div class="tips-title"><span>💡</span> <span>Petunjuk Debugging:</span>
+      </div>
+      <p class="tips-content">• Perhatikan kata kunci yang digunakan (const atau let)<br>
+        • Ingat: <strong>const</strong> = tidak bisa diubah, <strong>let</strong> = bisa diubah<br>
+        • Coba ganti kata kunci yang tepat dan jalankan ulang kodenya</p>
+     </div>
+    </div><!-- Bagian 3: Evaluasi Hasil -->
+    <div class="project-card">
+     <div class="project-header"><span class="project-icon">🏆</span>
+      <h2 class="project-title" id="project3Title">4. Evaluasi Hasil (Performance Test)</h2><span class="project-difficulty difficulty-hard">TARGET</span>
+     </div>
+     <p class="project-description">Siswa dianggap <strong>berhasil</strong> jika program yang dibuat dapat menampilkan output seperti contoh di bawah ini. Angka boleh berbeda sesuai dengan input yang kalian masukkan, tetapi <strong>format dan struktur output harus sama persis</strong>.</p>
+     <div class="expected-output">
+      <div class="output-title"><span>✅</span> <span>Contoh Output yang Harus Dicapai:</span>
+      </div>
+      <div class="output-content">
+       === NOTA PEMBAYARAN ===<br>
+       Item: Mouse Gaming <br>
+       Harga Satuan: Rp. 150.000<br>
+       Total Item: 1 <br>
+       Total Kotor: Rp. 150.000 <br>
+       Diskon: Rp. 5.000 <br>
+       Pajak (11%): Rp. 15.950 <br>
+       ----------------------- <br>
+       TOTAL BAYAR: Rp. 160.950
+      </div>
+     </div>
+     <div class="instruction-box">
+      <div class="instruction-title"><span>📋</span> <span>Kriteria Keberhasilan:</span>
+      </div>
+      <ol class="instruction-list">
+       <li>Program bisa dijalankan tanpa error</li>
+       <li>Semua variabel dideklarasikan dengan benar (const untuk tetap, let untuk dinamis)</li>
+       <li>Rumus perhitungan totalKotor, totalBersih, pajak, dan totalAkhir sudah tepat</li>
+       <li>Output ditampilkan menggunakan console.log() dengan format yang rapi</li>
+       <li>Berhasil menjelaskan error pada bagian debugging</li>
+      </ol>
+     </div>
+     <div class="tips-box">
+      <div class="tips-title"><span>💡</span> <span>Tips Menampilkan Output:</span>
+      </div>
+      <p class="tips-content">• Gunakan console.log() untuk menampilkan setiap baris<br>
+        • Gunakan tanda + untuk menggabungkan teks dan variabel<br>
+        • Contoh: console.log("Total Kotor: Rp. " + totalKotor)<br>
+        • Tambahkan console.log("===...===") untuk garis pembatas<br>
+        • Pastikan format Rp. diikuti dengan angka (gunakan + untuk menggabungkan)</p>
+     </div>
+     <div class="code-template">
+      <div class="template-title"><span>🔨</span> <span>Area Kerja - Tulis Kode Output:</span>
+      </div>
+     </div>
+     <div class="challenge-box">
+      <div class="challenge-title"><span>🚀</span> <span>Bonus Challenge (Opsional):</span>
+      </div>
+      <p class="challenge-content">Jika sudah selesai, coba tambahkan fitur berikut untuk meningkatkan nilai:<br><br>
+        1. <strong>Format Ribuan</strong>: Tambahkan pemisah titik untuk angka ribuan (150.000 bukan 150000)<br>
+        2. <strong>Pembulatan</strong>: Bulatkan hasil pajak menggunakan Math.round()<br>
+        3. <strong>Validasi Boolean</strong>: Tampilkan pesan "PROMO AKTIF!" jika statusDiskon === true<br>
+        4. <strong>Multiple Items</strong>: Tambahkan item kedua dan hitung total keseluruhan</p>
+     </div>
+     <div class="tips-box" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-left: 4px solid #2563eb;">
+      <div class="tips-title" style="color: #1e3a8a;"><span>📚</span> <span>Cara Mengerjakan LKPD Ini:</span>
+      </div>
+      <p class="tips-content" style="color: #1e40af;">1. Buka editor kode atau console browser (F12 → Console)<br>
+        2. Tulis kode mulai dari deklarasi variabel (Bagian A)<br>
+        3. Tambahkan rumus perhitungan (Bagian B)<br>
+        4. Tulis kode output dengan console.log()<br>
+        5. Jalankan program dan cek hasilnya<br>
+        6. Selesaikan bagian debugging (Bagian C)<br>
+        7. Dokumentasikan kode dan penjelasan di laporan</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025 | Selamat Mengerjakan Tantangan! 💪</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "🎯 LKPD VERSI TANTANGAN",
+      subtitle: "Proyek: Logika Kalkulator Kasir \"Smart-Shop\"",
+      project1_title: "1. Misi Utama (The Mission)",
+      project2_title: "3. Instruksi Kerja (Problem Solving)",
+      project3_title: "4. Evaluasi Hasil (Performance Test)",
+      footer_text: "© rsensei 2025 | Selamat Mengerjakan Tantangan! 💪",
+      background_start: "#667eea",
+      background_end: "#764ba2",
+      title_color: "#ffffff",
+      subtitle_color: "#f0f0f0"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const subtitle = document.getElementById('subtitle');
+      const project1Title = document.getElementById('project1Title');
+      const project2Title = document.getElementById('project2Title');
+      const project3Title = document.getElementById('project3Title');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (subtitle) subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+      if (project1Title) project1Title.textContent = config.project1_title || defaultConfig.project1_title;
+      if (project2Title) project2Title.textContent = config.project2_title || defaultConfig.project2_title;
+      if (project3Title) project3Title.textContent = config.project3_title || defaultConfig.project3_title;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_start || defaultConfig.background_start} 0%, ${config.background_end || defaultConfig.background_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (subtitle) subtitle.style.color = config.subtitle_color || defaultConfig.subtitle_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_start || defaultConfig.background_start,
+            set: (value) => {
+              config.background_start = value;
+              window.elementSdk.setConfig({ background_start: value });
+            }
+          },
+          {
+            get: () => config.background_end || defaultConfig.background_end,
+            set: (value) => {
+              config.background_end = value;
+              window.elementSdk.setConfig({ background_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle],
+        ["project1_title", config.project1_title || defaultConfig.project1_title],
+        ["project2_title", config.project2_title || defaultConfig.project2_title],
+        ["project3_title", config.project3_title || defaultConfig.project3_title],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c07948b939cd738',t:'MTc2ODgzODc5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
