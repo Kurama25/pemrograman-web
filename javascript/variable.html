@@ -1,0 +1,1313 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variable JavaScript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      text-align: justify;
+    }
+
+    .video-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .section-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-content {
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .variable-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .variable-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    .variable-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-color: #fbbf24;
+    }
+
+    .variable-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .variable-icon {
+      font-size: 32px;
+    }
+
+    .variable-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .variable-keyword {
+      font-size: 16px;
+      font-weight: 600;
+      color: #7c3aed;
+      background: #ede9fe;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .variable-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #475569;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: #10b981;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-keyword {
+      color: #c792ea;
+    }
+
+    .code-string {
+      color: #c3e88d;
+    }
+
+    .code-number {
+      color: #f78c6c;
+    }
+
+    .code-operator {
+      color: #89ddff;
+    }
+
+    .code-comment {
+      color: #676e95;
+      font-style: italic;
+    }
+
+    .code-variable {
+      color: #82aaff;
+    }
+
+    .comparison-section {
+      margin: 30px 0;
+    }
+
+    .comparison-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .comparison-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .comparison-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .comparison-table code {
+      background: #f1f5f9;
+      color: #7c3aed;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+    }
+
+    .check-icon {
+      color: #10b981;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .cross-icon {
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .warning-box {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-left: 4px solid #ef4444;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .warning-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .warning-content {
+      font-size: 15px;
+      color: #7f1d1d;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .success-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-left: 4px solid #22c55e;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .success-content {
+      font-size: 15px;
+      color: #14532d;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .example-section {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #e2e8f0;
+    }
+
+    .example-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .practice-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .practice-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .practice-description {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .editor-panel {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: #0f172a;
+      color: #fbbf24;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-editor {
+      width: 100%;
+      min-height: 400px;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+
+    .output-panel {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 400px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .run-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .run-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .clear-button {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .source-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px 0;
+    }
+
+    .source-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .source-list {
+      font-size: 15px;
+      color: #78350f;
+      line-height: 1.8;
+      list-style-position: inside;
+    }
+
+    .source-list li {
+      margin-bottom: 8px;
+    }
+
+    .source-list a {
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .source-list a:hover {
+      text-decoration: underline;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .naming-rules {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      border: 2px solid #e2e8f0;
+    }
+
+    .naming-rules h4 {
+      color: #1e3a8a;
+      margin-bottom: 15px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .naming-rules ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .naming-rules li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #475569;
+      display: flex;
+      align-items: start;
+      gap: 10px;
+    }
+
+    .naming-rules li.valid::before {
+      content: "✓";
+      color: #10b981;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .naming-rules li.invalid::before {
+      content: "✗";
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .video-section {
+        padding: 25px 20px;
+      }
+
+      .video-title {
+        font-size: 20px;
+        flex-direction: column;
+      }
+
+      .section-card {
+        padding: 25px 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-icon {
+        font-size: 40px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .variable-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .variable-name {
+        font-size: 20px;
+      }
+
+      .variable-keyword {
+        font-size: 14px;
+      }
+
+      .variable-description {
+        font-size: 14px;
+      }
+
+      .code-example {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .practice-section {
+        padding: 25px 20px;
+      }
+
+      .practice-title {
+        font-size: 24px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .practice-description {
+        font-size: 14px;
+      }
+
+      .editor-container {
+        grid-template-columns: 1fr;
+      }
+
+      .code-editor {
+        min-height: 300px;
+        font-size: 13px;
+      }
+
+      .output-panel {
+        min-height: 300px;
+        font-size: 13px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .run-button, .clear-button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+        font-size: 15px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+
+      .info-title, .source-title, .warning-title, .success-title, .comparison-title, .example-title {
+        font-size: 16px;
+      }
+
+      .info-content, .source-list, .warning-content, .success-content {
+        font-size: 13px;
+      }
+
+      .comparison-table {
+        font-size: 12px;
+      }
+
+      .comparison-table th {
+        font-size: 13px;
+        padding: 12px 10px;
+      }
+
+      .comparison-table td {
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      .comparison-table code {
+        font-size: 11px;
+      }
+
+      .feature-list li {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">📦 Variable JavaScript</h1>
+     <p class="intro-text" id="introText">Variable adalah wadah atau tempat penyimpanan untuk menyimpan data dalam program JavaScript. Dengan variable, kita dapat menyimpan nilai dan menggunakannya kembali di seluruh program. JavaScript menyediakan tiga cara untuk mendeklarasikan variable: var, let, dan const. Mari kita pelajari perbedaan dan penggunaannya!</p>
+    </header>
+    <div class="video-section">
+     <h2 class="video-title"><span>🎥</span> <span>Video Pembelajaran</span></h2>
+     <div class="video-container"><iframe src="https://www.youtube.com/embed/X1q_cK0Qv6o?si=Yvn3VlY14Z7MbzTM" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+     </div>
+    </div><!-- Apa itu Variable -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       💡
+      </div>
+      <h2 class="section-title">Apa itu Variable?</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>📝</span> <span>Konsep Dasar Variable</span>
+      </div>
+      <p class="info-content">Variable adalah nama simbolik yang kita berikan untuk sebuah lokasi di memori komputer yang menyimpan nilai. Bayangkan variable seperti kotak penyimpanan dengan label di luarnya. Label adalah nama variable, dan isi kotaknya adalah nilai yang tersimpan. Kita bisa mengubah isi kotak tersebut kapan saja (kecuali untuk const yang nilainya tetap).</p>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>💡</span> <span>Analogi Sederhana</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// Bayangkan variable seperti kotak penyimpanan</span> <span class="code-keyword">let</span> <span class="code-variable">namaSiswa</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-comment">// Kotak berlabel "namaSiswa" berisi "Budi"</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-comment">// Kotak berlabel "umur" berisi angka 17</span> <span class="code-keyword">let</span> <span class="code-variable">sudahLulus</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// Kotak berlabel "sudahLulus" berisi nilai true</span> <span class="code-comment">// Kita bisa mengubah isi kotak</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">18</span><span class="code-operator">;</span> <span class="code-comment">// Sekarang kotak "umur" berisi 18</span>
+      </div>
+     </div>
+     <div class="naming-rules">
+      <h4>📋 Aturan Penamaan Variable</h4>
+      <ul>
+       <li class="valid"><code>namaVariable</code> - Huruf kecil di awal (camelCase) ✓</li>
+       <li class="valid"><code>nama_variable</code> - Menggunakan underscore ✓</li>
+       <li class="valid"><code>_private</code> - Dimulai dengan underscore ✓</li>
+       <li class="valid"><code>$jquery</code> - Dimulai dengan dollar sign ✓</li>
+       <li class="valid"><code>nama2</code> - Mengandung angka (tidak di awal) ✓</li>
+       <li class="invalid"><code>2nama</code> - Dimulai dengan angka ✗</li>
+       <li class="invalid"><code>nama-variable</code> - Menggunakan tanda hubung ✗</li>
+       <li class="invalid"><code>nama variable</code> - Mengandung spasi ✗</li>
+       <li class="invalid"><code>let</code> atau <code>class</code> - Kata kunci JavaScript ✗</li>
+      </ul>
+     </div>
+     <div class="success-box">
+      <div class="success-title"><span>✅</span> <span>Best Practices Penamaan</span>
+      </div>
+      <p class="success-content"><strong>1. Gunakan nama yang deskriptif:</strong> <code>let totalHarga</code> lebih baik dari <code>let x</code><br><strong>2. camelCase untuk variable:</strong> <code>let namaLengkap</code> bukan <code>let nama_lengkap</code><br><strong>3. UPPERCASE untuk konstanta:</strong> <code>const MAX_SIZE = 100</code><br><strong>4. Hindari nama singkat:</strong> Gunakan <code>let jumlahSiswa</code> bukan <code>let js</code><br><strong>5. Konsisten:</strong> Pilih satu gaya dan gunakan di seluruh kode</p>
+     </div>
+    </div><!-- Tiga Cara Deklarasi Variable -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       🔑
+      </div>
+      <h2 class="section-title">Tiga Cara Deklarasi Variable</h2>
+     </div>
+     <div class="variable-grid"><!-- VAR -->
+      <div class="variable-card">
+       <div class="variable-header"><span class="variable-icon">🔴</span>
+        <div style="flex: 1;">
+         <div class="variable-name">
+          var
+         </div>
+         <div class="variable-keyword">
+          var
+         </div>
+        </div>
+       </div>
+       <p class="variable-description">Cara lama untuk mendeklarasikan variable. Memiliki function scope dan dapat di-redeclare. Sudah jarang digunakan dalam kode modern karena perilakunya yang kurang predictable.</p>
+       <ul class="feature-list">
+        <li>Function scoped (tidak block scoped)</li>
+        <li>Bisa di-redeclare (deklarasi ulang)</li>
+        <li>Bisa di-reassign (ubah nilai)</li>
+        <li>Hoisting (diangkat ke atas)</li>
+        <li>Tidak direkomendasikan lagi</li>
+       </ul>
+       <div class="code-example"><span class="code-keyword">var</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Budi"</span> <span class="code-comment">// Bisa di-redeclare</span> <span class="code-keyword">var</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Siti"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Siti"</span> <span class="code-comment">// Tidak block scoped</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">var</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">umur</span><span class="code-operator">);</span> <span class="code-comment">// 25 (masih bisa diakses)</span>
+       </div>
+      </div><!-- LET -->
+      <div class="variable-card">
+       <div class="variable-header"><span class="variable-icon">🟢</span>
+        <div style="flex: 1;">
+         <div class="variable-name">
+          let
+         </div>
+         <div class="variable-keyword">
+          let
+         </div>
+        </div>
+       </div>
+       <p class="variable-description">Cara modern untuk mendeklarasikan variable yang nilainya bisa berubah. Memiliki block scope dan tidak bisa di-redeclare. Ini adalah pilihan terbaik untuk variable yang nilainya akan diubah.</p>
+       <ul class="feature-list">
+        <li>Block scoped (hanya di dalam {})</li>
+        <li>Tidak bisa di-redeclare</li>
+        <li>Bisa di-reassign (ubah nilai)</li>
+        <li>Tidak ada hoisting yang membingungkan</li>
+        <li>Direkomendasikan untuk nilai berubah</li>
+       </ul>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Budi"</span> <span class="code-comment">// Bisa di-reassign</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Siti"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Siti"</span> <span class="code-comment">// Block scoped</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">umur</span><span class="code-operator">);</span> <span class="code-comment">// 25</span> <span class="code-operator">}</span> <span class="code-comment">// console.log(umur); // Error!</span>
+       </div>
+      </div><!-- CONST -->
+      <div class="variable-card">
+       <div class="variable-header"><span class="variable-icon">🔵</span>
+        <div style="flex: 1;">
+         <div class="variable-name">
+          const
+         </div>
+         <div class="variable-keyword">
+          const
+         </div>
+        </div>
+       </div>
+       <p class="variable-description">Digunakan untuk mendeklarasikan konstanta - variable yang nilainya tidak akan berubah. Harus diinisialisasi saat deklarasi dan tidak bisa di-reassign. Pilihan terbaik untuk nilai yang tetap.</p>
+       <ul class="feature-list">
+        <li>Block scoped (hanya di dalam {})</li>
+        <li>Tidak bisa di-redeclare</li>
+        <li>Tidak bisa di-reassign</li>
+        <li>Harus diinisialisasi saat deklarasi</li>
+        <li>Direkomendasikan untuk nilai tetap</li>
+       </ul>
+       <div class="code-example"><span class="code-keyword">const</span> <span class="code-variable">PI</span> <span class="code-operator">=</span> <span class="code-number">3.14159</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">PI</span><span class="code-operator">);</span> <span class="code-comment">// 3.14159</span> <span class="code-comment">// Tidak bisa di-reassign</span> <span class="code-comment">// PI = 3.14; // Error!</span> <span class="code-comment">// Harus diinisialisasi</span> <span class="code-comment">// const nama; // Error!</span> <span class="code-comment">// Object/array bisa dimodifikasi</span> <span class="code-keyword">const</span> <span class="code-variable">siswa</span> <span class="code-operator">=</span> <span class="code-operator">{</span> <span class="code-variable">nama</span><span class="code-operator">:</span> <span class="code-string">"Budi"</span> <span class="code-operator">};</span> <span class="code-variable">siswa</span><span class="code-operator">.</span><span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Siti"</span><span class="code-operator">;</span> <span class="code-comment">// OK ✓</span>
+       </div>
+      </div>
+     </div>
+    </div><!-- Perbandingan var, let, const -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       ⚖️
+      </div>
+      <h2 class="section-title">Perbandingan var, let, dan const</h2>
+     </div>
+     <div class="table-container">
+      <table class="comparison-table">
+       <thead>
+        <tr>
+         <th>Fitur</th>
+         <th>var</th>
+         <th>let</th>
+         <th>const</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><strong>Scope</strong></td>
+         <td>Function scope</td>
+         <td>Block scope</td>
+         <td>Block scope</td>
+        </tr>
+        <tr>
+         <td><strong>Redeclare</strong></td>
+         <td><span class="check-icon">✓</span> Bisa</td>
+         <td><span class="cross-icon">✗</span> Tidak bisa</td>
+         <td><span class="cross-icon">✗</span> Tidak bisa</td>
+        </tr>
+        <tr>
+         <td><strong>Reassign</strong></td>
+         <td><span class="check-icon">✓</span> Bisa</td>
+         <td><span class="check-icon">✓</span> Bisa</td>
+         <td><span class="cross-icon">✗</span> Tidak bisa</td>
+        </tr>
+        <tr>
+         <td><strong>Hoisting</strong></td>
+         <td><span class="check-icon">✓</span> Ya (undefined)</td>
+         <td>Temporal Dead Zone</td>
+         <td>Temporal Dead Zone</td>
+        </tr>
+        <tr>
+         <td><strong>Inisialisasi Wajib</strong></td>
+         <td><span class="cross-icon">✗</span> Tidak</td>
+         <td><span class="cross-icon">✗</span> Tidak</td>
+         <td><span class="check-icon">✓</span> Ya</td>
+        </tr>
+        <tr>
+         <td><strong>Kapan Digunakan</strong></td>
+         <td>Jangan digunakan</td>
+         <td>Nilai berubah</td>
+         <td>Nilai tetap</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="comparison-section">
+      <div class="comparison-title"><span>🔍</span> <span>Contoh Perbandingan Scope</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// ===== VAR: Function Scope =====</span> <span class="code-keyword">function</span> <span class="code-variable">testVar</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-keyword">var</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">1</span><span class="code-operator">;</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">var</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// Variable yang sama!</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 2</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 2 (terpengaruh!)</span> <span class="code-operator">}</span> <span class="code-comment">// ===== LET: Block Scope =====</span> <span class="code-keyword">function</span> <span class="code-variable">testLet</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-keyword">let</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">1</span><span class="code-operator">;</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">let</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// Variable berbeda!</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 2</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 1 (tidak terpengaruh!)</span> <span class="code-operator">}</span> <span class="code-comment">// ===== CONST: Block Scope + Immutable =====</span> <span class="code-keyword">function</span> <span class="code-variable">testConst</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-keyword">const</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">1</span><span class="code-operator">;</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">const</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 2</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 1</span> <span class="code-comment">// x = 3; // Error! Tidak bisa reassign</span> <span class="code-operator">}</span>
+      </div>
+     </div>
+     <div class="warning-box">
+      <div class="warning-title"><span>⚠️</span> <span>Kesalahan Umum dengan const</span>
+      </div>
+      <p class="warning-content"><strong>const tidak membuat nilai immutable untuk object/array!</strong> const hanya mencegah reassignment variable, bukan perubahan properti object atau elemen array.<br><br><code>const arr = [1, 2, 3];</code><br><code>arr.push(4); // OK ✓ (mengubah isi array)</code><br><code>arr = [5, 6]; // Error! ✗ (reassign variable)</code><br><br>
+        Untuk membuat object benar-benar immutable, gunakan <code>Object.freeze()</code>.</p>
+     </div>
+    </div><!-- Scope Variable -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       🎯
+      </div>
+      <h2 class="section-title">Scope Variable</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Scope?</span>
+      </div>
+      <p class="info-content">Scope menentukan di mana variable dapat diakses dalam kode. Ada tiga jenis scope utama: Global Scope (bisa diakses di mana saja), Function Scope (hanya di dalam fungsi), dan Block Scope (hanya di dalam blok kode {}). Memahami scope sangat penting untuk menghindari bug dan menulis kode yang bersih.</p>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🌍</span> <span>1. Global Scope</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// Variable di luar fungsi/blok = Global Scope</span> <span class="code-keyword">let</span> <span class="code-variable">namaSekolah</span> <span class="code-operator">=</span> <span class="code-string">"SMA Negeri 1"</span><span class="code-operator">;</span> <span class="code-keyword">function</span> <span class="code-variable">tampilkanSekolah</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">namaSekolah</span><span class="code-operator">);</span> <span class="code-comment">// Bisa diakses ✓</span> <span class="code-operator">}</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">namaSekolah</span><span class="code-operator">);</span> <span class="code-comment">// Bisa diakses ✓</span> <span class="code-operator">}</span> <span class="code-variable">tampilkanSekolah</span><span class="code-operator">();</span> <span class="code-comment">// "SMA Negeri 1"</span>
+      </div>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>⚙️</span> <span>2. Function Scope (var)</span>
+      </div>
+      <div class="code-example"><span class="code-keyword">function</span> <span class="code-variable">hitungTotal</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-keyword">var</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-number">100</span><span class="code-operator">;</span> <span class="code-comment">// Function scoped</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">var</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-number">200</span><span class="code-operator">;</span> <span class="code-comment">// Masih variable yang sama</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">total</span><span class="code-operator">);</span> <span class="code-comment">// 200</span> <span class="code-operator">}</span> <span class="code-comment">// console.log(total); // Error! Di luar fungsi</span>
+      </div>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>📦</span> <span>3. Block Scope (let &amp; const)</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// Block scope: hanya di dalam {}</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">true</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">let</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-keyword">const</span> <span class="code-variable">y</span> <span class="code-operator">=</span> <span class="code-number">20</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">,</span> <span class="code-variable">y</span><span class="code-operator">);</span> <span class="code-comment">// 10 20</span> <span class="code-operator">}</span> <span class="code-comment">// console.log(x); // Error! Di luar blok</span> <span class="code-comment">// console.log(y); // Error! Di luar blok</span> <span class="code-comment">// Loop juga punya block scope</span> <span class="code-keyword">for</span> <span class="code-operator">(</span><span class="code-keyword">let</span> <span class="code-variable">i</span> <span class="code-operator">=</span> <span class="code-number">0</span><span class="code-operator">;</span> <span class="code-variable">i</span> <span class="code-operator">&lt;</span> <span class="code-number">3</span><span class="code-operator">;</span> <span class="code-variable">i</span><span class="code-operator">++)</span> <span class="code-operator">{</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">i</span><span class="code-operator">);</span> <span class="code-comment">// 0 1 2</span> <span class="code-operator">}</span> <span class="code-comment">// console.log(i); // Error! i hanya ada di loop</span>
+      </div>
+     </div>
+     <div class="success-box">
+      <div class="success-title"><span>✅</span> <span>Tips Menggunakan Scope</span>
+      </div>
+      <p class="success-content"><strong>1. Gunakan scope terkecil:</strong> Deklarasikan variable di scope terkecil yang diperlukan<br><strong>2. Hindari global variable:</strong> Terlalu banyak global variable dapat menyebabkan konflik<br><strong>3. Gunakan let/const di loop:</strong> <code>for (let i = 0; ...)</code> bukan <code>for (var i = 0; ...)</code><br><strong>4. Block scope lebih aman:</strong> let dan const mencegah bug yang tidak terduga<br><strong>5. Nama variable unik per scope:</strong> Hindari nama variable yang sama di scope berbeda</p>
+     </div>
+    </div><!-- Hoisting -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       ⬆️
+      </div>
+      <h2 class="section-title">Hoisting</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Hoisting?</span>
+      </div>
+      <p class="info-content">Hoisting adalah mekanisme JavaScript yang "memindahkan" deklarasi variable dan fungsi ke bagian atas scope mereka sebelum kode dieksekusi. Namun, hanya deklarasinya yang dipindahkan, bukan inisialisasinya. Ini bisa menyebabkan perilaku yang membingungkan, terutama dengan var.</p>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🔴</span> <span>Hoisting dengan var</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// Kode yang kita tulis:</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// undefined (bukan error!)</span> <span class="code-keyword">var</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Budi"</span> <span class="code-comment">// Yang sebenarnya terjadi (hoisting):</span> <span class="code-keyword">var</span> <span class="code-variable">nama</span><span class="code-operator">;</span> <span class="code-comment">// Deklarasi dipindahkan ke atas</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// undefined</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-comment">// Inisialisasi tetap di sini</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Budi"</span>
+      </div>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🟢</span> <span>Temporal Dead Zone (let &amp; const)</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// let dan const juga di-hoist, tapi tidak bisa diakses</span> <span class="code-comment">// console.log(nama); // Error! Temporal Dead Zone</span> <span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">nama</span><span class="code-operator">);</span> <span class="code-comment">// "Budi"</span> <span class="code-comment">// Temporal Dead Zone: area sebelum deklarasi</span> <span class="code-comment">// Di zona ini, variable sudah ada tapi belum bisa diakses</span> <span class="code-keyword">function</span> <span class="code-variable">contoh</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-comment">// TDZ mulai di sini</span> <span class="code-comment">// console.log(x); // Error!</span> <span class="code-keyword">let</span> <span class="code-variable">x</span> <span class="code-operator">=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-comment">// TDZ berakhir di sini</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// 10</span> <span class="code-operator">}</span>
+      </div>
+     </div>
+     <div class="warning-box">
+      <div class="warning-title"><span>⚠️</span> <span>Mengapa Hoisting Bisa Berbahaya</span>
+      </div>
+      <p class="warning-content">Hoisting dengan var bisa menyebabkan bug yang sulit dilacak karena:<br><br><strong>1. Nilai undefined yang tak terduga:</strong> Variable yang digunakan sebelum inisialisasi bernilai undefined<br><strong>2. Bug tersembunyi:</strong> Kode tidak error tapi hasilnya salah<br><strong>3. Sulit di-debug:</strong> Perilaku tidak intuitif dan membingungkan<br><br><strong>Solusi:</strong> Gunakan let dan const yang memberikan error jelas ketika diakses sebelum deklarasi!</p>
+     </div>
+    </div><!-- Kapan Menggunakan var, let, const -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       🎓
+      </div>
+      <h2 class="section-title">Kapan Menggunakan var, let, atau const?</h2>
+     </div>
+     <div class="success-box">
+      <div class="success-title"><span>✅</span> <span>Best Practice Modern JavaScript</span>
+      </div>
+      <p class="success-content"><strong>1. Default ke const:</strong> Gunakan const sebagai pilihan utama<br><strong>2. let untuk nilai berubah:</strong> Hanya gunakan let jika nilai akan berubah<br><strong>3. Jangan gunakan var:</strong> var sudah deprecated dalam kode modern<br><strong>4. Deklarasi di awal scope:</strong> Deklarasikan variable di awal untuk kejelasan<br><strong>5. Satu deklarasi per baris:</strong> Hindari <code>let a = 1, b = 2;</code></p>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🔵</span> <span>Gunakan const untuk:</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// 1. Nilai tetap / konstanta</span> <span class="code-keyword">const</span> <span class="code-variable">PI</span> <span class="code-operator">=</span> <span class="code-number">3.14159</span><span class="code-operator">;</span> <span class="code-keyword">const</span> <span class="code-variable">MAX_SISWA</span> <span class="code-operator">=</span> <span class="code-number">30</span><span class="code-operator">;</span> <span class="code-keyword">const</span> <span class="code-variable">NAMA_SEKOLAH</span> <span class="code-operator">=</span> <span class="code-string">"SMA Negeri 1"</span><span class="code-operator">;</span> <span class="code-comment">// 2. Object/Array yang propertinya berubah</span> <span class="code-keyword">const</span> <span class="code-variable">siswa</span> <span class="code-operator">=</span> <span class="code-operator">{</span> <span class="code-variable">nama</span><span class="code-operator">:</span> <span class="code-string">"Budi"</span><span class="code-operator">,</span> <span class="code-variable">umur</span><span class="code-operator">:</span> <span class="code-number">17</span> <span class="code-operator">};</span> <span class="code-variable">siswa</span><span class="code-operator">.</span><span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">18</span><span class="code-operator">;</span> <span class="code-comment">// OK ✓</span> <span class="code-comment">// 3. Fungsi yang tidak akan di-reassign</span> <span class="code-keyword">const</span> <span class="code-variable">hitungLuas</span> <span class="code-operator">=</span> <span class="code-operator">(</span><span class="code-variable">p</span><span class="code-operator">,</span> <span class="code-variable">l</span><span class="code-operator">)</span> <span class="code-operator">=&gt;</span> <span class="code-variable">p</span> <span class="code-operator">*</span> <span class="code-variable">l</span><span class="code-operator">;</span> <span class="code-comment">// 4. Import module</span> <span class="code-keyword">const</span> <span class="code-variable">express</span> <span class="code-operator">=</span> <span class="code-variable">require</span><span class="code-operator">(</span><span class="code-string">'express'</span><span class="code-operator">);</span>
+      </div>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🟢</span> <span>Gunakan let untuk:</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// 1. Counter dalam loop</span> <span class="code-keyword">for</span> <span class="code-operator">(</span><span class="code-keyword">let</span> <span class="code-variable">i</span> <span class="code-operator">=</span> <span class="code-number">0</span><span class="code-operator">;</span> <span class="code-variable">i</span> <span class="code-operator">&lt;</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-variable">i</span><span class="code-operator">++)</span> <span class="code-operator">{</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">i</span><span class="code-operator">);</span> <span class="code-operator">}</span> <span class="code-comment">// 2. Variable yang nilainya berubah</span> <span class="code-keyword">let</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-number">0</span><span class="code-operator">;</span> <span class="code-variable">total</span> <span class="code-operator">+=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-variable">total</span> <span class="code-operator">+=</span> <span class="code-number">20</span><span class="code-operator">;</span> <span class="code-comment">// 3. Variable dalam kondisi</span> <span class="code-keyword">let</span> <span class="code-variable">status</span><span class="code-operator">;</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-variable">nilai</span> <span class="code-operator">&gt;=</span> <span class="code-number">75</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-string">"Lulus"</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-keyword">else</span> <span class="code-operator">{</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-string">"Tidak Lulus"</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-comment">// 4. Akumulator</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-string">""</span><span class="code-operator">;</span> <span class="code-keyword">for</span> <span class="code-operator">(</span><span class="code-keyword">let</span> <span class="code-variable">char</span> <span class="code-keyword">of</span> <span class="code-string">"Hello"</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-variable">hasil</span> <span class="code-operator">+=</span> <span class="code-variable">char</span> <span class="code-operator">+</span> <span class="code-string">" "</span><span class="code-operator">;</span> <span class="code-operator">}</span>
+      </div>
+     </div>
+     <div class="example-section">
+      <div class="example-title"><span>🔴</span> <span>Jangan gunakan var:</span>
+      </div>
+      <div class="code-example"><span class="code-comment">// ❌ JANGAN LAKUKAN INI</span> <span class="code-keyword">var</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-keyword">var</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-comment">// ✅ GUNAKAN INI</span> <span class="code-keyword">const</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-comment">// Alasan: var punya masalah hoisting, function scope,</span> <span class="code-comment">// dan bisa di-redeclare yang menyebabkan bug</span>
+      </div>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Aturan Emas</span>
+      </div>
+      <p class="info-content"><strong>Default ke const, upgrade ke let jika perlu, jangan pernah gunakan var.</strong><br><br>
+        Mulailah dengan mendeklarasikan semua variable menggunakan const. Jika kemudian Anda menemukan bahwa nilai variable perlu berubah, ubah const menjadi let. Pendekatan ini membuat kode Anda lebih aman dan mudah diprediksi.</p>
+     </div>
+    </div><!-- Practice Section -->
+    <div class="practice-section">
+     <div class="practice-title"><span>💻</span> <span>Coba Praktikkan!</span>
+     </div>
+     <p class="practice-description">Gunakan editor di bawah ini untuk mencoba berbagai deklarasi variable JavaScript. Tulis kode JavaScript Anda di sebelah kiri, lalu klik tombol "Jalankan Kode" untuk melihat hasilnya di sebelah kanan. Eksperimen dengan var, let, dan const untuk memahami perbedaannya!</p>
+     <div class="editor-container">
+      <div class="editor-panel">
+       <div class="editor-header"><span>📝</span> <span>Editor Kode</span>
+       </div><textarea class="code-editor" id="codeEditor" placeholder="Tulis kode JavaScript di sini...">// 1. Deklarasi dengan const
+const namaSekolah = "SMA Negeri 1";
+const jumlahSiswa = 500;
+console.log("Sekolah:", namaSekolah);
+console.log("Jumlah Siswa:", jumlahSiswa);
+
+// 2. Deklarasi dengan let
+let nilai = 85;
+console.log("\nNilai awal:", nilai);
+nilai = 90; // Bisa diubah
+console.log("Nilai setelah diubah:", nilai);
+
+// 3. Object dengan const
+const siswa = {
+  nama: "Budi",
+  kelas: "XII IPA 1"
+};
+console.log("\nData Siswa:", siswa);
+siswa.nama = "Siti"; // Properti bisa diubah
+console.log("Setelah diubah:", siswa);
+
+// 4. Block Scope
+if (true) {
+  let blockVar = "Hanya di dalam block";
+  console.log("\nDi dalam block:", blockVar);
+}
+// console.log(blockVar); // Error jika uncomment
+
+// 5. Loop dengan let
+console.log("\nLoop:");
+for (let i = 1; i &lt;= 3; i++) {
+  console.log("Iterasi ke-" + i);
+}</textarea>
+      </div>
+      <div class="editor-panel">
+       <div class="editor-header"><span>📤</span> <span>Output</span>
+       </div>
+       <div class="output-panel" id="output"></div>
+      </div>
+     </div>
+     <div class="button-group"><button class="run-button" id="runBtn"> <span>▶️</span> <span>Jalankan Kode</span> </button> <button class="clear-button" id="clearBtn"> <span>🗑️</span> <span>Hapus Output</span> </button>
+     </div>
+    </div><!-- Source Section -->
+    <div class="source-box">
+     <div class="source-title"><span>📚</span> <span>Sumber Materi</span>
+     </div>
+     <ul class="source-list">
+      <li>MDN Web Docs - var: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank" rel="noopener noreferrer">MDN var Statement</a></li>
+      <li>MDN Web Docs - let: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noopener noreferrer">MDN let Statement</a></li>
+      <li>MDN Web Docs - const: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const" target="_blank" rel="noopener noreferrer">MDN const Statement</a></li>
+      <li>MDN Web Docs - Hoisting: <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting" target="_blank" rel="noopener noreferrer">MDN Hoisting</a></li>
+      <li>JavaScript.info - Variables: <a href="https://javascript.info/variables" target="_blank" rel="noopener noreferrer">JavaScript.info Variables</a></li>
+     </ul>
+    </div>
+    <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer"> <span>⬅️</span> <span>Kembali ke Halaman Sebelumnya</span> </a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "📦 Variable JavaScript",
+      intro_text: "Variable adalah wadah atau tempat penyimpanan untuk menyimpan data dalam program JavaScript. Dengan variable, kita dapat menyimpan nilai dan menggunakannya kembali di seluruh program. JavaScript menyediakan tiga cara untuk mendeklarasikan variable: var, let, dan const. Mari kita pelajari perbedaan dan penggunaannya!",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Code Editor Functionality
+    const codeEditor = document.getElementById('codeEditor');
+    const output = document.getElementById('output');
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // Custom console.log
+    const originalLog = console.log;
+    let logs = [];
+
+    function customLog(...args) {
+      const message = args.map(arg => {
+        if (typeof arg === 'object') {
+          try {
+            return JSON.stringify(arg, null, 2);
+          } catch(e) {
+            return String(arg);
+          }
+        }
+        return String(arg);
+      }).join(' ');
+      logs.push(message);
+    }
+
+    runBtn.addEventListener('click', () => {
+      logs = [];
+      output.textContent = '';
+      output.style.color = '#e2e8f0';
+      
+      try {
+        console.log = customLog;
+        
+        // Execute code
+        eval(codeEditor.value);
+        
+        // Display output
+        if (logs.length > 0) {
+          output.textContent = logs.join('\n');
+        } else {
+          output.textContent = 'Kode berhasil dijalankan! (Tidak ada output)';
+        }
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+        output.style.color = '#ff5370';
+      } finally {
+        console.log = originalLog;
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      output.textContent = '';
+      logs = [];
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c0709aea36093d2',t:'MTc2ODgzMzEwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

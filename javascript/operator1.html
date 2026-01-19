@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator JavaScript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      text-align: justify;
+    }
+
+    .video-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .section-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-content {
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .operator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .operator-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    .operator-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-color: #fbbf24;
+    }
+
+    .operator-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .operator-icon {
+      font-size: 32px;
+    }
+
+    .operator-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .operator-symbol {
+      font-size: 16px;
+      font-weight: 600;
+      color: #7c3aed;
+      background: #ede9fe;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .operator-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-keyword {
+      color: #c792ea;
+    }
+
+    .code-string {
+      color: #c3e88d;
+    }
+
+    .code-number {
+      color: #f78c6c;
+    }
+
+    .code-operator {
+      color: #89ddff;
+    }
+
+    .code-comment {
+      color: #676e95;
+      font-style: italic;
+    }
+
+    .code-variable {
+      color: #82aaff;
+    }
+
+    .practice-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .practice-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .practice-description {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .editor-panel {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: #0f172a;
+      color: #fbbf24;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-editor {
+      width: 100%;
+      min-height: 350px;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+
+    .output-panel {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 350px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .run-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .run-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .clear-button {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .source-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px 0;
+    }
+
+    .source-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .source-list {
+      font-size: 15px;
+      color: #78350f;
+      line-height: 1.8;
+      list-style-position: inside;
+    }
+
+    .source-list li {
+      margin-bottom: 8px;
+    }
+
+    .source-list a {
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .source-list a:hover {
+      text-decoration: underline;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .operator-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .operator-table th {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .operator-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .operator-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .operator-table code {
+      background: #f1f5f9;
+      color: #7c3aed;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .video-section {
+        padding: 25px 20px;
+      }
+
+      .video-title {
+        font-size: 20px;
+        flex-direction: column;
+      }
+
+      .section-card {
+        padding: 25px 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-icon {
+        font-size: 40px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .operator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .operator-name {
+        font-size: 18px;
+      }
+
+      .operator-symbol {
+        font-size: 14px;
+      }
+
+      .operator-description {
+        font-size: 13px;
+      }
+
+      .code-example {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .practice-section {
+        padding: 25px 20px;
+      }
+
+      .practice-title {
+        font-size: 24px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .practice-description {
+        font-size: 14px;
+      }
+
+      .editor-container {
+        grid-template-columns: 1fr;
+      }
+
+      .code-editor {
+        min-height: 250px;
+        font-size: 13px;
+      }
+
+      .output-panel {
+        min-height: 250px;
+        font-size: 13px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .run-button, .clear-button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+        font-size: 15px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+
+      .info-title, .source-title {
+        font-size: 16px;
+      }
+
+      .info-content, .source-list {
+        font-size: 13px;
+      }
+
+      .operator-table {
+        font-size: 12px;
+      }
+
+      .operator-table th {
+        font-size: 13px;
+        padding: 12px 10px;
+      }
+
+      .operator-table td {
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      .operator-table code {
+        font-size: 11px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">⚙️ Operator JavaScript</h1>
+     <p class="intro-text" id="introText">Operator adalah simbol khusus yang digunakan untuk melakukan operasi pada nilai dan variabel. JavaScript memiliki berbagai jenis operator seperti aritmatika untuk perhitungan matematika, penugasan untuk menyimpan nilai, dan perbandingan untuk membandingkan nilai.</p>
+    </header>
+    <div class="video-section">
+     <h2 class="video-title"><span>🎥</span> <span>Video Pembelajaran</span></h2>
+     <div class="video-container"><iframe src="https://www.youtube.com/embed/EnXClrVdpTM?si=yy-bgqRD49807rAW" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     </div>
+    </div><!-- Operator Aritmatika -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       ➕
+      </div>
+      <h2 class="section-title">Operator Aritmatika</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Aritmatika?</span>
+      </div>
+      <p class="info-content">Operator aritmatika digunakan untuk melakukan operasi matematika pada angka (number). Operator ini memungkinkan kita untuk melakukan perhitungan seperti penjumlahan, pengurangan, perkalian, pembagian, dan operasi matematika lainnya.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➕</span>
+        <div>
+         <div class="operator-name">
+          Penjumlahan
+         </div>
+         <div class="operator-symbol">
+          +
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menjumlahkan dua nilai atau lebih. Dapat juga digunakan untuk menggabungkan string.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">+</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 15</span> <span class="code-comment">// Untuk string</span> <span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span> <span class="code-operator">+</span> <span class="code-string">" Santoso"</span><span class="code-operator">;</span> <span class="code-comment">// "Budi Santoso"</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➖</span>
+        <div>
+         <div class="operator-name">
+          Pengurangan
+         </div>
+         <div class="operator-symbol">
+          -
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengurangkan satu nilai dari nilai lainnya.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">20</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">8</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">-</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 12</span> <span class="code-comment">// Contoh lain</span> <span class="code-keyword">let</span> <span class="code-variable">saldo</span> <span class="code-operator">=</span> <span class="code-number">100000</span> <span class="code-operator">-</span> <span class="code-number">25000</span><span class="code-operator">;</span> <span class="code-comment">// 75000</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">✖️</span>
+        <div>
+         <div class="operator-name">
+          Perkalian
+         </div>
+         <div class="operator-symbol">
+          *
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengalikan dua nilai atau lebih.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">6</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">4</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">*</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 24</span> <span class="code-comment">// Menghitung luas</span> <span class="code-keyword">let</span> <span class="code-variable">luas</span> <span class="code-operator">=</span> <span class="code-number">5</span> <span class="code-operator">*</span> <span class="code-number">8</span><span class="code-operator">;</span> <span class="code-comment">// 40</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➗</span>
+        <div>
+         <div class="operator-name">
+          Pembagian
+         </div>
+         <div class="operator-symbol">
+          /
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Membagi satu nilai dengan nilai lainnya.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">20</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">4</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">/</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 5</span> <span class="code-comment">// Membagi dengan desimal</span> <span class="code-keyword">let</span> <span class="code-variable">rata</span> <span class="code-operator">=</span> <span class="code-number">75</span> <span class="code-operator">/</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// 37.5</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📦</span>
+        <div>
+         <div class="operator-name">
+          Modulus (Sisa Bagi)
+         </div>
+         <div class="operator-symbol">
+          %
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengembalikan sisa hasil pembagian (remainder).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">sisa</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">%</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 2</span> <span class="code-comment">// Cek bilangan genap/ganjil</span> <span class="code-keyword">let</span> <span class="code-variable">cek</span> <span class="code-operator">=</span> <span class="code-number">10</span> <span class="code-operator">%</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// 0 (genap)</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⬆️</span>
+        <div>
+         <div class="operator-name">
+          Eksponen (Pangkat)
+         </div>
+         <div class="operator-symbol">
+          **
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memangkatkan nilai pertama dengan nilai kedua.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">a</span> <span class="code-operator">=</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">b</span> <span class="code-operator">=</span> <span class="code-number">3</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-variable">a</span> <span class="code-operator">**</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-comment">// 8 (2³)</span> <span class="code-comment">// Contoh lain</span> <span class="code-keyword">let</span> <span class="code-variable">kuadrat</span> <span class="code-operator">=</span> <span class="code-number">5</span> <span class="code-operator">**</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// 25</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➕</span>
+        <div>
+         <div class="operator-name">
+          Increment
+         </div>
+         <div class="operator-symbol">
+          ++
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menambah nilai variabel sebesar 1.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-variable">angka</span><span class="code-operator">++;</span> <span class="code-comment">// angka sekarang 6</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-variable">angka</span> <span class="code-operator">+</span> <span class="code-number">1</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➖</span>
+        <div>
+         <div class="operator-name">
+          Decrement
+         </div>
+         <div class="operator-symbol">
+          --
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengurangi nilai variabel sebesar 1.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-variable">angka</span><span class="code-operator">--;</span> <span class="code-comment">// angka sekarang 9</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-variable">angka</span> <span class="code-operator">-</span> <span class="code-number">1</span><span class="code-operator">;</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Operator</th>
+         <th>Nama</th>
+         <th>Contoh</th>
+         <th>Hasil</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>+</code></td>
+         <td>Penjumlahan</td>
+         <td><code>10 + 5</code></td>
+         <td>15</td>
+        </tr>
+        <tr>
+         <td><code>-</code></td>
+         <td>Pengurangan</td>
+         <td><code>10 - 5</code></td>
+         <td>5</td>
+        </tr>
+        <tr>
+         <td><code>*</code></td>
+         <td>Perkalian</td>
+         <td><code>10 * 5</code></td>
+         <td>50</td>
+        </tr>
+        <tr>
+         <td><code>/</code></td>
+         <td>Pembagian</td>
+         <td><code>10 / 5</code></td>
+         <td>2</td>
+        </tr>
+        <tr>
+         <td><code>%</code></td>
+         <td>Modulus</td>
+         <td><code>10 % 3</code></td>
+         <td>1</td>
+        </tr>
+        <tr>
+         <td><code>**</code></td>
+         <td>Eksponen</td>
+         <td><code>2 ** 3</code></td>
+         <td>8</td>
+        </tr>
+        <tr>
+         <td><code>++</code></td>
+         <td>Increment</td>
+         <td><code>x++</code></td>
+         <td>x + 1</td>
+        </tr>
+        <tr>
+         <td><code>--</code></td>
+         <td>Decrement</td>
+         <td><code>x--</code></td>
+         <td>x - 1</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div><!-- Operator Penugasan -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       📝
+      </div>
+      <h2 class="section-title">Operator Penugasan</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Penugasan?</span>
+      </div>
+      <p class="info-content">Operator penugasan (assignment) digunakan untuk memberikan atau menyimpan nilai ke dalam variabel. Operator dasar adalah = (sama dengan), dan ada juga operator penugasan kombinasi yang menggabungkan operasi aritmatika dengan penugasan.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📌</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Dasar
+         </div>
+         <div class="operator-symbol">
+          =
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memberikan nilai ke variabel.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">aktif</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// Mengubah nilai</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">26</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➕</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Penjumlahan
+         </div>
+         <div class="operator-symbol">
+          +=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menambah nilai variabel dengan nilai tertentu.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-number">10</span><span class="code-operator">;</span> <span class="code-variable">skor</span> <span class="code-operator">+=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-comment">// skor = 15</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-variable">skor</span> <span class="code-operator">+</span> <span class="code-number">5</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➖</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Pengurangan
+         </div>
+         <div class="operator-symbol">
+          -=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengurangi nilai variabel dengan nilai tertentu.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">stok</span> <span class="code-operator">=</span> <span class="code-number">100</span><span class="code-operator">;</span> <span class="code-variable">stok</span> <span class="code-operator">-=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-comment">// stok = 75</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">stok</span> <span class="code-operator">=</span> <span class="code-variable">stok</span> <span class="code-operator">-</span> <span class="code-number">25</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">✖️</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Perkalian
+         </div>
+         <div class="operator-symbol">
+          *=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengalikan nilai variabel dengan nilai tertentu.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-number">1000</span><span class="code-operator">;</span> <span class="code-variable">harga</span> <span class="code-operator">*=</span> <span class="code-number">2</span><span class="code-operator">;</span> <span class="code-comment">// harga = 2000</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-variable">harga</span> <span class="code-operator">*</span> <span class="code-number">2</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➗</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Pembagian
+         </div>
+         <div class="operator-symbol">
+          /=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Membagi nilai variabel dengan nilai tertentu.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-number">100</span><span class="code-operator">;</span> <span class="code-variable">total</span> <span class="code-operator">/=</span> <span class="code-number">4</span><span class="code-operator">;</span> <span class="code-comment">// total = 25</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-variable">total</span> <span class="code-operator">/</span> <span class="code-number">4</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📦</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Modulus
+         </div>
+         <div class="operator-symbol">
+          %=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menyimpan sisa pembagian ke variabel.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nilai</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-variable">nilai</span> <span class="code-operator">%=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-comment">// nilai = 2</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">nilai</span> <span class="code-operator">=</span> <span class="code-variable">nilai</span> <span class="code-operator">%</span> <span class="code-number">5</span><span class="code-operator">;</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Operator</th>
+         <th>Nama</th>
+         <th>Contoh</th>
+         <th>Sama Dengan</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>=</code></td>
+         <td>Penugasan</td>
+         <td><code>x = 5</code></td>
+         <td><code>x = 5</code></td>
+        </tr>
+        <tr>
+         <td><code>+=</code></td>
+         <td>Tambah &amp; Tugaskan</td>
+         <td><code>x += 3</code></td>
+         <td><code>x = x + 3</code></td>
+        </tr>
+        <tr>
+         <td><code>-=</code></td>
+         <td>Kurang &amp; Tugaskan</td>
+         <td><code>x -= 3</code></td>
+         <td><code>x = x - 3</code></td>
+        </tr>
+        <tr>
+         <td><code>*=</code></td>
+         <td>Kali &amp; Tugaskan</td>
+         <td><code>x *= 3</code></td>
+         <td><code>x = x * 3</code></td>
+        </tr>
+        <tr>
+         <td><code>/=</code></td>
+         <td>Bagi &amp; Tugaskan</td>
+         <td><code>x /= 3</code></td>
+         <td><code>x = x / 3</code></td>
+        </tr>
+        <tr>
+         <td><code>%=</code></td>
+         <td>Modulus &amp; Tugaskan</td>
+         <td><code>x %= 3</code></td>
+         <td><code>x = x % 3</code></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div><!-- Operator Perbandingan -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       ⚖️
+      </div>
+      <h2 class="section-title">Operator Perbandingan</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Perbandingan?</span>
+      </div>
+      <p class="info-content">Operator perbandingan (comparison) digunakan untuk membandingkan dua nilai dan mengembalikan nilai boolean (true atau false). Operator ini sangat penting untuk membuat keputusan dalam program.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🟰</span>
+        <div>
+         <div class="operator-name">
+          Sama Dengan (Longgar)
+         </div>
+         <div class="operator-symbol">
+          ==
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah dua nilai sama (tanpa memeriksa tipe data).</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">==</span> <span class="code-number">5</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">==</span> <span class="code-string">"5"</span> <span class="code-comment">// true (tipe berbeda)</span> <span class="code-number">10</span> <span class="code-operator">==</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">17</span><span class="code-operator">;</span> <span class="code-variable">umur</span> <span class="code-operator">==</span> <span class="code-number">17</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">✅</span>
+        <div>
+         <div class="operator-name">
+          Sama Dengan (Ketat)
+         </div>
+         <div class="operator-symbol">
+          ===
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai dan tipe data sama (lebih disarankan).</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">===</span> <span class="code-number">5</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">===</span> <span class="code-string">"5"</span> <span class="code-comment">// false (tipe berbeda)</span> <span class="code-number">10</span> <span class="code-operator">===</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-variable">nama</span> <span class="code-operator">===</span> <span class="code-string">"Budi"</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">❌</span>
+        <div>
+         <div class="operator-name">
+          Tidak Sama (Longgar)
+         </div>
+         <div class="operator-symbol">
+          !=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah dua nilai tidak sama (tanpa tipe data).</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">!=</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">!=</span> <span class="code-string">"5"</span> <span class="code-comment">// false</span> <span class="code-number">5</span> <span class="code-operator">!=</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-string">"aktif"</span><span class="code-operator">;</span> <span class="code-variable">status</span> <span class="code-operator">!=</span> <span class="code-string">"nonaktif"</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🚫</span>
+        <div>
+         <div class="operator-name">
+          Tidak Sama (Ketat)
+         </div>
+         <div class="operator-symbol">
+          !==
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai atau tipe data tidak sama (lebih disarankan).</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">!==</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">!==</span> <span class="code-string">"5"</span> <span class="code-comment">// true (tipe berbeda)</span> <span class="code-number">5</span> <span class="code-operator">!==</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-number">100</span><span class="code-operator">;</span> <span class="code-variable">angka</span> <span class="code-operator">!==</span> <span class="code-string">"100"</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⬆️</span>
+        <div>
+         <div class="operator-name">
+          Lebih Besar
+         </div>
+         <div class="operator-symbol">
+          &gt;
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai pertama lebih besar dari nilai kedua.</p>
+       <div class="code-example"><span class="code-number">10</span> <span class="code-operator">&gt;</span> <span class="code-number">5</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">&gt;</span> <span class="code-number">10</span> <span class="code-comment">// false</span> <span class="code-number">5</span> <span class="code-operator">&gt;</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">nilai</span> <span class="code-operator">=</span> <span class="code-number">85</span><span class="code-operator">;</span> <span class="code-variable">nilai</span> <span class="code-operator">&gt;</span> <span class="code-number">75</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⬇️</span>
+        <div>
+         <div class="operator-name">
+          Lebih Kecil
+         </div>
+         <div class="operator-symbol">
+          &lt;
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai pertama lebih kecil dari nilai kedua.</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">&lt;</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">10</span> <span class="code-operator">&lt;</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-number">5</span> <span class="code-operator">&lt;</span> <span class="code-number">5</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">15</span><span class="code-operator">;</span> <span class="code-variable">umur</span> <span class="code-operator">&lt;</span> <span class="code-number">17</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⬆️✅</span>
+        <div>
+         <div class="operator-name">
+          Lebih Besar Sama Dengan
+         </div>
+         <div class="operator-symbol">
+          &gt;=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai pertama lebih besar atau sama dengan nilai kedua.</p>
+       <div class="code-example"><span class="code-number">10</span> <span class="code-operator">&gt;=</span> <span class="code-number">5</span> <span class="code-comment">// true</span> <span class="code-number">10</span> <span class="code-operator">&gt;=</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">5</span> <span class="code-operator">&gt;=</span> <span class="code-number">10</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-number">70</span><span class="code-operator">;</span> <span class="code-variable">skor</span> <span class="code-operator">&gt;=</span> <span class="code-number">70</span> <span class="code-comment">// true (lulus)</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⬇️✅</span>
+        <div>
+         <div class="operator-name">
+          Lebih Kecil Sama Dengan
+         </div>
+         <div class="operator-symbol">
+          &lt;=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah nilai pertama lebih kecil atau sama dengan nilai kedua.</p>
+       <div class="code-example"><span class="code-number">5</span> <span class="code-operator">&lt;=</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">10</span> <span class="code-operator">&lt;=</span> <span class="code-number">10</span> <span class="code-comment">// true</span> <span class="code-number">15</span> <span class="code-operator">&lt;=</span> <span class="code-number">10</span> <span class="code-comment">// false</span> <span class="code-keyword">let</span> <span class="code-variable">stok</span> <span class="code-operator">=</span> <span class="code-number">5</span><span class="code-operator">;</span> <span class="code-variable">stok</span> <span class="code-operator">&lt;=</span> <span class="code-number">10</span> <span class="code-comment">// true (stok rendah)</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Operator</th>
+         <th>Nama</th>
+         <th>Contoh</th>
+         <th>Hasil</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>==</code></td>
+         <td>Sama dengan (longgar)</td>
+         <td><code>5 == "5"</code></td>
+         <td>true</td>
+        </tr>
+        <tr>
+         <td><code>===</code></td>
+         <td>Sama dengan (ketat)</td>
+         <td><code>5 === "5"</code></td>
+         <td>false</td>
+        </tr>
+        <tr>
+         <td><code>!=</code></td>
+         <td>Tidak sama (longgar)</td>
+         <td><code>5 != "5"</code></td>
+         <td>false</td>
+        </tr>
+        <tr>
+         <td><code>!==</code></td>
+         <td>Tidak sama (ketat)</td>
+         <td><code>5 !== "5"</code></td>
+         <td>true</td>
+        </tr>
+        <tr>
+         <td><code>&gt;</code></td>
+         <td>Lebih besar</td>
+         <td><code>10 &gt; 5</code></td>
+         <td>true</td>
+        </tr>
+        <tr>
+         <td><code>&lt;</code></td>
+         <td>Lebih kecil</td>
+         <td><code>5 &lt; 10</code></td>
+         <td>true</td>
+        </tr>
+        <tr>
+         <td><code>&gt;=</code></td>
+         <td>Lebih besar sama dengan</td>
+         <td><code>10 &gt;= 10</code></td>
+         <td>true</td>
+        </tr>
+        <tr>
+         <td><code>&lt;=</code></td>
+         <td>Lebih kecil sama dengan</td>
+         <td><code>5 &lt;= 10</code></td>
+         <td>true</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>⚠️</span> <span>Perbedaan == dan ===</span>
+      </div>
+      <p class="info-content"><strong>Operator == (loose equality)</strong> membandingkan nilai tanpa memeriksa tipe data. JavaScript akan melakukan konversi tipe data jika perlu.<br><br><strong>Operator === (strict equality)</strong> membandingkan nilai DAN tipe data. Lebih disarankan karena lebih aman dan menghindari bug.<br><br><strong>Contoh:</strong> 5 == "5" hasilnya true, tetapi 5 === "5" hasilnya false karena tipe datanya berbeda (number vs string).</p>
+     </div>
+    </div><!-- Practice Section -->
+    <div class="practice-section">
+     <div class="practice-title"><span>💻</span> <span>Coba Praktikkan!</span>
+     </div>
+     <p class="practice-description">Gunakan editor di bawah ini untuk mencoba operator JavaScript. Tulis kode JavaScript Anda di sebelah kiri, lalu klik tombol "Jalankan Kode" untuk melihat hasilnya di sebelah kanan.</p>
+     <div class="editor-container">
+      <div class="editor-panel">
+       <div class="editor-header"><span>📝</span> <span>Editor Kode</span>
+       </div><textarea class="code-editor" id="codeEditor" placeholder="Tulis kode JavaScript di sini...">// Contoh Operator Aritmatika
+let a = 10;
+let b = 5;
+
+console.log("Penjumlahan:", a + b);
+console.log("Pengurangan:", a - b);
+console.log("Perkalian:", a * b);
+console.log("Pembagian:", a / b);
+console.log("Modulus:", a % b);
+console.log("Pangkat:", a ** 2);
+
+// Contoh Operator Penugasan
+let skor = 100;
+skor += 50;  // Tambah 50
+console.log("Skor setelah += 50:", skor);
+
+// Contoh Operator Perbandingan
+console.log("10 &gt; 5:", 10 &gt; 5);
+console.log("5 === '5':", 5 === "5");
+console.log("10 &gt;= 10:", 10 &gt;= 10);</textarea>
+      </div>
+      <div class="editor-panel">
+       <div class="editor-header"><span>📤</span> <span>Output</span>
+       </div>
+       <div class="output-panel" id="output"></div>
+      </div>
+     </div>
+     <div class="button-group"><button class="run-button" id="runBtn"> <span>▶️</span> <span>Jalankan Kode</span> </button> <button class="clear-button" id="clearBtn"> <span>🗑️</span> <span>Hapus Output</span> </button>
+     </div>
+    </div><!-- Source Section -->
+    <div class="source-box">
+     <div class="source-title"><span>📚</span> <span>Sumber Materi</span>
+     </div>
+     <ul class="source-list">
+      <li>MDN Web Docs - JavaScript Operators: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators" target="_blank" rel="noopener noreferrer">MDN JavaScript Operators</a></li>
+      <li>W3Schools - JavaScript Operators: <a href="https://www.w3schools.com/js/js_operators.asp" target="_blank" rel="noopener noreferrer">W3Schools Operators</a></li>
+      <li>JavaScript.info - Operators: <a href="https://javascript.info/operators" target="_blank" rel="noopener noreferrer">JavaScript.info</a></li>
+      <li>ECMAScript 2024 Specification: <a href="https://tc39.es/ecma262/" target="_blank" rel="noopener noreferrer">Official ECMAScript Spec</a></li>
+     </ul>
+    </div>
+    <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer"> <span>⬅️</span> <span>Kembali ke Halaman Sebelumnya</span> </a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "⚙️ Operator JavaScript",
+      intro_text: "Operator adalah simbol khusus yang digunakan untuk melakukan operasi pada nilai dan variabel. JavaScript memiliki berbagai jenis operator seperti aritmatika untuk perhitungan matematika, penugasan untuk menyimpan nilai, dan perbandingan untuk membandingkan nilai.",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Code Editor Functionality
+    const codeEditor = document.getElementById('codeEditor');
+    const output = document.getElementById('output');
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // Custom console.log
+    const originalLog = console.log;
+    let logs = [];
+
+    function customLog(...args) {
+      const message = args.map(arg => {
+        if (typeof arg === 'object') {
+          return JSON.stringify(arg, null, 2);
+        }
+        return String(arg);
+      }).join(' ');
+      logs.push(message);
+    }
+
+    runBtn.addEventListener('click', () => {
+      logs = [];
+      output.textContent = '';
+      
+      try {
+        console.log = customLog;
+        
+        // Execute code
+        eval(codeEditor.value);
+        
+        // Display output
+        if (logs.length > 0) {
+          output.textContent = logs.join('\n');
+        } else {
+          output.textContent = 'Kode berhasil dijalankan! (Tidak ada output)';
+        }
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+        output.style.color = '#ff5370';
+      } finally {
+        console.log = originalLog;
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      output.textContent = '';
+      logs = [];
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c06e8b83055ce4f',t:'MTc2ODgzMTc1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

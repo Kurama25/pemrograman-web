@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator Lanjutan JavaScript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 48px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .intro-text {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      text-align: justify;
+    }
+
+    .video-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .section-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #fbbf24;
+    }
+
+    .section-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .info-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-content {
+      font-size: 15px;
+      color: #475569;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .operator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .operator-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 16px;
+      padding: 25px;
+      border: 2px solid #cbd5e1;
+      transition: all 0.3s ease;
+    }
+
+    .operator-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border-color: #fbbf24;
+    }
+
+    .operator-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .operator-icon {
+      font-size: 32px;
+    }
+
+    .operator-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .operator-symbol {
+      font-size: 16px;
+      font-weight: 600;
+      color: #7c3aed;
+      background: #ede9fe;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .operator-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-keyword {
+      color: #c792ea;
+    }
+
+    .code-string {
+      color: #c3e88d;
+    }
+
+    .code-number {
+      color: #f78c6c;
+    }
+
+    .code-operator {
+      color: #89ddff;
+    }
+
+    .code-comment {
+      color: #676e95;
+      font-style: italic;
+    }
+
+    .code-variable {
+      color: #82aaff;
+    }
+
+    .practice-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .practice-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .practice-description {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .editor-panel {
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .editor-header {
+      background: #0f172a;
+      color: #fbbf24;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-editor {
+      width: 100%;
+      min-height: 400px;
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+
+    .output-panel {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 400px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .run-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .run-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .clear-button {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    }
+
+    .source-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 30px 0;
+    }
+
+    .source-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .source-list {
+      font-size: 15px;
+      color: #78350f;
+      line-height: 1.8;
+      list-style-position: inside;
+    }
+
+    .source-list li {
+      margin-bottom: 8px;
+    }
+
+    .source-list a {
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .source-list a:hover {
+      text-decoration: underline;
+    }
+
+    .back-button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .back-button:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .operator-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .operator-table th {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .operator-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .operator-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .operator-table code {
+      background: #f1f5f9;
+      color: #7c3aed;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+    }
+
+    .warning-box {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-left: 4px solid #ef4444;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .warning-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .warning-content {
+      font-size: 15px;
+      color: #7f1d1d;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .success-box {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-left: 4px solid #22c55e;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .success-content {
+      font-size: 15px;
+      color: #14532d;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .intro-text {
+        font-size: 15px;
+      }
+
+      .video-section {
+        padding: 25px 20px;
+      }
+
+      .video-title {
+        font-size: 20px;
+        flex-direction: column;
+      }
+
+      .section-card {
+        padding: 25px 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-icon {
+        font-size: 40px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .operator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .operator-name {
+        font-size: 18px;
+      }
+
+      .operator-symbol {
+        font-size: 14px;
+      }
+
+      .operator-description {
+        font-size: 13px;
+      }
+
+      .code-example {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .practice-section {
+        padding: 25px 20px;
+      }
+
+      .practice-title {
+        font-size: 24px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .practice-description {
+        font-size: 14px;
+      }
+
+      .editor-container {
+        grid-template-columns: 1fr;
+      }
+
+      .code-editor {
+        min-height: 300px;
+        font-size: 13px;
+      }
+
+      .output-panel {
+        min-height: 300px;
+        font-size: 13px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .run-button, .clear-button {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+        font-size: 15px;
+      }
+
+      .back-button {
+        font-size: 16px;
+        padding: 14px 30px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+
+      .info-title, .source-title, .warning-title, .success-title {
+        font-size: 16px;
+      }
+
+      .info-content, .source-list, .warning-content, .success-content {
+        font-size: 13px;
+      }
+
+      .operator-table {
+        font-size: 12px;
+      }
+
+      .operator-table th {
+        font-size: 13px;
+        padding: 12px 10px;
+      }
+
+      .operator-table td {
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      .operator-table code {
+        font-size: 11px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">🔧 Operator Lanjutan JavaScript</h1>
+     <p class="intro-text" id="introText">Operator lanjutan mencakup operator logika untuk membuat keputusan kompleks, operator string untuk manipulasi teks, operator typeof untuk memeriksa tipe data, dan operator kondisional (ternary) untuk menulis kondisi secara ringkas. Mari kita pelajari operator-operator penting ini!</p>
+    </header>
+    <div class="video-section">
+     <h2 class="video-title"><span>🎥</span> <span>Video Pembelajaran</span></h2>
+     <div class="video-container"><iframe src="https://www.youtube.com/embed/_XSeF00qNWE?si=o6I2ukL_vh94eJtk" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     </div>
+    </div><!-- Operator Logika -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       🧠
+      </div>
+      <h2 class="section-title">Operator Logika</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Logika?</span>
+      </div>
+      <p class="info-content">Operator logika digunakan untuk menggabungkan atau membalikkan kondisi boolean (true/false). Operator ini sangat berguna dalam membuat keputusan yang lebih kompleks dalam program, seperti memeriksa apakah beberapa kondisi terpenuhi secara bersamaan atau salah satunya terpenuhi.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔗</span>
+        <div>
+         <div class="operator-name">
+          AND (DAN)
+         </div>
+         <div class="operator-symbol">
+          &amp;&amp;
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengembalikan true hanya jika SEMUA kondisi bernilai true. Jika salah satu kondisi false, hasilnya false.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">18</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">punyaKTP</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// Cek apakah bisa buat rekening</span> <span class="code-keyword">let</span> <span class="code-variable">bisaBuatRekening</span> <span class="code-operator">=</span> <span class="code-variable">umur</span> <span class="code-operator">&gt;=</span> <span class="code-number">17</span> <span class="code-operator">&amp;&amp;</span> <span class="code-variable">punyaKTP</span><span class="code-operator">;</span> <span class="code-comment">// true (kedua kondisi terpenuhi)</span> <span class="code-comment">// Contoh lain</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">true</span> <span class="code-operator">&amp;&amp;</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// true</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">true</span> <span class="code-operator">&amp;&amp;</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-comment">// false</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">false</span> <span class="code-operator">&amp;&amp;</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// false</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔀</span>
+        <div>
+         <div class="operator-name">
+          OR (ATAU)
+         </div>
+         <div class="operator-symbol">
+          ||
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Mengembalikan true jika SALAH SATU atau LEBIH kondisi bernilai true. Hanya false jika semua kondisi false.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">adalDiskon</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">adalVoucher</span> <span class="code-operator">=</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-comment">// Cek apakah dapat potongan harga</span> <span class="code-keyword">let</span> <span class="code-variable">dapatPotongan</span> <span class="code-operator">=</span> <span class="code-variable">adalDiskon</span> <span class="code-operator">||</span> <span class="code-variable">adalVoucher</span><span class="code-operator">;</span> <span class="code-comment">// true (salah satu kondisi terpenuhi)</span> <span class="code-comment">// Contoh lain</span> <span class="code-keyword">let</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">true</span> <span class="code-operator">||</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-comment">// true</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">false</span> <span class="code-operator">||</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-comment">// false</span> <span class="code-variable">hasil</span> <span class="code-operator">=</span> <span class="code-keyword">true</span> <span class="code-operator">||</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔄</span>
+        <div>
+         <div class="operator-name">
+          NOT (TIDAK)
+         </div>
+         <div class="operator-symbol">
+          !
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Membalikkan nilai boolean. True menjadi false, dan false menjadi true.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">sudahLogin</span> <span class="code-operator">=</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">belumLogin</span> <span class="code-operator">=</span> <span class="code-operator">!</span><span class="code-variable">sudahLogin</span><span class="code-operator">;</span> <span class="code-comment">// true (kebalikan dari false)</span> <span class="code-comment">// Contoh lain</span> <span class="code-keyword">let</span> <span class="code-variable">aktif</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">nonAktif</span> <span class="code-operator">=</span> <span class="code-operator">!</span><span class="code-variable">aktif</span><span class="code-operator">;</span> <span class="code-comment">// false</span> <span class="code-comment">// Double NOT untuk konversi ke boolean</span> <span class="code-keyword">let</span> <span class="code-variable">nilai</span> <span class="code-operator">=</span> <span class="code-string">"teks"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">isTruthy</span> <span class="code-operator">=</span> <span class="code-operator">!!</span><span class="code-variable">nilai</span><span class="code-operator">;</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Operator</th>
+         <th>Nama</th>
+         <th>Contoh</th>
+         <th>Hasil</th>
+         <th>Keterangan</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>&amp;&amp;</code></td>
+         <td>AND</td>
+         <td><code>true &amp;&amp; true</code></td>
+         <td>true</td>
+         <td>Semua harus true</td>
+        </tr>
+        <tr>
+         <td><code>&amp;&amp;</code></td>
+         <td>AND</td>
+         <td><code>true &amp;&amp; false</code></td>
+         <td>false</td>
+         <td>Salah satu false</td>
+        </tr>
+        <tr>
+         <td><code>||</code></td>
+         <td>OR</td>
+         <td><code>true || false</code></td>
+         <td>true</td>
+         <td>Salah satu true</td>
+        </tr>
+        <tr>
+         <td><code>||</code></td>
+         <td>OR</td>
+         <td><code>false || false</code></td>
+         <td>false</td>
+         <td>Semua false</td>
+        </tr>
+        <tr>
+         <td><code>!</code></td>
+         <td>NOT</td>
+         <td><code>!true</code></td>
+         <td>false</td>
+         <td>Membalikkan nilai</td>
+        </tr>
+        <tr>
+         <td><code>!</code></td>
+         <td>NOT</td>
+         <td><code>!false</code></td>
+         <td>true</td>
+         <td>Membalikkan nilai</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="success-box">
+      <div class="success-title"><span>✅</span> <span>Tips Praktis</span>
+      </div>
+      <p class="success-content"><strong>Operator AND (&amp;&amp;):</strong> Gunakan ketika semua kondisi harus dipenuhi. Contoh: validasi form (nama terisi DAN email terisi).<br><br><strong>Operator OR (||):</strong> Gunakan ketika salah satu kondisi cukup. Contoh: metode pembayaran (cash ATAU transfer ATAU kartu kredit).<br><br><strong>Operator NOT (!):</strong> Gunakan untuk membalikkan kondisi. Contoh: !sudahLogin untuk mengecek apakah pengguna belum login.</p>
+     </div>
+    </div><!-- Operator String -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       📝
+      </div>
+      <h2 class="section-title">Operator String</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator String?</span>
+      </div>
+      <p class="info-content">Operator string digunakan untuk memanipulasi dan menggabungkan teks (string). Operator utama adalah tanda plus (+) untuk menggabungkan (concatenation) string. JavaScript juga mendukung template literals dengan backtick (`) untuk cara yang lebih modern dan mudah dalam menggabungkan string dengan variabel.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">➕</span>
+        <div>
+         <div class="operator-name">
+          Penggabungan String
+         </div>
+         <div class="operator-symbol">
+          +
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menggabungkan dua atau lebih string menjadi satu string yang lebih panjang. Metode klasik yang masih banyak digunakan.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">namaDepan</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">namaBelakang</span> <span class="code-operator">=</span> <span class="code-string">"Santoso"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">namaLengkap</span> <span class="code-operator">=</span> <span class="code-variable">namaDepan</span> <span class="code-operator">+</span> <span class="code-string">" "</span> <span class="code-operator">+</span> <span class="code-variable">namaBelakang</span><span class="code-operator">;</span> <span class="code-comment">// "Budi Santoso"</span> <span class="code-comment">// Menggabungkan string dengan angka</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">kalimat</span> <span class="code-operator">=</span> <span class="code-string">"Saya berumur "</span> <span class="code-operator">+</span> <span class="code-variable">umur</span> <span class="code-operator">+</span> <span class="code-string">" tahun"</span><span class="code-operator">;</span> <span class="code-comment">// "Saya berumur 25 tahun"</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📋</span>
+        <div>
+         <div class="operator-name">
+          Template Literals
+         </div>
+         <div class="operator-symbol">
+          `${}`
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Cara modern untuk menggabungkan string dengan variabel menggunakan backtick (`) dan ${variabel}. Lebih mudah dibaca dan fleksibel.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Siti"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">22</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">kota</span> <span class="code-operator">=</span> <span class="code-string">"Jakarta"</span><span class="code-operator">;</span> <span class="code-comment">// Menggunakan template literals</span> <span class="code-keyword">let</span> <span class="code-variable">profil</span> <span class="code-operator">=</span> <span class="code-string">`Nama: ${nama}, Umur: ${umur}, Kota: ${kota}`</span><span class="code-operator">;</span> <span class="code-comment">// "Nama: Siti, Umur: 22, Kota: Jakarta"</span> <span class="code-comment">// Multi-line string</span> <span class="code-keyword">let</span> <span class="code-variable">pesan</span> <span class="code-operator">=</span> <span class="code-string">`Halo ${nama}! Selamat datang di sistem kami. Anda terdaftar dari ${kota}.`</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔗</span>
+        <div>
+         <div class="operator-name">
+          Penugasan Penggabungan
+         </div>
+         <div class="operator-symbol">
+          +=
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menambahkan string ke variabel yang sudah ada. Shorthand untuk menggabungkan dan menyimpan hasil ke variabel yang sama.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">pesan</span> <span class="code-operator">=</span> <span class="code-string">"Halo"</span><span class="code-operator">;</span> <span class="code-variable">pesan</span> <span class="code-operator">+=</span> <span class="code-string">" dunia"</span><span class="code-operator">;</span> <span class="code-comment">// pesan sekarang "Halo dunia"</span> <span class="code-variable">pesan</span> <span class="code-operator">+=</span> <span class="code-string">"!"</span><span class="code-operator">;</span> <span class="code-comment">// pesan sekarang "Halo dunia!"</span> <span class="code-comment">// Sama dengan:</span> <span class="code-variable">pesan</span> <span class="code-operator">=</span> <span class="code-variable">pesan</span> <span class="code-operator">+</span> <span class="code-string">" JavaScript"</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔢</span>
+        <div>
+         <div class="operator-name">
+          Ekspresi dalam Template
+         </div>
+         <div class="operator-symbol">
+          ${expr}
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Anda bisa menyisipkan ekspresi JavaScript apa pun di dalam ${}, termasuk operasi matematika, pemanggilan fungsi, dan kondisi.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-number">50000</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">jumlah</span> <span class="code-operator">=</span> <span class="code-number">3</span><span class="code-operator">;</span> <span class="code-comment">// Operasi matematika di dalam ${}</span> <span class="code-keyword">let</span> <span class="code-variable">total</span> <span class="code-operator">=</span> <span class="code-string">`Total: Rp ${harga * jumlah}`</span><span class="code-operator">;</span> <span class="code-comment">// "Total: Rp 150000"</span> <span class="code-comment">// Kondisi di dalam ${}</span> <span class="code-keyword">let</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-number">85</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-string">`Nilai: ${skor &gt;= 75 ? 'Lulus' : 'Tidak Lulus'}`</span><span class="code-operator">;</span> <span class="code-comment">// "Nilai: Lulus"</span>
+       </div>
+      </div>
+     </div>
+     <div class="warning-box">
+      <div class="warning-title"><span>⚠️</span> <span>Perhatian: Perbedaan + dan Template Literals</span>
+      </div>
+      <p class="warning-content">Ketika menggunakan operator +, jika salah satu operand adalah string, JavaScript akan mengubah yang lain menjadi string juga.<br><br><strong>Contoh:</strong> "5" + 3 menghasilkan "53" (string), bukan 8 (number).<br><strong>Contoh:</strong> 5 + 3 + " apel" menghasilkan "8 apel" karena 5 dan 3 dijumlahkan dulu.<br><strong>Contoh:</strong> "Ada " + 5 + 3 menghasilkan "Ada 53" karena 5 diubah ke string terlebih dahulu.<br><br>
+        Template literals selalu menghasilkan string, lebih konsisten dan aman.</p>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Metode</th>
+         <th>Contoh</th>
+         <th>Hasil</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td>Concatenation (+)</td>
+         <td><code>"Halo" + " " + "Dunia"</code></td>
+         <td>"Halo Dunia"</td>
+        </tr>
+        <tr>
+         <td>Template Literals</td>
+         <td><code>`Halo ${"Dunia"}`</code></td>
+         <td>"Halo Dunia"</td>
+        </tr>
+        <tr>
+         <td>String + Number</td>
+         <td><code>"Umur: " + 25</code></td>
+         <td>"Umur: 25"</td>
+        </tr>
+        <tr>
+         <td>Template + Expr</td>
+         <td><code>`Total: ${10 * 5}`</code></td>
+         <td>"Total: 50"</td>
+        </tr>
+        <tr>
+         <td>Assignment (+=)</td>
+         <td><code>str = "A"; str += "B"</code></td>
+         <td>"AB"</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div><!-- Operator Typeof -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       🔍
+      </div>
+      <h2 class="section-title">Operator Typeof</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Typeof?</span>
+      </div>
+      <p class="info-content">Operator typeof digunakan untuk memeriksa tipe data dari sebuah variabel atau nilai. Operator ini mengembalikan string yang menunjukkan tipe data, seperti "string", "number", "boolean", "object", "function", atau "undefined". Sangat berguna untuk validasi dan debugging.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔤</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk String
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah suatu nilai bertipe string (teks).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nama</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">tipe</span> <span class="code-operator">=</span> <span class="code-keyword">typeof</span> <span class="code-variable">nama</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">tipe</span><span class="code-operator">);</span> <span class="code-comment">// "string"</span> <span class="code-comment">// Dengan tanda kurung</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span><span class="code-operator">(</span><span class="code-string">"Hello"</span><span class="code-operator">));</span> <span class="code-comment">// "string"</span> <span class="code-comment">// Validasi input</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">nama</span> <span class="code-operator">===</span> <span class="code-string">"string"</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-string">"Nama valid!"</span><span class="code-operator">);</span> <span class="code-operator">}</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔢</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk Number
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah suatu nilai bertipe number (angka).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">25</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">umur</span><span class="code-operator">);</span> <span class="code-comment">// "number"</span> <span class="code-keyword">let</span> <span class="code-variable">harga</span> <span class="code-operator">=</span> <span class="code-number">99.99</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">harga</span><span class="code-operator">);</span> <span class="code-comment">// "number"</span> <span class="code-comment">// NaN juga bertipe "number"</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">NaN</span><span class="code-operator">);</span> <span class="code-comment">// "number"</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">✅</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk Boolean
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah suatu nilai bertipe boolean (true/false).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">aktif</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">aktif</span><span class="code-operator">);</span> <span class="code-comment">// "boolean"</span> <span class="code-keyword">let</span> <span class="code-variable">selesai</span> <span class="code-operator">=</span> <span class="code-keyword">false</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">selesai</span><span class="code-operator">);</span> <span class="code-comment">// "boolean"</span> <span class="code-comment">// Hasil perbandingan</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-operator">(</span><span class="code-number">5</span> <span class="code-operator">&gt;</span> <span class="code-number">3</span><span class="code-operator">));</span> <span class="code-comment">// "boolean"</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📦</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk Object &amp; Array
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa object dan array. Perhatian: array juga mengembalikan "object".</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">orang</span> <span class="code-operator">=</span> <span class="code-operator">{</span> <span class="code-variable">nama</span><span class="code-operator">:</span> <span class="code-string">"Budi"</span> <span class="code-operator">};</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">orang</span><span class="code-operator">);</span> <span class="code-comment">// "object"</span> <span class="code-keyword">let</span> <span class="code-variable">angka</span> <span class="code-operator">=</span> <span class="code-operator">[</span><span class="code-number">1</span><span class="code-operator">,</span> <span class="code-number">2</span><span class="code-operator">,</span> <span class="code-number">3</span><span class="code-operator">];</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">angka</span><span class="code-operator">);</span> <span class="code-comment">// "object" ⚠️</span> <span class="code-comment">// null juga "object" (bug historis)</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-keyword">null</span><span class="code-operator">);</span> <span class="code-comment">// "object" ⚠️</span> <span class="code-comment">// Cek array dengan Array.isArray()</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">Array</span><span class="code-operator">.</span><span class="code-variable">isArray</span><span class="code-operator">(</span><span class="code-variable">angka</span><span class="code-operator">));</span> <span class="code-comment">// true</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⚡</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk Function
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah suatu nilai adalah function (fungsi).</p>
+       <div class="code-example"><span class="code-keyword">function</span> <span class="code-variable">sapa</span><span class="code-operator">()</span> <span class="code-operator">{</span> <span class="code-keyword">return</span> <span class="code-string">"Halo!"</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">sapa</span><span class="code-operator">);</span> <span class="code-comment">// "function"</span> <span class="code-comment">// Arrow function</span> <span class="code-keyword">let</span> <span class="code-variable">tambah</span> <span class="code-operator">=</span> <span class="code-operator">(</span><span class="code-variable">a</span><span class="code-operator">,</span> <span class="code-variable">b</span><span class="code-operator">)</span> <span class="code-operator">=&gt;</span> <span class="code-variable">a</span> <span class="code-operator">+</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">tambah</span><span class="code-operator">);</span> <span class="code-comment">// "function"</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">❓</span>
+        <div>
+         <div class="operator-name">
+          Typeof untuk Undefined
+         </div>
+         <div class="operator-symbol">
+          typeof
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Memeriksa apakah variabel belum diberi nilai (undefined).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">x</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">x</span><span class="code-operator">);</span> <span class="code-comment">// "undefined"</span> <span class="code-comment">// Variabel yang tidak dideklarasikan</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">tidakAda</span><span class="code-operator">);</span> <span class="code-comment">// "undefined"</span> <span class="code-comment">// Cek apakah variabel sudah didefinisikan</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-keyword">typeof</span> <span class="code-variable">myVar</span> <span class="code-operator">!==</span> <span class="code-string">"undefined"</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-comment">// Aman untuk menggunakan myVar</span> <span class="code-operator">}</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>Nilai</th>
+         <th>typeof Hasil</th>
+         <th>Keterangan</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>"Halo"</code></td>
+         <td>"string"</td>
+         <td>Tipe string</td>
+        </tr>
+        <tr>
+         <td><code>123</code></td>
+         <td>"number"</td>
+         <td>Tipe number</td>
+        </tr>
+        <tr>
+         <td><code>true</code></td>
+         <td>"boolean"</td>
+         <td>Tipe boolean</td>
+        </tr>
+        <tr>
+         <td><code>{}</code></td>
+         <td>"object"</td>
+         <td>Tipe object</td>
+        </tr>
+        <tr>
+         <td><code>[]</code></td>
+         <td>"object"</td>
+         <td>Array adalah object</td>
+        </tr>
+        <tr>
+         <td><code>null</code></td>
+         <td>"object"</td>
+         <td>Bug historis JS</td>
+        </tr>
+        <tr>
+         <td><code>function(){}</code></td>
+         <td>"function"</td>
+         <td>Tipe function</td>
+        </tr>
+        <tr>
+         <td><code>undefined</code></td>
+         <td>"undefined"</td>
+         <td>Belum diberi nilai</td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="warning-box">
+      <div class="warning-title"><span>⚠️</span> <span>Quirks typeof yang Perlu Diperhatikan</span>
+      </div>
+      <p class="warning-content"><strong>1. Array mengembalikan "object":</strong> Untuk mengecek array, gunakan Array.isArray() bukan typeof.<br><br><strong>2. null mengembalikan "object":</strong> Ini bug historis JavaScript yang tidak diperbaiki untuk backward compatibility. Gunakan <code>nilai === null</code> untuk mengecek null.<br><br><strong>3. NaN mengembalikan "number":</strong> Meskipun artinya "Not a Number", NaN bertipe number. Gunakan isNaN() atau Number.isNaN() untuk mengecek NaN.</p>
+     </div>
+    </div><!-- Operator Kondisional (Ternary) -->
+    <div class="section-card">
+     <div class="section-header">
+      <div class="section-icon">
+       ❓
+      </div>
+      <h2 class="section-title">Operator Kondisional (Ternary)</h2>
+     </div>
+     <div class="info-box">
+      <div class="info-title"><span>💡</span> <span>Apa itu Operator Ternary?</span>
+      </div>
+      <p class="info-content">Operator ternary adalah operator kondisional yang menyediakan cara singkat untuk menulis kondisi if-else dalam satu baris. Sintaksnya: <code>kondisi ? nilaiJikaTrue : nilaiJikaFalse</code>. Operator ini sangat berguna untuk membuat kode lebih ringkas dan mudah dibaca, terutama untuk kondisi sederhana.</p>
+     </div>
+     <div class="operator-grid">
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🎯</span>
+        <div>
+         <div class="operator-name">
+          Ternary Sederhana
+         </div>
+         <div class="operator-symbol">
+          ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Penggunaan dasar operator ternary untuk menggantikan if-else sederhana.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">umur</span> <span class="code-operator">=</span> <span class="code-number">18</span><span class="code-operator">;</span> <span class="code-comment">// Menggunakan ternary</span> <span class="code-keyword">let</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-variable">umur</span> <span class="code-operator">&gt;=</span> <span class="code-number">17</span> <span class="code-operator">?</span> <span class="code-string">"Dewasa"</span> <span class="code-operator">:</span> <span class="code-string">"Anak-anak"</span><span class="code-operator">;</span> <span class="code-comment">// "Dewasa"</span> <span class="code-comment">// Sama dengan if-else:</span> <span class="code-keyword">let</span> <span class="code-variable">status2</span><span class="code-operator">;</span> <span class="code-keyword">if</span> <span class="code-operator">(</span><span class="code-variable">umur</span> <span class="code-operator">&gt;=</span> <span class="code-number">17</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-variable">status2</span> <span class="code-operator">=</span> <span class="code-string">"Dewasa"</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-keyword">else</span> <span class="code-operator">{</span> <span class="code-variable">status2</span> <span class="code-operator">=</span> <span class="code-string">"Anak-anak"</span><span class="code-operator">;</span> <span class="code-operator">}</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔢</span>
+        <div>
+         <div class="operator-name">
+          Ternary dengan Angka
+         </div>
+         <div class="operator-symbol">
+          ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menggunakan ternary untuk mengembalikan nilai numerik berdasarkan kondisi.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-number">85</span><span class="code-operator">;</span> <span class="code-comment">// Menentukan bonus</span> <span class="code-keyword">let</span> <span class="code-variable">bonus</span> <span class="code-operator">=</span> <span class="code-variable">skor</span> <span class="code-operator">&gt;=</span> <span class="code-number">80</span> <span class="code-operator">?</span> <span class="code-number">1000000</span> <span class="code-operator">:</span> <span class="code-number">500000</span><span class="code-operator">;</span> <span class="code-comment">// 1000000</span> <span class="code-comment">// Diskon produk</span> <span class="code-keyword">let</span> <span class="code-variable">totalBelanja</span> <span class="code-operator">=</span> <span class="code-number">300000</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">diskon</span> <span class="code-operator">=</span> <span class="code-variable">totalBelanja</span> <span class="code-operator">&gt;</span> <span class="code-number">250000</span> <span class="code-operator">?</span> <span class="code-number">0.1</span> <span class="code-operator">:</span> <span class="code-number">0</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">bayar</span> <span class="code-operator">=</span> <span class="code-variable">totalBelanja</span> <span class="code-operator">-</span> <span class="code-operator">(</span><span class="code-variable">totalBelanja</span> <span class="code-operator">*</span> <span class="code-variable">diskon</span><span class="code-operator">);</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🔗</span>
+        <div>
+         <div class="operator-name">
+          Ternary Bersarang
+         </div>
+         <div class="operator-symbol">
+          ? : ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Operator ternary dapat disarangkan untuk menangani multiple kondisi (gunakan dengan hati-hati agar tidak terlalu kompleks).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">nilai</span> <span class="code-operator">=</span> <span class="code-number">75</span><span class="code-operator">;</span> <span class="code-comment">// Menentukan grade</span> <span class="code-keyword">let</span> <span class="code-variable">grade</span> <span class="code-operator">=</span> <span class="code-variable">nilai</span> <span class="code-operator">&gt;=</span> <span class="code-number">90</span> <span class="code-operator">?</span> <span class="code-string">"A"</span> <span class="code-operator">:</span> <span class="code-variable">nilai</span> <span class="code-operator">&gt;=</span> <span class="code-number">80</span> <span class="code-operator">?</span> <span class="code-string">"B"</span> <span class="code-operator">:</span> <span class="code-variable">nilai</span> <span class="code-operator">&gt;=</span> <span class="code-number">70</span> <span class="code-operator">?</span> <span class="code-string">"C"</span> <span class="code-operator">:</span> <span class="code-variable">nilai</span> <span class="code-operator">&gt;=</span> <span class="code-number">60</span> <span class="code-operator">?</span> <span class="code-string">"D"</span> <span class="code-operator">:</span> <span class="code-string">"E"</span><span class="code-operator">;</span> <span class="code-comment">// "C"</span> <span class="code-comment">// Lebih baik gunakan if-else jika terlalu kompleks</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">📝</span>
+        <div>
+         <div class="operator-name">
+          Ternary dalam Template
+         </div>
+         <div class="operator-symbol">
+          ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menggunakan operator ternary di dalam template literals untuk output dinamis.</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">sudahLogin</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">username</span> <span class="code-operator">=</span> <span class="code-string">"Budi"</span><span class="code-operator">;</span> <span class="code-comment">// Pesan sambutan</span> <span class="code-keyword">let</span> <span class="code-variable">pesan</span> <span class="code-operator">=</span> <span class="code-string">`Halo, ${sudahLogin ? username : 'Tamu'}!`</span><span class="code-operator">;</span> <span class="code-comment">// "Halo, Budi!"</span> <span class="code-comment">// Status member</span> <span class="code-keyword">let</span> <span class="code-variable">poin</span> <span class="code-operator">=</span> <span class="code-number">150</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">status</span> <span class="code-operator">=</span> <span class="code-string">`Status: ${poin &gt; 100 ? 'Gold' : 'Silver'}`</span><span class="code-operator">;</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">⚡</span>
+        <div>
+         <div class="operator-name">
+          Ternary dalam Fungsi
+         </div>
+         <div class="operator-symbol">
+          ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menggunakan operator ternary sebagai return value dalam fungsi.</p>
+       <div class="code-example"><span class="code-comment">// Fungsi cek ganjil/genap</span> <span class="code-keyword">function</span> <span class="code-variable">cekGanjilGenap</span><span class="code-operator">(</span><span class="code-variable">angka</span><span class="code-operator">)</span> <span class="code-operator">{</span> <span class="code-keyword">return</span> <span class="code-variable">angka</span> <span class="code-operator">%</span> <span class="code-number">2</span> <span class="code-operator">===</span> <span class="code-number">0</span> <span class="code-operator">?</span> <span class="code-string">"Genap"</span> <span class="code-operator">:</span> <span class="code-string">"Ganjil"</span><span class="code-operator">;</span> <span class="code-operator">}</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">cekGanjilGenap</span><span class="code-operator">(</span><span class="code-number">4</span><span class="code-operator">));</span> <span class="code-comment">// "Genap"</span> <span class="code-comment">// Arrow function dengan ternary</span> <span class="code-keyword">const</span> <span class="code-variable">maksimal</span> <span class="code-operator">=</span> <span class="code-operator">(</span><span class="code-variable">a</span><span class="code-operator">,</span> <span class="code-variable">b</span><span class="code-operator">)</span> <span class="code-operator">=&gt;</span> <span class="code-variable">a</span> <span class="code-operator">&gt;</span> <span class="code-variable">b</span> <span class="code-operator">?</span> <span class="code-variable">a</span> <span class="code-operator">:</span> <span class="code-variable">b</span><span class="code-operator">;</span> <span class="code-variable">console</span><span class="code-operator">.</span><span class="code-variable">log</span><span class="code-operator">(</span><span class="code-variable">maksimal</span><span class="code-operator">(</span><span class="code-number">10</span><span class="code-operator">,</span> <span class="code-number">5</span><span class="code-operator">));</span> <span class="code-comment">// 10</span>
+       </div>
+      </div>
+      <div class="operator-card">
+       <div class="operator-header"><span class="operator-icon">🎨</span>
+        <div>
+         <div class="operator-name">
+          Ternary untuk Class/Style
+         </div>
+         <div class="operator-symbol">
+          ? :
+         </div>
+        </div>
+       </div>
+       <p class="operator-description">Menggunakan ternary untuk menentukan class CSS atau style secara dinamis (berguna dalam manipulasi DOM).</p>
+       <div class="code-example"><span class="code-keyword">let</span> <span class="code-variable">isAktif</span> <span class="code-operator">=</span> <span class="code-keyword">true</span><span class="code-operator">;</span> <span class="code-comment">// Menentukan class CSS</span> <span class="code-keyword">let</span> <span class="code-variable">className</span> <span class="code-operator">=</span> <span class="code-variable">isAktif</span> <span class="code-operator">?</span> <span class="code-string">"active"</span> <span class="code-operator">:</span> <span class="code-string">"inactive"</span><span class="code-operator">;</span> <span class="code-comment">// Menentukan warna</span> <span class="code-keyword">let</span> <span class="code-variable">skor</span> <span class="code-operator">=</span> <span class="code-number">85</span><span class="code-operator">;</span> <span class="code-keyword">let</span> <span class="code-variable">warna</span> <span class="code-operator">=</span> <span class="code-variable">skor</span> <span class="code-operator">&gt;=</span> <span class="code-number">75</span> <span class="code-operator">?</span> <span class="code-string">"green"</span> <span class="code-operator">:</span> <span class="code-string">"red"</span><span class="code-operator">;</span> <span class="code-comment">// Dalam HTML (contoh)</span> <span class="code-comment">// element.className = isAktif ? "active" : "inactive";</span>
+       </div>
+      </div>
+     </div>
+     <div class="table-container">
+      <table class="operator-table">
+       <thead>
+        <tr>
+         <th>If-Else</th>
+         <th>Ternary Equivalent</th>
+        </tr>
+       </thead>
+       <tbody>
+        <tr>
+         <td><code>if (x &gt; 5) { y = 10; } else { y = 20; }</code></td>
+         <td><code>y = x &gt; 5 ? 10 : 20;</code></td>
+        </tr>
+        <tr>
+         <td><code>if (login) { msg = "Hi"; } else { msg = "Bye"; }</code></td>
+         <td><code>msg = login ? "Hi" : "Bye";</code></td>
+        </tr>
+        <tr>
+         <td><code>if (age &gt;= 18) { return true; } else { return false; }</code></td>
+         <td><code>return age &gt;= 18 ? true : false;</code></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+     <div class="success-box">
+      <div class="success-title"><span>✅</span> <span>Kapan Menggunakan Ternary?</span>
+      </div>
+      <p class="success-content"><strong>GUNAKAN ternary ketika:</strong><br>
+        • Kondisi sederhana dengan dua pilihan jelas<br>
+        • Untuk assignment atau return value langsung<br>
+        • Membuat kode lebih ringkas dan mudah dibaca<br>
+        • Di dalam template literals atau JSX (React)<br><br><strong>JANGAN gunakan ternary ketika:</strong><br>
+        • Kondisi sangat kompleks atau bersarang dalam<br>
+        • Ada lebih dari 2-3 kondisi<br>
+        • Perlu menjalankan multiple statements<br>
+        • Membuat kode susah dibaca (gunakan if-else biasa)</p>
+     </div>
+    </div><!-- Practice Section -->
+    <div class="practice-section">
+     <div class="practice-title"><span>💻</span> <span>Coba Praktikkan!</span>
+     </div>
+     <p class="practice-description">Gunakan editor di bawah ini untuk mencoba operator-operator lanjutan JavaScript. Tulis kode JavaScript Anda di sebelah kiri, lalu klik tombol "Jalankan Kode" untuk melihat hasilnya di sebelah kanan. Coba berbagai kombinasi operator logika, string, typeof, dan ternary!</p>
+     <div class="editor-container">
+      <div class="editor-panel">
+       <div class="editor-header"><span>📝</span> <span>Editor Kode</span>
+       </div><textarea class="code-editor" id="codeEditor" placeholder="Tulis kode JavaScript di sini...">// 1. Operator Logika
+let umur = 20;
+let punyaSIM = true;
+
+console.log("=== OPERATOR LOGIKA ===");
+console.log("Bisa nyetir?", umur &gt;= 17 &amp;&amp; punyaSIM);
+console.log("Perlu pendamping?", umur &lt; 17 || !punyaSIM);
+
+// 2. Operator String
+let nama = "Budi";
+let kota = "Jakarta";
+
+console.log("\n=== OPERATOR STRING ===");
+console.log("Concatenation:", nama + " dari " + kota);
+console.log("Template:", `${nama} tinggal di ${kota}`);
+
+// 3. Operator Typeof
+console.log("\n=== OPERATOR TYPEOF ===");
+console.log("typeof 'hello':", typeof "hello");
+console.log("typeof 123:", typeof 123);
+console.log("typeof true:", typeof true);
+console.log("typeof []:", typeof []);
+console.log("typeof {}:", typeof {});
+
+// 4. Operator Ternary
+let nilai = 85;
+console.log("\n=== OPERATOR TERNARY ===");
+let grade = nilai &gt;= 75 ? "Lulus" : "Tidak Lulus";
+console.log("Hasil:", grade);
+console.log("Status:", nilai &gt;= 90 ? "Sempurna" : nilai &gt;= 75 ? "Bagus" : "Perlu Belajar");</textarea>
+      </div>
+      <div class="editor-panel">
+       <div class="editor-header"><span>📤</span> <span>Output</span>
+       </div>
+       <div class="output-panel" id="output"></div>
+      </div>
+     </div>
+     <div class="button-group"><button class="run-button" id="runBtn"> <span>▶️</span> <span>Jalankan Kode</span> </button> <button class="clear-button" id="clearBtn"> <span>🗑️</span> <span>Hapus Output</span> </button>
+     </div>
+    </div><!-- Source Section -->
+    <div class="source-box">
+     <div class="source-title"><span>📚</span> <span>Sumber Materi</span>
+     </div>
+     <ul class="source-list">
+      <li>MDN Web Docs - Logical Operators: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#logical_operators" target="_blank" rel="noopener noreferrer">MDN Logical Operators</a></li>
+      <li>MDN Web Docs - typeof Operator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" target="_blank" rel="noopener noreferrer">MDN typeof</a></li>
+      <li>MDN Web Docs - Conditional Operator: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator" target="_blank" rel="noopener noreferrer">MDN Ternary Operator</a></li>
+      <li>MDN Web Docs - Template Literals: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noopener noreferrer">MDN Template Literals</a></li>
+      <li>JavaScript.info - Logical Operators: <a href="https://javascript.info/logical-operators" target="_blank" rel="noopener noreferrer">JavaScript.info</a></li>
+     </ul>
+    </div>
+    <div class="back-button-container"><a href="index.html" class="back-button" rel="noopener noreferrer"> <span>⬅️</span> <span>Kembali ke Halaman Sebelumnya</span> </a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "🔧 Operator Lanjutan JavaScript",
+      intro_text: "Operator lanjutan mencakup operator logika untuk membuat keputusan kompleks, operator string untuk manipulasi teks, operator typeof untuk memeriksa tipe data, dan operator kondisional (ternary) untuk menulis kondisi secara ringkas. Mari kita pelajari operator-operator penting ini!",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      text_color: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const introText = document.getElementById('introText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (introText) introText.textContent = config.intro_text || defaultConfig.intro_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+      if (introText) introText.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["intro_text", config.intro_text || defaultConfig.intro_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Code Editor Functionality
+    const codeEditor = document.getElementById('codeEditor');
+    const output = document.getElementById('output');
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // Custom console.log
+    const originalLog = console.log;
+    let logs = [];
+
+    function customLog(...args) {
+      const message = args.map(arg => {
+        if (typeof arg === 'object') {
+          try {
+            return JSON.stringify(arg, null, 2);
+          } catch(e) {
+            return String(arg);
+          }
+        }
+        return String(arg);
+      }).join(' ');
+      logs.push(message);
+    }
+
+    runBtn.addEventListener('click', () => {
+      logs = [];
+      output.textContent = '';
+      output.style.color = '#e2e8f0';
+      
+      try {
+        console.log = customLog;
+        
+        // Execute code
+        eval(codeEditor.value);
+        
+        // Display output
+        if (logs.length > 0) {
+          output.textContent = logs.join('\n');
+        } else {
+          output.textContent = 'Kode berhasil dijalankan! (Tidak ada output)';
+        }
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+        output.style.color = '#ff5370';
+      } finally {
+        console.log = originalLog;
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      output.textContent = '';
+      logs = [];
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c06faa6333a3e32',t:'MTc2ODgzMjQ5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
