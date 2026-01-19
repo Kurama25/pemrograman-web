@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client-side Javascript</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      color: #fbbf24;
+      font-size: 52px;
+      font-weight: 800;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .definition-box {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .definition-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+    }
+
+    .definition-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #374151;
+      text-align: justify;
+    }
+
+    .link-box {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .info-link {
+      display: inline-block;
+      background: #fbbf24;
+      color: #1e3a8a;
+      padding: 16px 36px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .info-link:hover {
+      background: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(251, 191, 36, 0.6);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border: 2px solid transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      border-color: #fbbf24;
+    }
+
+    .card-number {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e3a8a;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+    }
+
+    .card-icon {
+      font-size: 52px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.4;
+    }
+
+    .footer {
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      text-align: center;
+      padding: 24px;
+      width: 100%;
+      margin-top: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-text {
+      font-size: 15px;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 25px 15px;
+      }
+
+      .page-title {
+        font-size: 32px;
+      }
+
+      .definition-box {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .definition-title {
+        font-size: 18px;
+      }
+
+      .definition-text {
+        font-size: 14px;
+      }
+
+      .info-link {
+        font-size: 16px;
+        padding: 14px 28px;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .card-number {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+
+      .card-icon {
+        font-size: 40px;
+      }
+
+      .card-title {
+        font-size: 15px;
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container">
+    <header class="header">
+     <h1 class="page-title" id="pageTitle">Client-side (Javascript)</h1>
+    </header>
+    <div class="definition-box">
+     <h2 class="definition-title">Pengertian Client-side</h2>
+     <p class="definition-text" id="clientSideDefinition">Client-side adalah bagian dari aplikasi web yang dijalankan di browser pengguna. Kode client-side dieksekusi di komputer pengguna, bukan di server. Teknologi client-side seperti JavaScript memungkinkan interaksi dinamis dengan halaman web tanpa perlu memuat ulang halaman.</p>
+    </div>
+    <div class="definition-box">
+     <h2 class="definition-title">Pengertian Bahasa Pemrograman</h2>
+     <p class="definition-text" id="programmingLanguageDefinition">Bahasa pemrograman adalah seperangkat instruksi yang digunakan untuk membuat program komputer. Bahasa pemrograman memiliki sintaks dan aturan tertentu yang memungkinkan programmer untuk berkomunikasi dengan komputer dan memberikan perintah untuk melakukan tugas tertentu.</p>
+    </div>
+    <div class="link-box"><a href="def_web.html" class="info-link" rel="noopener noreferrer" id="linkText">Web Statis dan Web Dinamis ?</a>
+    </div>
+    <div class="cards-grid"><a href="dasar_javascript.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       1
+      </div>
+      <div class="card-icon">
+       📚
+      </div><h3 class="card-title">Dasar-dasar Pemrograman Javascript</h3></a> <a href="compiler_interpreter.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       2
+      </div>
+      <div class="card-icon">
+       ⚙️
+      </div><h3 class="card-title">Compiler dan Interpreter</h3></a> <a href="nilai_dan_tipe_data.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       3
+      </div>
+      <div class="card-icon">
+       💎🔤
+      </div><h3 class="card-title">Nilai dan Tipe Data pada Javascript (Angka, String dan Boolean)</h3></a> <a href="operator1.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       4
+      </div>
+      <div class="card-icon">
+       ➕
+      </div><h3 class="card-title">Operator pada Javascript (Aritmatika, Penugasan dan Perbandingan)</h3></a> <a href="operator2.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       5
+      </div>
+      <div class="card-icon">
+       🔧
+      </div><h3 class="card-title">Operator pada Javascript (Logika, String, Typeof dan Kondisional)</h3></a> <a href="variable.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       6
+      </div>
+      <div class="card-icon">
+       📦
+      </div><h3 class="card-title">Variable pada Javascript</h3></a> <a href="perulangan.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       7
+      </div>
+      <div class="card-icon">
+       🔄
+      </div><h3 class="card-title">Perulangan Pada Javascript</h3></a> <a href="pengkondisian.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       8
+      </div>
+      <div class="card-icon">
+       🔀
+      </div><h3 class="card-title">Pengkondisian Pada Javascript</h3></a> <a href="perulangan_pengkondisian_bersarang.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       9
+      </div>
+      <div class="card-icon">
+       🔁
+      </div><h3 class="card-title">Perulangan dan Pengkondisian Bersarang</h3></a> <a href="function.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       10
+      </div>
+      <div class="card-icon">
+       🎯
+      </div><h3 class="card-title">Function pada Javascript</h3></a> <a href="dom.html" class="card" rel="noopener noreferrer">
+      <div class="card-number">
+       11
+      </div>
+      <div class="card-icon">
+       🌳
+      </div><h3 class="card-title">DOM (Document Object Model)</h3></a>
+    </div>
+    <div class="link-box"><a href="../index.html" class="info-link" rel="noopener noreferrer">← Kembali ke Halaman Sebelumnya</a>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <p class="footer-text" id="footerText">© rsensei 2025</p>
+  </footer>
+  <script>
+    const defaultConfig = {
+      page_title: "Client-side (Javascript)",
+      client_side_definition: "Client-side adalah bagian dari aplikasi web yang dijalankan di browser pengguna. Kode client-side dieksekusi di komputer pengguna, bukan di server. Teknologi client-side seperti JavaScript memungkinkan interaksi dinamis dengan halaman web tanpa perlu memuat ulang halaman.",
+      programming_language_definition: "Bahasa pemrograman adalah seperangkat instruksi yang digunakan untuk membuat program komputer. Bahasa pemrograman memiliki sintaks dan aturan tertentu yang memungkinkan programmer untuk berkomunikasi dengan komputer dan memberikan perintah untuk melakukan tugas tertentu.",
+      link_text: "Web Statis dan Web Dinamis ?",
+      footer_text: "© rsensei 2025",
+      background_gradient_start: "#1e3c72",
+      background_gradient_middle: "#2a5298",
+      background_gradient_end: "#7e22ce",
+      title_color: "#fbbf24",
+      card_background: "#ffffff"
+    };
+
+    async function onConfigChange(config) {
+      const pageTitle = document.getElementById('pageTitle');
+      const clientSideDefinition = document.getElementById('clientSideDefinition');
+      const programmingLanguageDefinition = document.getElementById('programmingLanguageDefinition');
+      const linkText = document.getElementById('linkText');
+      const footerText = document.getElementById('footerText');
+
+      if (pageTitle) pageTitle.textContent = config.page_title || defaultConfig.page_title;
+      if (clientSideDefinition) clientSideDefinition.textContent = config.client_side_definition || defaultConfig.client_side_definition;
+      if (programmingLanguageDefinition) programmingLanguageDefinition.textContent = config.programming_language_definition || defaultConfig.programming_language_definition;
+      if (linkText) linkText.textContent = config.link_text || defaultConfig.link_text;
+      if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+      document.body.style.background = `linear-gradient(135deg, ${config.background_gradient_start || defaultConfig.background_gradient_start} 0%, ${config.background_gradient_middle || defaultConfig.background_gradient_middle} 50%, ${config.background_gradient_end || defaultConfig.background_gradient_end} 100%)`;
+      
+      if (pageTitle) pageTitle.style.color = config.title_color || defaultConfig.title_color;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_gradient_start || defaultConfig.background_gradient_start,
+            set: (value) => {
+              config.background_gradient_start = value;
+              window.elementSdk.setConfig({ background_gradient_start: value });
+            }
+          },
+          {
+            get: () => config.background_gradient_end || defaultConfig.background_gradient_end,
+            set: (value) => {
+              config.background_gradient_end = value;
+              window.elementSdk.setConfig({ background_gradient_end: value });
+            }
+          },
+          {
+            get: () => config.title_color || defaultConfig.title_color,
+            set: (value) => {
+              config.title_color = value;
+              window.elementSdk.setConfig({ title_color: value });
+            }
+          },
+          {
+            get: () => config.card_background || defaultConfig.card_background,
+            set: (value) => {
+              config.card_background = value;
+              window.elementSdk.setConfig({ card_background: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["page_title", config.page_title || defaultConfig.page_title],
+        ["client_side_definition", config.client_side_definition || defaultConfig.client_side_definition],
+        ["programming_language_definition", config.programming_language_definition || defaultConfig.programming_language_definition],
+        ["link_text", config.link_text || defaultConfig.link_text],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bcd6a088745ce7a',t:'MTc2ODIyODg4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
