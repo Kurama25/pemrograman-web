@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perulangan JavaScript - Media Pembelajaran Interaktif</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Fredoka', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+        
+        .code-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 3px solid #334155;
+        }
+        
+        @media (max-width: 768px) {
+            .code-box {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+        
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .bounce-animation {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .spin-animation {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .tab-active {
+            background: white;
+            color: #667eea;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        .demo-box {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .loop-item {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .grid-cell {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .grid-cell:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+        
+        .grid-cell.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.15);
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-container" class="w-full h-full overflow-auto gradient-bg">
+   <div class="w-full min-h-full px-4 py-8"><!-- Header -->
+    <div class="max-w-6xl mx-auto mb-8 text-center">
+     <h1 id="main-title" class="text-4xl md:text-6xl font-bold text-white mb-4 bounce-animation">🔁 Perulangan JavaScript</h1>
+     <p id="subtitle" class="text-lg md:text-2xl text-white opacity-90 mb-6">Belajar Loop dengan Cara yang Menyenangkan!</p>
+     <div class="max-w-md mx-auto progress-bar">
+      <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+     </div>
+     <p id="progress-text" class="text-white mt-3 text-sm md:text-base font-semibold">Progress: 0/5 Materi ✨</p>
+    </div><!-- Navigation Tabs -->
+    <div class="max-w-6xl mx-auto mb-8"><!-- Mobile Menu -->
+     <div class="md:hidden mb-4"><button onclick="toggleMobileMenu()" class="w-full bg-white bg-opacity-20 backdrop-blur-sm px-6 py-4 rounded-2xl font-bold text-white flex items-center justify-between hover:bg-opacity-30 transition-all"> <span class="flex items-center gap-3"> <span class="text-2xl">📚</span> <span id="current-menu-label">Menu Materi</span> </span> <span id="menu-icon" class="text-2xl">▼</span> </button>
+     </div><!-- Mobile Dropdown -->
+     <div id="mobile-menu-dropdown" class="md:hidden hidden mb-4 bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden"><button onclick="showTab('intro')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🌟</span> <span>Pengenalan</span> </button> <button onclick="showTab('for')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🔄</span> <span>For Loop</span> </button> <button onclick="showTab('while')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">⏰</span> <span>While Loop</span> </button> <button onclick="showTab('dowhile')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-purple-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🔁</span> <span>Do-While Loop</span> </button> <button onclick="showTab('nested')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-purple-100 flex items-center gap-3"> <span class="text-xl">🎯</span> <span>Nested Loop</span> </button>
+     </div><!-- Desktop Menu -->
+     <div class="hidden md:flex flex-wrap gap-3 justify-center bg-white bg-opacity-20 backdrop-blur-sm p-3 rounded-2xl"><button onclick="showTab('intro')" id="tab-intro" class="tab-active px-6 py-3 rounded-xl font-bold transition-all text-base"> 🌟 Pengenalan </button> <button onclick="showTab('for')" id="tab-for" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🔄 For Loop </button> <button onclick="showTab('while')" id="tab-while" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> ⏰ While Loop </button> <button onclick="showTab('dowhile')" id="tab-dowhile" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🔁 Do-While </button> <button onclick="showTab('nested')" id="tab-nested" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🎯 Nested Loop </button>
+     </div>
+    </div><!-- Content Sections -->
+    <div class="max-w-6xl mx-auto"><!-- Tab 1: Pengenalan -->
+     <div id="content-intro" class="tab-content">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-purple-700 mb-6">🌟 Apa itu Perulangan (Loop)?</h2>
+       <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-blue-500">
+        <p id="intro-text" class="text-gray-800 text-base md:text-xl leading-relaxed text-justify"><strong>Perulangan (Loop)</strong> adalah struktur kontrol yang memungkinkan kita mengeksekusi blok kode <strong>berulang kali</strong> tanpa harus menulis kode yang sama berkali-kali. Bayangkan seperti robot yang melakukan tugas yang sama hingga kondisi tertentu tercapai! 🤖</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl border-4 border-green-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">✅</span>
+          <h3 class="text-2xl font-bold text-green-700">Kenapa Penting?</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-base">
+          <li class="flex items-start"><span class="mr-2">💡</span> <span><strong>Efisien:</strong> Tidak perlu menulis kode berulang</span></li>
+          <li class="flex items-start"><span class="mr-2">⚡</span> <span><strong>Powerful:</strong> Bisa proses data banyak sekaligus</span></li>
+          <li class="flex items-start"><span class="mr-2">🎯</span> <span><strong>Fleksibel:</strong> Jumlah perulangan bisa dinamis</span></li>
+          <li class="flex items-start"><span class="mr-2">🚀</span> <span><strong>Essential:</strong> Digunakan hampir di semua program</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl border-4 border-orange-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">🎪</span>
+          <h3 class="text-2xl font-bold text-orange-700">Contoh Nyata</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-base">
+          <li class="flex items-start"><span class="mr-2">🎵</span> <span>Memutar playlist musik berulang</span></li>
+          <li class="flex items-start"><span class="mr-2">📧</span> <span>Kirim email ke 100 orang sekaligus</span></li>
+          <li class="flex items-start"><span class="mr-2">🎮</span> <span>Game loop yang terus berjalan</span></li>
+          <li class="flex items-start"><span class="mr-2">📊</span> <span>Hitung total nilai semua siswa</span></li>
+         </ul>
+        </div>
+       </div>
+       <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 md:p-8 rounded-2xl mb-6">
+        <h3 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">🔢 Jenis-Jenis Loop di JavaScript</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="text-3xl mb-2">
+           🔄
+          </div>
+          <h4 class="font-bold text-lg text-purple-600 mb-2">for Loop</h4>
+          <p class="text-sm text-gray-700">Untuk perulangan dengan jumlah yang pasti</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="text-3xl mb-2">
+           ⏰
+          </div>
+          <h4 class="font-bold text-lg text-blue-600 mb-2">while Loop</h4>
+          <p class="text-sm text-gray-700">Looping selama kondisi masih true</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="text-3xl mb-2">
+           🔁
+          </div>
+          <h4 class="font-bold text-lg text-green-600 mb-2">do-while Loop</h4>
+          <p class="text-sm text-gray-700">Minimal jalankan 1x dulu, baru cek kondisi</p>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('intro')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Paham! Lanjut ke For Loop 🚀 </button>
+       </div>
+      </div>
+     </div><!-- Tab 2: For Loop -->
+     <div id="content-for" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-purple-700 mb-6">🔄 For Loop - Perulangan Terkendali</h2>
+       <div class="bg-gradient-to-br from-indigo-50 to-purple-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-indigo-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-4">📖 Apa itu For Loop?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>For Loop</strong> adalah perulangan yang digunakan ketika kita <strong>sudah tahu berapa kali</strong> perulangan akan dilakukan. Seperti menghitung dari 1 sampai 10!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-indigo-700 mb-2">Struktur For Loop:</p>
+         <div class="code-box"><span class="keyword">for</span> (<span class="keyword">inisialisasi</span>; <span class="keyword">kondisi</span>; <span class="keyword">increment</span>) {<br> <span class="comment">// Kode yang akan diulang</span> <br>}
+         </div>
+        </div>
+       </div>
+       <div class="mb-6">
+        <h3 class="text-2xl font-bold text-purple-700 mb-4">🎯 Penjelasan Bagian For Loop</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-gradient-to-br from-blue-100 to-blue-200 p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           1️⃣
+          </div>
+          <h4 class="font-bold text-lg text-blue-800 mb-2">Inisialisasi</h4>
+          <p class="text-sm text-gray-800 mb-2"><code class="bg-white px-2 py-1 rounded">let i = 0</code></p>
+          <p class="text-sm text-gray-700">Menentukan nilai awal counter</p>
+         </div>
+         <div class="bg-gradient-to-br from-green-100 to-green-200 p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           2️⃣
+          </div>
+          <h4 class="font-bold text-lg text-green-800 mb-2">Kondisi</h4>
+          <p class="text-sm text-gray-800 mb-2"><code class="bg-white px-2 py-1 rounded">i &lt; 10</code></p>
+          <p class="text-sm text-gray-700">Loop berjalan selama kondisi true</p>
+         </div>
+         <div class="bg-gradient-to-br from-orange-100 to-orange-200 p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           3️⃣
+          </div>
+          <h4 class="font-bold text-lg text-orange-800 mb-2">Increment</h4>
+          <p class="text-sm text-gray-800 mb-2"><code class="bg-white px-2 py-1 rounded">i++</code></p>
+          <p class="text-sm text-gray-700">Menambah nilai counter setiap loop</p>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">💡 Contoh Kode</h3>
+        <div class="code-box mb-4"><span class="comment">// Menampilkan angka 1 sampai 5</span><br><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++){ <br><span class="keyword">&nbsp;&nbsp;&nbsp; console</span>.<span class="function">log</span>(<span class="string">"Angka: "</span> + i);<br> }<br> <span class="comment">// Output:</span> <span class="comment">// Angka: 1</span> <span class="comment">// Angka: 2</span> <span class="comment">// Angka: 3</span> <span class="comment">// Angka: 4</span> <span class="comment">// Angka: 5</span>
+        </div>
+        <h4 class="font-bold text-amber-700 mb-3 text-xl">🎮 Coba Interaktif!</h4>
+        <div class="flex flex-col md:flex-row gap-4 mb-4">
+         <div class="flex-1"><label for="for-start" class="block font-semibold mb-2 text-gray-800">Mulai dari:</label> <input type="number" id="for-start" value="1" class="w-full p-3 rounded-xl border-3 border-amber-300 focus:border-amber-500 focus:outline-none text-lg">
+         </div>
+         <div class="flex-1"><label for="for-end" class="block font-semibold mb-2 text-gray-800">Sampai:</label> <input type="number" id="for-end" value="5" class="w-full p-3 rounded-xl border-3 border-amber-300 focus:border-amber-500 focus:outline-none text-lg">
+         </div>
+        </div><button onclick="runForLoop()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> ▶️ Jalankan For Loop </button>
+        <div id="for-output" class="demo-box mt-4 min-h-[120px]">
+         <p class="text-white font-bold text-lg">Klik tombol untuk melihat hasilnya! 👆</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-pink-50 to-rose-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-rose-700 mb-4">🎨 Contoh Lain: Loop Array</h3>
+        <div class="code-box mb-4"><span class="comment">// Loop melalui array buah-buahan</span><br> <span class="keyword">const</span> buah = [<span class="string">"🍎 Apel"</span>, <span class="string">"🍌 Pisang"</span>, <span class="string">"🍇 Anggur"</span>, <span class="string">"🍊 Jeruk"</span>];<br> <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; buah.<span class="keyword">length</span>; i++) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Buah ke-"</span> + (i + <span class="number">1</span>) + <span class="string">". "</span> + buah[i]); <br>}
+        </div><button onclick="runForArray()" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🍎 Tampilkan Buah-Buahan </button>
+        <div id="for-array-output" class="demo-box mt-4 min-h-[120px]">
+         <p class="text-white font-bold text-lg">Klik untuk melihat buah-buahan! 🍇</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('for')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Mengerti! Lanjut ke While Loop ⏰ </button>
+       </div>
+      </div>
+     </div><!-- Tab 3: While Loop -->
+     <div id="content-while" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-purple-700 mb-6">⏰ While Loop - Looping Berbasis Kondisi</h2>
+       <div class="bg-gradient-to-br from-cyan-50 to-blue-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-cyan-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-cyan-700 mb-4">📖 Apa itu While Loop?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>While Loop</strong> adalah perulangan yang berjalan <strong>selama kondisi masih true</strong>. Berbeda dengan for loop, kita tidak perlu tahu pasti berapa kali loop akan berjalan. Loop akan terus berjalan sampai kondisinya menjadi false!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-cyan-700 mb-2">Struktur While Loop:</p>
+         <div class="code-box"><span class="keyword">while</span> (<span class="keyword">kondisi</span>) {<br> <span class="comment">// Kode yang akan diulang</span><br> <span class="comment">// Jangan lupa update kondisi!</span> <br>}
+         </div>
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl border-4 border-green-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">✅</span>
+          <h3 class="text-xl font-bold text-green-700">Kapan Pakai While?</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-sm">
+          <li class="flex items-start"><span class="mr-2">🎯</span> <span>Tidak tahu berapa kali loop akan jalan</span></li>
+          <li class="flex items-start"><span class="mr-2">🔍</span> <span>Loop bergantung pada kondisi eksternal</span></li>
+          <li class="flex items-start"><span class="mr-2">⏳</span> <span>Menunggu input atau event tertentu</span></li>
+          <li class="flex items-start"><span class="mr-2">🎲</span> <span>Proses yang bersifat tidak pasti</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-red-50 to-rose-100 p-6 rounded-2xl border-4 border-red-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">⚠️</span>
+          <h3 class="text-xl font-bold text-red-700">Hati-Hati!</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-sm">
+          <li class="flex items-start"><span class="mr-2">🚫</span> <span><strong>Infinite Loop:</strong> Kondisi selalu true = loop tidak pernah berhenti</span></li>
+          <li class="flex items-start"><span class="mr-2">��</span> <span>Bisa bikin browser crash atau hang</span></li>
+          <li class="flex items-start"><span class="mr-2">✅</span> <span><strong>Solusi:</strong> Pastikan ada cara untuk kondisi jadi false!</span></li>
+         </ul>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-violet-700 mb-4">💡 Contoh Kode</h3>
+        <div class="code-box mb-4"><span class="comment">// Hitung mundur dari 5</span><br> <span class="keyword">let</span> countdown = <span class="number">5</span>;<br> <span class="keyword">while</span> (countdown &gt; <span class="number">0</span>) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"⏰ "</span> + countdown);<br>&nbsp;&nbsp;countdown--;<br> <span class="comment">&nbsp;&nbsp;// Penting! Update kondisi</span><br> }<br> <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"🚀 Waktu Habis!"</span>);
+        </div>
+        <h4 class="font-bold text-violet-700 mb-3 text-xl">🎮 Coba Interaktif - Hitung Mundur!</h4>
+        <div class="mb-4"><label for="while-countdown" class="block font-semibold mb-2 text-gray-800">Hitung mundur dari:</label> <input type="number" id="while-countdown" value="10" min="1" max="20" class="w-full p-3 rounded-xl border-3 border-violet-300 focus:border-violet-500 focus:outline-none text-lg">
+        </div><button onclick="runWhileLoop()" class="w-full bg-gradient-to-r from-violet-500 to-purple-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> ⏰ Mulai Hitung Mundur </button>
+        <div id="while-output" class="demo-box mt-4 min-h-[120px]">
+         <p class="text-white font-bold text-lg">Siap untuk countdown? 🚀</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">🎲 Contoh: Tebak Angka Sederhana</h3>
+        <div class="code-box mb-4"><span class="comment">// Simulasi tebak angka</span><br> <span class="keyword">let</span> targetAngka = <span class="number">7</span>;<br> <span class="keyword">let</span> tebakan = <span class="number">1</span>;<br> <span class="keyword">let</span> percobaan = <span class="number">0</span>;<br> <span class="keyword">while</span> (tebakan !== targetAngka) { <br>&nbsp;&nbsp;percobaan++; <br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Percobaan "</span> + percobaan + <span class="string">": "</span> + tebakan);<br> &nbsp;&nbsp;tebakan++;<br> <span class="comment">// Coba angka berikutnya</span><br> }<br><span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"🎉 Ketemu angka "</span> + targetAngka + <span class="string">" di percobaan ke-"</span> + percobaan);<br>
+        </div><button onclick="runWhileGuess()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🎲 Simulasi Tebak Angka </button>
+        <div id="while-guess-output" class="demo-box mt-4 min-h-[120px]">
+         <p class="text-white font-bold text-lg">Lihat proses tebak angka! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('while')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Paham! Lanjut ke Do-While Loop 🔁 </button>
+       </div>
+      </div>
+     </div><!-- Tab 4: Do-While Loop -->
+     <div id="content-dowhile" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-purple-700 mb-6">🔁 Do-While Loop - Jalankan Dulu Baru Cek!</h2>
+       <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-emerald-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-emerald-700 mb-4">📖 Apa itu Do-While Loop?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>Do-While Loop</strong> mirip dengan while loop, tapi dengan satu perbedaan penting: <strong>kode akan dijalankan minimal 1 kali</strong>, baru kemudian cek kondisinya. Ini sangat berguna ketika kita ingin memastikan kode berjalan setidaknya sekali, terlepas dari kondisinya!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-emerald-700 mb-2">Struktur Do-While Loop:</p>
+         <div class="code-box"><span class="keyword">do</span> {<br> <span class="comment">// Kode yang akan dijalankan minimal 1x</span><br> <span class="comment">// Baru cek kondisi setelah ini</span><br> } <span class="keyword">while</span> (<span class="keyword">kondisi</span>);
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-blue-50 to-cyan-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">�� Perbedaan While vs Do-While</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-5 rounded-xl border-4 border-blue-300">
+          <h4 class="font-bold text-lg text-blue-600 mb-3">⏰ While Loop</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> i = <span class="number">10</span>;<br> <span class="keyword">while</span> (i &lt; <span class="number">5</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(i);<br>&nbsp;&nbsp;i++;<br>}<br> <span class="comment">// ❌ Tidak jalan sama sekali!</span>
+          </div>
+          <p class="text-sm text-gray-700">Cek kondisi dulu. Kalau false, kode tidak jalan.</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-4 border-emerald-300">
+          <h4 class="font-bold text-lg text-emerald-600 mb-3">🔁 Do-While Loop</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> i = <span class="number">10</span>;<br> <span class="keyword">do</span> {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(i);<br>&nbsp;&nbsp;i++;<br> } <span class="keyword">while</span> (i &lt; <span class="number">5</span>);<br><span class="comment">// ✅ Jalan 1x dulu!</span>
+          </div>
+          <p class="text-sm text-gray-700">Jalankan kode dulu, baru cek kondisi.</p>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-pink-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-purple-700 mb-4">💡 Contoh Penggunaan</h3>
+        <div class="code-box mb-4"><span class="comment">// Menu yang harus tampil minimal 1x</span><br> <span class="keyword">let</span> pilihan;<br> <span class="keyword">do</span> {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"=== MENU ==="</span>);<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"1. Main Game"</span>);<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"2. Lihat Skor"</span>);<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"3. Keluar"</span>);<br> &nbsp;&nbsp;pilihan = <span class="number">3</span>;<br> <span class="comment">// Simulasi input user</span><br> } <span class="keyword">while</span> (pilihan !== <span class="number">3</span>);<br> <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"👋 Terima kasih!"</span>);
+        </div>
+        <h4 class="font-bold text-purple-700 mb-3 text-xl">🎮 Demo Interaktif - Percobaan Login</h4>
+        <p class="text-gray-700 mb-4">Simulasi login yang harus dicoba minimal 1x:</p><button onclick="runDoWhileLogin()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🔐 Simulasi Login </button>
+        <div id="dowhile-output" class="demo-box mt-4 min-h-[120px]">
+         <p class="text-white font-bold text-lg">Coba simulasi login! 🔑</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-orange-700 mb-4">🎯 Kapan Pakai Do-While?</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           📋
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Menu Program</h4>
+          <p class="text-sm text-gray-700">Menu harus tampil minimal 1x untuk user bisa pilih</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           ✍️
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Input Validation</h4>
+          <p class="text-sm text-gray-700">Minta input user minimal 1x sebelum validasi</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           🎲
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Game Loop</h4>
+          <p class="text-sm text-gray-700">Jalankan game minimal 1 round dulu</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           🔄
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Retry Mechanism</h4>
+          <p class="text-sm text-gray-700">Coba proses minimal 1x, ulangi jika gagal</p>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('dowhile')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Jelas! Lanjut ke Nested Loop 🎯 </button>
+       </div>
+      </div>
+     </div><!-- Tab 5: Nested Loop -->
+     <div id="content-nested" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-purple-700 mb-6">🎯 Nested Loop - Loop di Dalam Loop!</h2>
+       <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-rose-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-rose-700 mb-4">📖 Apa itu Nested Loop?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>Nested Loop</strong> adalah perulangan di dalam perulangan. Bayangkan seperti jam: jarum jam berputar (outer loop) dan dalam setiap putaran, jarum menit berputar 60 kali (inner loop)! ⏰</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-rose-700 mb-2">Struktur Nested Loop:</p>
+         <div class="code-box"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) {<br> <span class="comment">&nbsp;&nbsp;// Outer loop (loop luar)</span><br> <span class="keyword">&nbsp;&nbsp;&nbsp;for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; <span class="number">3</span>; j++) {<br> <span class="comment">&nbsp;&nbsp;// Inner loop (loop dalam)</span><br> <span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"i="</span> + i + <span class="string">", j="</span> + j); <br>&nbsp;}<br>}
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-indigo-50 to-blue-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-indigo-700 mb-4">🔢 Cara Kerja Nested Loop</h3>
+        <div class="bg-white p-5 rounded-xl mb-4">
+         <h4 class="font-bold text-indigo-600 mb-3">Contoh: Loop 3x3</h4>
+         <div class="code-box text-sm mb-3"><span class="keyword">for</span> (<span class="keyword">let</span> baris = <span class="number">1</span>; baris &lt;= <span class="number">3</span>; baris++) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;for</span> (<span class="keyword">let</span> kolom = <span class="number">1</span>; kolom &lt;= <span class="number">3</span>; kolom++) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Baris "</span> + baris + <span class="string">", Kolom "</span> + kolom); <br>&nbsp;}<br>}
+         </div>
+         <div class="bg-gray-100 p-4 rounded-lg">
+          <p class="font-bold text-gray-700 mb-2">Output:</p>
+          <div class="space-y-1 text-sm text-gray-600 font-mono">
+           <p>Baris 1, Kolom 1 → Baris 1, Kolom 2 → Baris 1, Kolom 3</p>
+           <p>Baris 2, Kolom 1 → Baris 2, Kolom 2 → Baris 2, Kolom 3</p>
+           <p>Baris 3, Kolom 1 → Baris 3, Kolom 2 → Baris 3, Kolom 3</p>
+          </div>
+         </div>
+        </div>
+        <div class="bg-yellow-100 p-4 rounded-xl">
+         <p class="font-bold text-yellow-800 mb-2">💡 Cara Baca:</p>
+         <p class="text-sm text-gray-800">Untuk setiap <strong>1x putaran outer loop</strong>, inner loop berjalan <strong>lengkap</strong> dari awal sampai akhir!</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-violet-700 mb-4">🎨 Demo: Membuat Pola Bintang</h3>
+        <div class="code-box mb-4"><span class="comment">// Membuat segitiga bintang</span><br> <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;let</span> bintang = <span class="string">""</span>;<br> <span class="keyword">&nbsp;&nbsp;&nbsp;for</span> (<span class="keyword">let</span> j = <span class="number">1</span>; j &lt;= i; j++) {<br>&nbsp;&nbsp;&nbsp;&nbsp;bintang += <span class="string">"⭐"</span>;<br>&nbsp;}<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(bintang);<br> }
+        </div>
+        <h4 class="font-bold text-violet-700 mb-3 text-xl">🎮 Coba Buat Pola Sendiri!</h4>
+        <div class="mb-4"><label for="nested-rows" class="block font-semibold mb-2 text-gray-800">Jumlah Baris:</label> <input type="number" id="nested-rows" value="5" min="1" max="10" class="w-full p-3 rounded-xl border-3 border-violet-300 focus:border-violet-500 focus:outline-none text-lg">
+        </div><button onclick="runNestedPattern()" class="w-full bg-gradient-to-r from-violet-500 to-purple-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> ⭐ Buat Pola Bintang </button>
+        <div id="nested-output" class="bg-gray-900 text-yellow-300 p-6 rounded-xl mt-4 min-h-[120px] font-mono text-2xl leading-relaxed">
+         <p class="text-white text-base">Klik tombol untuk membuat pola! ✨</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-green-700 mb-4">🎯 Demo: Tabel Perkalian</h3>
+        <div class="code-box mb-4"><span class="comment">// Tabel perkalian 1-5</span><br> <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;for</span> (<span class="keyword">let</span> j = <span class="number">1</span>; j &lt;= <span class="number">5</span>; j++) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(i + <span class="string">" x "</span> + j + <span class="string">" = "</span> + (i * j));<br>&nbsp;}<br>}
+        </div><button onclick="runNestedMultiply()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🔢 Tampilkan Tabel Perkalian </button>
+        <div id="nested-multiply-output" class="demo-box mt-4 min-h-[150px] overflow-auto max-h-[300px]">
+         <p class="text-white font-bold text-lg">Lihat tabel perkalian! ���</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-orange-700 mb-4">💡 Kegunaan Nested Loop</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           📊
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Tabel &amp; Grid</h4>
+          <p class="text-sm text-gray-700">Membuat tabel, spreadsheet, atau grid 2D</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           🎮
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Game Board</h4>
+          <p class="text-sm text-gray-700">Chess board, tic-tac-toe, puzzle games</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           🖼️
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Matrix Operations</h4>
+          <p class="text-sm text-gray-700">Operasi matematika pada matriks</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <div class="text-3xl mb-2">
+           🎨
+          </div>
+          <h4 class="font-bold text-orange-600 mb-2">Pattern Design</h4>
+          <p class="text-sm text-gray-700">Membuat pola, ASCII art, designs</p>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('nested')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Mantap! Materi Selesai 🎉 </button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <div class="max-w-6xl mx-auto mt-12 text-center text-white">
+     <p class="text-sm md:text-base opacity-90 mb-6">💡 Terus berlatih dan jangan takut mencoba! Semangat belajar! 🚀</p><!-- Sumber Materi -->
+     <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 mb-8 text-left max-w-3xl mx-auto">
+      <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">📚 Sumber Referensi Materi</h3>
+      <div class="space-y-3 text-sm md:text-base opacity-90">
+       <div class="flex items-start gap-3"><span class="text-lg">🌐</span>
+        <div>
+         <p class="font-semibold">MDN Web Docs - JavaScript Loops</p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration" target="_blank" rel="noopener noreferrer" class="text-yellow-300 hover:text-yellow-100 underline break-all"> developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">📖</span>
+        <div>
+         <p class="font-semibold">W3Schools - JavaScript Loops</p><a href="https://www.w3schools.com/js/js_loop_for.asp" target="_blank" rel="noopener noreferrer" class="text-yellow-300 hover:text-yellow-100 underline break-all"> w3schools.com/js/js_loop_for.asp </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">💻</span>
+        <div>
+         <p class="font-semibold">JavaScript.info - Loops</p><a href="https://javascript.info/while-for" target="_blank" rel="noopener noreferrer" class="text-yellow-300 hover:text-yellow-100 underline break-all"> javascript.info/while-for </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">🎓</span>
+        <div>
+         <p class="font-semibold">freeCodeCamp - JavaScript Loops Tutorial</p><a href="https://www.freecodecamp.org/news/javascript-loops-explained-for-loop-for/" target="_blank" rel="noopener noreferrer" class="text-yellow-300 hover:text-yellow-100 underline break-all"> freecodecamp.org/news/javascript-loops-explained </a>
+        </div>
+       </div>
+      </div>
+     </div><a href="index.html" class="inline-block bg-white bg-opacity-20 backdrop-blur-sm text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold hover:bg-opacity-30 transition-all text-sm md:text-base mb-8"> ← Kembali ke Halaman Sebelumnya </a>
+     <div class="border-t border-white border-opacity-20 pt-6 mt-8">
+      <p class="text-xs md:text-sm opacity-70">© Rsensei 2025. All rights reserved.</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            main_title: "🔁 Perulangan JavaScript",
+            subtitle: "Belajar Loop dengan Cara yang Menyenangkan!",
+            intro_text: "Perulangan (Loop) adalah struktur kontrol yang memungkinkan kita mengeksekusi blok kode berulang kali tanpa harus menulis kode yang sama berkali-kali. Bayangkan seperti robot yang melakukan tugas yang sama hingga kondisi tertentu tercapai! 🤖"
+        };
+
+        let completedSections = new Set();
+
+        const menuLabels = {
+            'intro': 'Pengenalan',
+            'for': 'For Loop',
+            'while': 'While Loop',
+            'dowhile': 'Do-While Loop',
+            'nested': 'Nested Loop'
+        };
+
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                icon.textContent = '▲';
+            } else {
+                dropdown.classList.add('hidden');
+                icon.textContent = '▼';
+            }
+        }
+
+        async function onConfigChange(config) {
+            const mainTitle = document.getElementById('main-title');
+            const subtitle = document.getElementById('subtitle');
+            const introText = document.getElementById('intro-text');
+
+            if (mainTitle) {
+                mainTitle.textContent = config.main_title || defaultConfig.main_title;
+            }
+            if (subtitle) {
+                subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+            }
+            if (introText) {
+                introText.textContent = config.intro_text || defaultConfig.intro_text;
+            }
+        }
+
+        function showTab(tabName) {
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            dropdown.classList.add('hidden');
+            icon.textContent = '▼';
+            
+            document.getElementById('current-menu-label').textContent = menuLabels[tabName];
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('[id^="tab-"]:not([id$="-mobile"])').forEach(tab => {
+                tab.classList.remove('tab-active', 'text-purple-700');
+                tab.classList.add('text-white');
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            const activeTab = document.getElementById('tab-' + tabName);
+            if (activeTab) {
+                activeTab.classList.add('tab-active');
+                activeTab.classList.remove('text-white');
+                activeTab.classList.add('text-purple-700');
+            }
+        }
+
+        function completeSection(section) {
+            completedSections.add(section);
+            updateProgress();
+            
+            const nextTab = {
+                'intro': 'for',
+                'for': 'while',
+                'while': 'dowhile',
+                'dowhile': 'nested'
+            };
+            
+            if (nextTab[section]) {
+                showTab(nextTab[section]);
+            }
+        }
+
+        function updateProgress() {
+            const total = 5;
+            const completed = completedSections.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Progress: ${completed}/${total} Materi ✨`;
+        }
+
+        function runForLoop() {
+            const start = parseInt(document.getElementById('for-start').value);
+            const end = parseInt(document.getElementById('for-end').value);
+            const output = document.getElementById('for-output');
+            
+            output.innerHTML = '';
+            
+            for (let i = start; i <= end; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'loop-item';
+                    item.textContent = `Angka ${i}`;
+                    output.appendChild(item);
+                }, (i - start) * 200);
+            }
+        }
+
+        function runForArray() {
+            const buah = ["🍎 Apel", "🍌 Pisang", "🍇 Anggur", "🍊 Jeruk", "🍓 Strawberry"];
+            const output = document.getElementById('for-array-output');
+            
+            output.innerHTML = '';
+            
+            for (let i = 0; i < buah.length; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'loop-item';
+                    item.textContent = `${i + 1}. ${buah[i]}`;
+                    output.appendChild(item);
+                }, i * 300);
+            }
+        }
+
+        function runWhileLoop() {
+            const start = parseInt(document.getElementById('while-countdown').value);
+            const output = document.getElementById('while-output');
+            
+            output.innerHTML = '';
+            
+            let countdown = start;
+            let counter = 0;
+            
+            const interval = setInterval(() => {
+                if (countdown > 0) {
+                    const item = document.createElement('div');
+                    item.className = 'loop-item text-2xl';
+                    item.textContent = `⏰ ${countdown}`;
+                    output.appendChild(item);
+                    countdown--;
+                } else {
+                    clearInterval(interval);
+                    const item = document.createElement('div');
+                    item.className = 'loop-item text-2xl bg-green-500 text-white';
+                    item.textContent = '🚀 Waktu Habis!';
+                    output.appendChild(item);
+                }
+            }, 400);
+        }
+
+        function runWhileGuess() {
+            const targetAngka = Math.floor(Math.random() * 10) + 1;
+            const output = document.getElementById('while-guess-output');
+            
+            output.innerHTML = '';
+            
+            let tebakan = 1;
+            let percobaan = 0;
+            
+            const interval = setInterval(() => {
+                percobaan++;
+                const item = document.createElement('div');
+                item.className = 'loop-item';
+                
+                if (tebakan !== targetAngka) {
+                    item.textContent = `Percobaan ${percobaan}: ${tebakan} ❌`;
+                    output.appendChild(item);
+                    tebakan++;
+                } else {
+                    clearInterval(interval);
+                    item.className = 'loop-item bg-green-500 text-white text-lg';
+                    item.textContent = `🎉 Ketemu angka ${targetAngka} di percobaan ke-${percobaan}!`;
+                    output.appendChild(item);
+                }
+            }, 500);
+        }
+
+        function runDoWhileLogin() {
+            const output = document.getElementById('dowhile-output');
+            output.innerHTML = '';
+            
+            const attempts = ['user123', 'wrongpass', 'admin', 'correct'];
+            let i = 0;
+            
+            const interval = setInterval(() => {
+                if (i < attempts.length) {
+                    const item = document.createElement('div');
+                    item.className = 'loop-item';
+                    
+                    if (attempts[i] === 'correct') {
+                        item.className = 'loop-item bg-green-500 text-white';
+                        item.textContent = `✅ Login Berhasil!`;
+                        clearInterval(interval);
+                    } else {
+                        item.textContent = `Percobaan ${i + 1}: ${attempts[i]} ❌`;
+                    }
+                    
+                    output.appendChild(item);
+                    i++;
+                }
+            }, 600);
+        }
+
+        function runNestedPattern() {
+            const rows = parseInt(document.getElementById('nested-rows').value);
+            const output = document.getElementById('nested-output');
+            
+            output.innerHTML = '';
+            
+            let currentRow = 0;
+            
+            const interval = setInterval(() => {
+                if (currentRow < rows) {
+                    let stars = '';
+                    for (let j = 0; j <= currentRow; j++) {
+                        stars += '⭐';
+                    }
+                    
+                    const line = document.createElement('div');
+                    line.textContent = stars;
+                    output.appendChild(line);
+                    currentRow++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 300);
+        }
+
+        function runNestedMultiply() {
+            const output = document.getElementById('nested-multiply-output');
+            output.innerHTML = '';
+            
+            let row = 1;
+            
+            const interval = setInterval(() => {
+                if (row <= 5) {
+                    for (let col = 1; col <= 5; col++) {
+                        const item = document.createElement('div');
+                        item.className = 'loop-item text-sm';
+                        item.textContent = `${row} × ${col} = ${row * col}`;
+                        output.appendChild(item);
+                    }
+                    row++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 800);
+        }
+
+
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["main_title", config.main_title || defaultConfig.main_title],
+                    ["subtitle", config.subtitle || defaultConfig.subtitle],
+                    ["intro_text", config.intro_text || defaultConfig.intro_text]
+                ])
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.elementSdk && window.elementSdk.config) {
+                onConfigChange(window.elementSdk.config);
+            } else {
+                onConfigChange(defaultConfig);
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c79d98c3691d846',t:'MTc3MDAzNjk5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
