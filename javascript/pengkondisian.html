@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengkondisian JavaScript - Media Pembelajaran Interaktif</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+        }
+        
+        .code-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 3px solid #1e293b;
+        }
+        
+        @media (max-width: 768px) {
+            .code-box {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+        
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .number { color: #d19a66; }
+        .operator { color: #56b6c2; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+        }
+        
+        .glow-animation {
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        .tab-active {
+            background: white;
+            color: #1e3a8a;
+            border-bottom: 4px solid #3b82f6;
+        }
+        
+        .demo-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .result-item {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .icon-badge {
+            display: inline-block;
+            padding: 12px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 16px;
+            font-size: 32px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .comparison-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            border: 3px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .comparison-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        
+        .input-field {
+            padding: 12px 16px;
+            border: 3px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        
+        .select-field {
+            padding: 12px 16px;
+            border: 3px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .select-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-container" class="w-full h-full overflow-auto gradient-bg">
+   <div class="w-full min-h-full px-4 py-8"><!-- Header -->
+    <div class="max-w-6xl mx-auto mb-8 text-center">
+     <h1 id="main-title" class="text-4xl md:text-6xl font-bold text-white mb-4 float-animation">🎯 Pengkondisian JavaScript</h1>
+     <p id="subtitle" class="text-lg md:text-2xl text-white opacity-90 mb-6">Buat Keputusan Cerdas dalam Kode!</p>
+     <div class="max-w-md mx-auto progress-bar">
+      <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+     </div>
+     <p id="progress-text" class="text-white mt-3 text-sm md:text-base font-semibold">Progress: 0/6 Materi ✨</p>
+    </div><!-- Navigation Tabs -->
+    <div class="max-w-6xl mx-auto mb-8"><!-- Mobile Menu -->
+     <div class="md:hidden mb-4"><button onclick="toggleMobileMenu()" class="w-full bg-white bg-opacity-20 backdrop-blur-sm px-6 py-4 rounded-2xl font-bold text-white flex items-center justify-between hover:bg-opacity-30 transition-all"> <span class="flex items-center gap-3"> <span class="text-2xl">📚</span> <span id="current-menu-label">Menu Materi</span> </span> <span id="menu-icon" class="text-2xl">▼</span> </button>
+     </div><!-- Mobile Dropdown -->
+     <div id="mobile-menu-dropdown" class="md:hidden hidden mb-4 bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden"><button onclick="showTab('intro')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🌟</span> <span>Pengenalan</span> </button> <button onclick="showTab('if')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">✅</span> <span>IF Statement</span> </button> <button onclick="showTab('ifelse')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🔀</span> <span>IF-ELSE</span> </button> <button onclick="showTab('elseif')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🎯</span> <span>ELSE IF</span> </button> <button onclick="showTab('switch')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 border-b border-gray-200 flex items-center gap-3"> <span class="text-xl">🎛️</span> <span>SWITCH</span> </button> <button onclick="showTab('ternary')" class="w-full px-6 py-4 text-left font-bold transition-all hover:bg-blue-100 flex items-center gap-3"> <span class="text-xl">⚡</span> <span>TERNARY</span> </button>
+     </div><!-- Desktop Menu -->
+     <div class="hidden md:flex flex-wrap gap-3 justify-center bg-white bg-opacity-20 backdrop-blur-sm p-3 rounded-2xl"><button onclick="showTab('intro')" id="tab-intro" class="tab-active px-6 py-3 rounded-xl font-bold transition-all text-base"> 🌟 Pengenalan </button> <button onclick="showTab('if')" id="tab-if" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> ✅ IF Statement </button> <button onclick="showTab('ifelse')" id="tab-ifelse" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🔀 IF-ELSE </button> <button onclick="showTab('elseif')" id="tab-elseif" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🎯 ELSE IF </button> <button onclick="showTab('switch')" id="tab-switch" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> 🎛️ SWITCH </button> <button onclick="showTab('ternary')" id="tab-ternary" class="px-6 py-3 rounded-xl font-bold text-white transition-all hover:bg-white hover:bg-opacity-20 text-base"> ⚡ TERNARY </button>
+     </div>
+    </div><!-- Content Sections -->
+    <div class="max-w-6xl mx-auto"><!-- Tab 1: Pengenalan -->
+     <div id="content-intro" class="tab-content">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">🌟 Apa itu Pengkondisian?</h2>
+       <div class="bg-gradient-to-br from-blue-50 to-cyan-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-blue-500">
+        <p id="intro-text" class="text-gray-800 text-base md:text-xl leading-relaxed text-justify"><strong>Pengkondisian (Conditional Statements)</strong> adalah cara program membuat <strong>keputusan berdasarkan kondisi tertentu</strong>. Bayangkan seperti lampu lalu lintas: jika merah berhenti, jika hijau jalan! 🚦</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl border-4 border-green-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">💡</span>
+          <h3 class="text-2xl font-bold text-green-700">Kenapa Penting?</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-base">
+          <li class="flex items-start"><span class="mr-2">🎯</span> <span><strong>Kontrol Alur:</strong> Menentukan jalur eksekusi kode</span></li>
+          <li class="flex items-start"><span class="mr-2">🤖</span> <span><strong>Logika:</strong> Membuat program lebih pintar</span></li>
+          <li class="flex items-start"><span class="mr-2">✅</span> <span><strong>Validasi:</strong> Cek input sebelum diproses</span></li>
+          <li class="flex items-start"><span class="mr-2">🎮</span> <span><strong>Interaktif:</strong> Respon berbeda untuk situasi berbeda</span></li>
+         </ul>
+        </div>
+        <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl border-4 border-orange-300">
+         <div class="flex items-center mb-4"><span class="text-4xl mr-3">🌍</span>
+          <h3 class="text-2xl font-bold text-orange-700">Contoh Sehari-hari</h3>
+         </div>
+         <ul class="space-y-3 text-gray-800 text-base">
+          <li class="flex items-start"><span class="mr-2">🌂</span> <span>Jika hujan, bawa payung</span></li>
+          <li class="flex items-start"><span class="mr-2">🎓</span> <span>Jika nilai ≥ 60, lulus ujian</span></li>
+          <li class="flex items-start"><span class="mr-2">🔐</span> <span>Jika password benar, login berhasil</span></li>
+          <li class="flex items-start"><span class="mr-2">🛒</span> <span>Jika total &gt; 100rb, dapat diskon</span></li>
+         </ul>
+        </div>
+       </div>
+       <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-6 md:p-8 rounded-2xl mb-6">
+        <h3 class="text-2xl md:text-3xl font-bold text-purple-700 mb-4">📋 Jenis-Jenis Pengkondisian</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="icon-badge mb-3">
+           ✅
+          </div>
+          <h4 class="font-bold text-lg text-blue-600 mb-2">IF Statement</h4>
+          <p class="text-sm text-gray-700">Jalankan kode jika kondisi benar</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="icon-badge mb-3">
+           🔀
+          </div>
+          <h4 class="font-bold text-lg text-green-600 mb-2">IF-ELSE</h4>
+          <p class="text-sm text-gray-700">Pilih antara dua kemungkinan</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="icon-badge mb-3">
+           🎯
+          </div>
+          <h4 class="font-bold text-lg text-purple-600 mb-2">ELSE IF</h4>
+          <p class="text-sm text-gray-700">Cek beberapa kondisi berurutan</p>
+         </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mt-4">
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="icon-badge mb-3">
+           🎛️
+          </div>
+          <h4 class="font-bold text-lg text-orange-600 mb-2">SWITCH</h4>
+          <p class="text-sm text-gray-700">Pilih dari banyak opsi berdasarkan nilai</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl shadow-lg">
+          <div class="icon-badge mb-3">
+           ⚡
+          </div>
+          <h4 class="font-bold text-lg text-cyan-600 mb-2">TERNARY</h4>
+          <p class="text-sm text-gray-700">IF-ELSE singkat dalam satu baris</p>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">🎮 Demo Interaktif - Cek Umur</h3>
+        <p class="text-gray-700 mb-4">Mari coba pengkondisian sederhana:</p>
+        <div class="mb-4"><label for="age-input" class="block font-semibold mb-2 text-gray-800">Masukkan Umur Anda:</label> <input type="number" id="age-input" class="input-field" placeholder="Contoh: 25" min="0" max="150">
+        </div><button onclick="checkAge()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🎯 Cek Kategori Umur </button>
+        <div id="age-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Masukkan umur dan klik tombol! 🎂</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('intro')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Paham! Lanjut ke IF Statement 🚀 </button>
+       </div>
+      </div>
+     </div><!-- Tab 2: IF Statement -->
+     <div id="content-if" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">✅ IF Statement - Kondisi Dasar</h2>
+       <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-blue-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-blue-700 mb-4">📖 Apa itu IF Statement?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>IF Statement</strong> adalah pengkondisian paling dasar. Kode di dalam IF hanya akan dijalankan <strong>jika kondisinya bernilai true</strong>. Jika false, kode akan dilewati begitu saja.</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-blue-700 mb-2">Struktur IF Statement:</p>
+         <div class="code-box"><span class="keyword">if</span> (<span class="keyword">kondisi</span>) {<br> <span class="comment">// Kode ini HANYA jalan jika kondisi = true</span><br> }
+         </div>
+        </div>
+       </div>
+       <div class="mb-6">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">🎯 Cara Kerja IF Statement</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-gradient-to-br from-green-100 to-emerald-200 p-6 rounded-xl border-4 border-green-400">
+          <div class="text-center mb-4">
+           <div class="text-5xl mb-2">
+            ✅
+           </div>
+           <h4 class="font-bold text-xl text-green-800">Kondisi TRUE</h4>
+          </div>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> nilai = <span class="number">80</span>;<br> <span class="keyword">if</span> (nilai &gt;= <span class="number">60</span>) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Lulus!"</span>);<br>}<br><span class="comment">// Output: Lulus!</span>
+          </div>
+          <p class="text-sm text-gray-800 text-center">✅ Kondisi benar (80 ≥ 60), kode dijalankan!</p>
+         </div>
+         <div class="bg-gradient-to-br from-red-100 to-rose-200 p-6 rounded-xl border-4 border-red-400">
+          <div class="text-center mb-4">
+           <div class="text-5xl mb-2">
+            ❌
+           </div>
+           <h4 class="font-bold text-xl text-red-800">Kondisi FALSE</h4>
+          </div>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> nilai = <span class="number">40</span>;<br> <span class="keyword">if</span> (nilai &gt;= <span class="number">60</span>) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Lulus!"</span>);<br>}<br><span class="comment">// Tidak ada output</span>
+          </div>
+          <p class="text-sm text-gray-800 text-center">❌ Kondisi salah (40 &lt; 60), kode dilewati!</p>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-violet-700 mb-4">💡 Operator Perbandingan</h3>
+        <div class="comparison-grid">
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           ==
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Sama Dengan</h4>
+          <div class="code-box text-xs"><span class="number">5</span> <span class="operator">==</span> <span class="number">5</span> <span class="comment">// true</span><br> <span class="number">5</span> <span class="operator">==</span> <span class="string">"5"</span> <span class="comment">// true</span>
+          </div>
+         </div>
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           ===
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Identik</h4>
+          <div class="code-box text-xs"><span class="number">5</span> <span class="operator">===</span> <span class="number">5</span> <span class="comment">// true</span><br> <span class="number">5</span> <span class="operator">===</span> <span class="string">"5"</span> <span class="comment">// false</span>
+          </div>
+         </div>
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           !=
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Tidak Sama</h4>
+          <div class="code-box text-xs"><span class="number">5</span> <span class="operator">!=</span> <span class="number">3</span> <span class="comment">// true</span><br> <span class="number">5</span> <span class="operator">!=</span> <span class="number">5</span> <span class="comment">// false</span>
+          </div>
+         </div>
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           &gt;
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Lebih Besar</h4>
+          <div class="code-box text-xs"><span class="number">10</span> <span class="operator">&gt;</span> <span class="number">5</span> <span class="comment">// true</span><br> <span class="number">3</span> <span class="operator">&gt;</span> <span class="number">8</span> <span class="comment">// false</span>
+          </div>
+         </div>
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           &lt;
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Lebih Kecil</h4>
+          <div class="code-box text-xs"><span class="number">3</span> <span class="operator">&lt;</span> <span class="number">8</span> <span class="comment">// true</span><br> <span class="number">10</span> <span class="operator">&lt;</span> <span class="number">5</span> <span class="comment">// false</span>
+          </div>
+         </div>
+         <div class="comparison-card">
+          <div class="text-3xl mb-2 text-center">
+           &gt;=
+          </div>
+          <h4 class="font-bold text-center text-violet-600 mb-2">Lebih/Sama</h4>
+          <div class="code-box text-xs"><span class="number">5</span> <span class="operator">&gt;=</span> <span class="number">5</span> <span class="comment">// true</span><br> <span class="number">7</span> <span class="operator">&gt;=</span> <span class="number">3</span> <span class="comment">// true</span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-green-700 mb-4">🎮 Demo Interaktif - Cek Nilai Ujian</h3>
+        <div class="code-box mb-4"><span class="comment">// Program cek kelulusan</span><br> <span class="keyword">let</span> nilaiUjian = <span class="number">75</span>;<br> <span class="keyword">if</span> (nilaiUjian &gt;= <span class="number">60</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"🎉 Selamat! Anda LULUS!"</span>);<br>}<br> <span class="keyword">if</span> (nilaiUjian &gt;= <span class="number">80</span>) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"⭐ Nilai Anda Sangat Bagus!"</span>);<br>}
+        </div>
+        <div class="mb-4"><label for="score-input" class="block font-semibold mb-2 text-gray-800">Masukkan Nilai Ujian (0-100):</label> <input type="number" id="score-input" class="input-field" placeholder="Contoh: 75" min="0" max="100">
+        </div><button onclick="checkScore()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 📝 Cek Hasil Ujian </button>
+        <div id="score-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Masukkan nilai dan lihat hasilnya! 📊</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('if')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Mengerti! Lanjut ke IF-ELSE 🔀 </button>
+       </div>
+      </div>
+     </div><!-- Tab 3: IF-ELSE -->
+     <div id="content-ifelse" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">🔀 IF-ELSE - Dua Pilihan</h2>
+       <div class="bg-gradient-to-br from-cyan-50 to-blue-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-cyan-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-cyan-700 mb-4">📖 Apa itu IF-ELSE?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>IF-ELSE</strong> memberikan <strong>dua pilihan</strong>: jika kondisi true, jalankan blok IF. Jika false, jalankan blok ELSE. Salah satu pasti akan dijalankan!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-cyan-700 mb-2">Struktur IF-ELSE:</p>
+         <div class="code-box"><span class="keyword">if</span> (<span class="keyword">kondisi</span>) {<br><span class="comment">// Jalan jika kondisi TRUE</span><br>} <span class="keyword">else</span> {<br><span class="comment">// Jalan jika kondisi FALSE</span><br>}
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-indigo-50 to-purple-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-indigo-700 mb-4">🎯 Visualisasi IF-ELSE</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-6 rounded-xl border-4 border-green-400">
+          <div class="text-center mb-4">
+           <div class="text-5xl mb-3">
+            🌞
+           </div>
+           <h4 class="font-bold text-xl text-green-700">Skenario 1: Cuaca Cerah</h4>
+          </div>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> cuaca = <span class="string">"cerah"</span>;<br><span class="keyword">if</span> (cuaca === <span class="string">"cerah"</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Pergi jalan-jalan! 🎉"</span>);<br>} <span class="keyword">else</span> {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Di rumah aja 🏠"</span>);<br>}
+          </div>
+          <div class="bg-green-100 p-3 rounded-lg">
+           <p class="text-sm font-bold text-green-800">Output: Pergi jalan-jalan! 🎉</p>
+          </div>
+         </div>
+         <div class="bg-white p-6 rounded-xl border-4 border-blue-400">
+          <div class="text-center mb-4">
+           <div class="text-5xl mb-3">
+            🌧️
+           </div>
+           <h4 class="font-bold text-xl text-blue-700">Skenario 2: Cuaca Hujan</h4>
+          </div>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> cuaca = <span class="string">"hujan"</span>;<br><span class="keyword">if</span> (cuaca === <span class="string">"cerah"</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Pergi jalan-jalan! 🎉"</span>);<br>} <span class="keyword">else</span> {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Di rumah aja 🏠"</span>);<br>}
+          </div>
+          <div class="bg-blue-100 p-3 rounded-lg">
+           <p class="text-sm font-bold text-blue-800">Output: Di rumah aja 🏠</p>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-rose-700 mb-4">💡 Contoh Penggunaan</h3>
+        <div class="code-box mb-4"><span class="comment">// Program cek genap/ganjil</span><br><span class="keyword">let</span> angka = <span class="number">7</span>;<br><span class="keyword">if</span> (angka % <span class="number">2</span> === <span class="number">0</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(angka + <span class="string">" adalah GENAP 🔵"</span>);<br>} <span class="keyword">else</span> {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(angka + <span class="string">" adalah GANJIL 🔴"</span>);<br>}<br> <span class="comment">// Output: 7 adalah GANJIL 🔴</span>
+        </div>
+        <h4 class="font-bold text-rose-700 mb-3 text-xl">🎮 Coba Sendiri!</h4>
+        <div class="mb-4"><label for="number-input" class="block font-semibold mb-2 text-gray-800">Masukkan Angka:</label> <input type="number" id="number-input" class="input-field" placeholder="Contoh: 42">
+        </div><button onclick="checkEvenOdd()" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🔢 Cek Genap atau Ganjil </button>
+        <div id="evenodd-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Masukkan angka dan cek! 🎯</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">🎮 Demo - Password Checker</h3>
+        <div class="code-box mb-4"><span class="comment">// Simulasi login sederhana</span><br><span class="keyword">let</span> passwordBenar = <span class="string">"rahasia123"</span>;<br><span class="keyword">let</span> passwordInput = <span class="string">"user_input"</span>;<br><span class="keyword">if</span> (passwordInput === passwordBenar) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"✅ Login Berhasil!"</span>);<br>} <span class="keyword">else</span> {<br><span class="keyword">&nbsp;console</span>.<span class="function">log</span>(<span class="string">"❌ Password Salah!"</span>);<br>}
+        </div>
+        <div class="mb-4"><label for="password-input" class="block font-semibold mb-2 text-gray-800">Masukkan Password (passwordBenar: rahasia123):</label> <input type="password" id="password-input" class="input-field" placeholder="Masukkan password...">
+        </div><button onclick="checkPassword()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🔐 Cek Password </button>
+        <div id="password-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Coba masukkan password! 🔑</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('ifelse')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Paham! Lanjut ke ELSE IF 🎯 </button>
+       </div>
+      </div>
+     </div><!-- Tab 4: ELSE IF -->
+     <div id="content-elseif" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">🎯 ELSE IF - Banyak Pilihan</h2>
+       <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-emerald-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-emerald-700 mb-4">📖 Apa itu ELSE IF?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>ELSE IF</strong> memungkinkan kita <strong>mengecek beberapa kondisi secara berurutan</strong>. Jika kondisi pertama false, cek kondisi kedua, lalu ketiga, dan seterusnya. Sangat berguna untuk banyak pilihan!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-emerald-700 mb-2">Struktur ELSE IF:</p>
+         <div class="code-box"><span class="keyword">if</span> (<span class="keyword">kondisi1</span>) {<br><span class="comment">// Jalan jika kondisi1 TRUE</span><br>} <span class="keyword">else if</span> (<span class="keyword">kondisi2</span>) {<br><span class="comment">// Jalan jika kondisi1 FALSE dan kondisi2 TRUE</span><br> } <span class="keyword">else if</span> (<span class="keyword">kondisi3</span>) {<br><span class="comment">// Jalan jika kondisi1 &amp; 2 FALSE, kondisi3 TRUE</span><br>} <span class="keyword">else</span> {<br><span class="comment">// Jalan jika SEMUA kondisi FALSE</span><br>}
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">📊 Contoh: Sistem Grading</h3>
+        <div class="code-box mb-4"><span class="comment">// Konversi nilai menjadi grade</span><br><span class="keyword">let</span> nilai = <span class="number">85</span>;<br><span class="keyword">let</span> grade;<br><span class="keyword">if</span> (nilai &gt;= <span class="number">90</span>) {<br>&nbsp;&nbsp;grade = <span class="string">"A - Excellent! 🌟"</span>; <br>} <span class="keyword">else if</span> (nilai &gt;= <span class="number">80</span>) {<br>&nbsp;&nbsp;grade = <span class="string">"B - Bagus Sekali! 👍"</span>;<br>} <span class="keyword">else if</span> (nilai &gt;= <span class="number">70</span>) {<br>&nbsp;&nbsp;grade = <span class="string">"C - Cukup Baik 👌"</span>;<br>} <span class="keyword">else if</span> (nilai &gt;= <span class="number">60</span>) {<br>&nbsp;&nbsp;grade = <span class="string">"D - Perlu Ditingkatkan 📚"</span>;<br>} <span class="keyword">else</span> {<br>&nbsp;&nbsp;grade = <span class="string">"E - Harus Belajar Lebih Giat! 💪"</span>;<br>}<br> <span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Grade Anda: "</span> + grade);
+        </div>
+        <h4 class="font-bold text-blue-700 mb-3 text-xl">🎮 Kalkulator Grade Interaktif</h4>
+        <div class="mb-4"><label for="grade-input" class="block font-semibold mb-2 text-gray-800">Masukkan Nilai (0-100):</label> <input type="number" id="grade-input" class="input-field" placeholder="Contoh: 85" min="0" max="100">
+        </div><button onclick="calculateGrade()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 📊 Hitung Grade </button>
+        <div id="grade-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Masukkan nilai untuk melihat grade! 🎓</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-pink-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-purple-700 mb-4">🌡️ Demo - Rekomendasi Cuaca</h3>
+        <div class="code-box mb-4"><span class="comment">// Rekomendasi berdasarkan suhu</span><br><span class="keyword">let</span> suhu = <span class="number">28</span>;<br><span class="keyword">let</span> rekomendasi;<br><span class="keyword">if</span> (suhu &gt;= <span class="number">35</span>) {<br>&nbsp;&nbsp;rekomendasi = <span class="string">"🔥 Sangat panas! Minum banyak air!"</span>;<br>} <span class="keyword">else if</span> (suhu &gt;= <span class="number">30</span>) {<br>&nbsp;&nbsp;rekomendasi = <span class="string">"☀️ Panas! Gunakan sunscreen!"</span>;<br>} <span class="keyword">else if</span> (suhu &gt;= <span class="number">25</span>) {<br>&nbsp;&nbsp;rekomendasi = <span class="string">"🌤️ Hangat! Cuaca sempurna!"</span>;<br>} <span class="keyword">else if</span> (suhu &gt;= <span class="number">15</span>) {<br>&nbsp;&nbsp;rekomendasi = <span class="string">"🍂 Sejuk! Pakai jaket tipis!"</span>;<br>} <span class="keyword">else</span> {<br>&nbsp;&nbsp;rekomendasi = <span class="string">"❄️ Dingin! Pakai jaket tebal!"</span>;<br>}
+        </div>
+        <div class="mb-4"><label for="temp-input" class="block font-semibold mb-2 text-gray-800">Masukkan Suhu (°C):</label> <input type="number" id="temp-input" class="input-field" placeholder="Contoh: 28">
+        </div><button onclick="checkTemperature()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🌡️ Cek Rekomendasi </button>
+        <div id="temp-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Masukkan suhu untuk rekomendasi! 🌈</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-orange-700 mb-4">💡 Tips Penggunaan ELSE IF</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="bg-white p-5 rounded-xl border-3 border-green-300">
+          <div class="flex items-center mb-3"><span class="text-3xl mr-3">✅</span>
+           <h4 class="font-bold text-lg text-green-700">DO (Lakukan)</h4>
+          </div>
+          <ul class="space-y-2 text-sm text-gray-700">
+           <li>✓ Urutkan dari kondisi paling spesifik</li>
+           <li>✓ Gunakan untuk pilihan bertingkat</li>
+           <li>✓ Tambahkan ELSE di akhir sebagai fallback</li>
+           <li>✓ Gunakan operator yang tepat</li>
+          </ul>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-3 border-red-300">
+          <div class="flex items-center mb-3"><span class="text-3xl mr-3">❌</span>
+           <h4 class="font-bold text-lg text-red-700">DON'T (Jangan)</h4>
+          </div>
+          <ul class="space-y-2 text-sm text-gray-700">
+           <li>✗ Terlalu banyak nested IF</li>
+           <li>✗ Kondisi yang saling tumpang tindih</li>
+           <li>✗ Lupa handle semua kemungkinan</li>
+           <li>✗ Urutan kondisi yang salah</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('elseif')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Jelas! Lanjut ke SWITCH 🎛️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 5: SWITCH -->
+     <div id="content-switch" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">🎛️ SWITCH - Pilihan Multiple</h2>
+       <div class="bg-gradient-to-br from-violet-50 to-purple-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-violet-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-violet-700 mb-4">📖 Apa itu SWITCH?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>SWITCH</strong> adalah alternatif IF-ELSE IF yang lebih <strong>rapi dan mudah dibaca</strong> ketika kita punya <strong>banyak pilihan berdasarkan satu nilai</strong>. Seperti remote TV dengan banyak channel!</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-violet-700 mb-2">Struktur SWITCH:</p>
+         <div class="code-box"><span class="keyword">switch</span> (<span class="keyword">ekspresi</span>) {<br>&nbsp;&nbsp;<span class="keyword">case</span> nilai1:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kode untuk nilai1</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> nilai2:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kode untuk nilai2</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">default</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kode jika tidak ada case yang cocok</span><br>}
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-blue-50 to-cyan-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-blue-700 mb-4">🆚 SWITCH vs IF-ELSE IF</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-5 rounded-xl border-4 border-blue-400">
+          <h4 class="font-bold text-xl text-blue-700 mb-3 text-center">IF-ELSE IF</h4>
+          <div class="code-box text-xs"><span class="keyword">let</span> hari = <span class="number">1</span>;<br><span class="keyword">if</span> (hari === <span class="number">1</span>) {<br>&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Senin"</span>);<br>} <span class="keyword">else if</span> (hari === <span class="number">2</span>) {<br>&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Selasa"</span>); <br>} <span class="keyword">else if</span> (hari === <span class="number">3</span>) {<br>&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Rabu"</span>);<br>} <span class="keyword">else</span> {<br>&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Hari lain"</span>);<br>}
+          </div>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-4 border-purple-400">
+          <h4 class="font-bold text-xl text-purple-700 mb-3 text-center">SWITCH (Lebih Rapi!)</h4>
+          <div class="code-box text-xs"><span class="keyword">let</span> hari = <span class="number">1</span>;<br><span class="keyword">switch</span> (hari) {<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Senin"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Selasa"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Rabu"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">default</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Hari lain"</span>);<br>}
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">⚠️ Pentingnya BREAK</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-5 rounded-xl border-4 border-red-400">
+          <h4 class="font-bold text-lg text-red-700 mb-3">❌ Tanpa BREAK (Fall-through)</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> nilai = <span class="number">2</span>;<br><span class="keyword">switch</span> (nilai) {<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Satu"</span>);<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Dua"</span>);<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Tiga"</span>);<br>}<br><span class="comment">// Output: Dua, Tiga (SALAH!)</span>
+          </div>
+          <p class="text-sm text-red-700">Tanpa break, akan lanjut ke case berikutnya!</p>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-4 border-green-400">
+          <h4 class="font-bold text-lg text-green-700 mb-3">✅ Dengan BREAK (Benar)</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> nilai = <span class="number">2</span>;<br><span class="keyword">switch</span> (nilai) {<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Satu"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Dua"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Tiga"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>}<br><span class="comment">// Output: Dua (BENAR!)</span>
+          </div>
+          <p class="text-sm text-green-700">Break menghentikan eksekusi setelah case cocok!</p>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-green-700 mb-4">🎮 Demo - Kalkulator Sederhana</h3>
+        <div class="code-box mb-4"><span class="comment">// Kalkulator dengan switch</span><br><span class="keyword">let</span> operator = <span class="string">"+"</span>;<br><span class="keyword">let</span> a = <span class="number">10</span>, b = <span class="number">5</span>;<br><span class="keyword">let</span> hasil;<br><span class="keyword">switch</span> (operator) {<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"+"</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;hasil = a + b;<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"-"</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;hasil = a - b;<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"*"</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;hasil = a * b;<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"/"</span>:<br>&nbsp;&nbsp;&nbsp;&nbsp;hasil = a / b;<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>&nbsp;&nbsp;<span class="keyword">default</span>:<br> &nbsp;&nbsp;&nbsp;&nbsp;hasil = <span class="string">"Operator tidak valid"</span>;<br>}
+        </div>
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+         <div><label for="calc-num1" class="block font-semibold mb-2 text-gray-800">Angka 1:</label> <input type="number" id="calc-num1" class="input-field" value="10">
+         </div>
+         <div><label for="calc-operator" class="block font-semibold mb-2 text-gray-800">Operator:</label> <select id="calc-operator" class="select-field"> <option value="+">+ (Tambah)</option> <option value="-">- (Kurang)</option> <option value="*">× (Kali)</option> <option value="/">÷ (Bagi)</option> </select>
+         </div>
+         <div><label for="calc-num2" class="block font-semibold mb-2 text-gray-800">Angka 2:</label> <input type="number" id="calc-num2" class="input-field" value="5">
+         </div>
+        </div><button onclick="calculate()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🧮 Hitung </button>
+        <div id="calc-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Pilih operasi dan hitung! 🔢</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-pink-50 to-rose-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-rose-700 mb-4">🍕 Demo - Menu Makanan</h3>
+        <div class="mb-4"><label for="food-choice" class="block font-semibold mb-2 text-gray-800">Pilih Makanan Favorit:</label> <select id="food-choice" class="select-field"> <option value="">-- Pilih Makanan --</option> <option value="pizza">🍕 Pizza</option> <option value="burger">🍔 Burger</option> <option value="sushi">🍣 Sushi</option> <option value="pasta">🍝 Pasta</option> <option value="ramen">🍜 Ramen</option> </select>
+        </div><button onclick="orderFood()" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> 🍽️ Pesan Makanan </button>
+        <div id="food-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Pilih makanan favoritmu! 😋</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('switch')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Mantap! Lanjut ke TERNARY ⚡ </button>
+       </div>
+      </div>
+     </div><!-- Tab 6: TERNARY -->
+     <div id="content-ternary" class="tab-content hidden">
+      <div class="card p-6 md:p-10 mb-6">
+       <h2 class="text-3xl md:text-4xl font-bold text-blue-700 mb-6">⚡ Ternary Operator - Shortcut IF-ELSE</h2>
+       <div class="bg-gradient-to-br from-cyan-50 to-teal-100 p-6 md:p-8 rounded-2xl mb-6 border-l-8 border-cyan-500">
+        <h3 class="text-2xl md:text-3xl font-bold text-cyan-700 mb-4">📖 Apa itu Ternary Operator?</h3>
+        <p class="text-gray-800 text-base md:text-lg mb-4 text-justify"><strong>Ternary Operator</strong> adalah cara <strong>singkat menulis IF-ELSE dalam satu baris</strong>. Disebut "ternary" karena memiliki 3 bagian: kondisi, nilai jika true, dan nilai jika false. Super efisien! ⚡</p>
+        <div class="bg-white p-4 rounded-xl">
+         <p class="font-bold text-cyan-700 mb-2">Struktur Ternary:</p>
+         <div class="code-box"><span class="keyword">kondisi</span> ? <span class="keyword">nilaiJikaTrue</span> : <span class="keyword">nilaiJikaFalse</span>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-purple-700 mb-4">🔄 Transformasi IF-ELSE ke Ternary</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-5 rounded-xl border-4 border-blue-400">
+          <h4 class="font-bold text-xl text-blue-700 mb-3 text-center">📝 IF-ELSE Biasa</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> umur = <span class="number">20</span>;<br><span class="keyword">let</span> status;<br><span class="keyword">if</span> (umur &gt;= <span class="number">18</span>) {<br>&nbsp;&nbsp;status = <span class="string">"Dewasa"</span>;<br>} <span class="keyword">else</span> {<br>&nbsp;&nbsp;status = <span class="string">"Anak-anak"</span>;<br>}<br><span class="keyword">console</span>.<span class="function">log</span>(status);<br><span class="comment">// 5 baris kode</span>
+          </div>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-4 border-green-400 glow-animation">
+          <h4 class="font-bold text-xl text-green-700 mb-3 text-center">⚡ Ternary (Singkat!)</h4>
+          <div class="code-box text-xs mb-3"><span class="keyword">let</span> umur = <span class="number">20</span>;<br><span class="keyword">let</span> status = umur &gt;= <span class="number">18</span> ? <span class="string">"Dewasa"</span> : <span class="string">"Anak-anak"</span>;<br><span class="keyword">console</span>.<span class="function">log</span>(status);<br><span class="comment">// Hanya 1 baris!</span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-amber-700 mb-4">💡 Contoh Penggunaan</h3>
+        <div class="space-y-4">
+         <div class="bg-white p-5 rounded-xl">
+          <h4 class="font-bold text-lg text-amber-600 mb-2">1️⃣ Cek Genap/Ganjil</h4>
+          <div class="code-box text-xs"><span class="keyword">let</span> angka = <span class="number">7</span>;<br><span class="keyword">let</span> hasil = angka % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">"Genap 🔵"</span> : <span class="string">"Ganjil 🔴"</span>;<br><span class="keyword">console</span>.<span class="function">log</span>(hasil);<br><span class="comment">// Output: Ganjil 🔴</span>
+          </div>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <h4 class="font-bold text-lg text-amber-600 mb-2">2️⃣ Status Kelulusan</h4>
+          <div class="code-box text-xs"><span class="keyword">let</span> nilai = <span class="number">75</span>;<br><span class="keyword">let</span> status = nilai &gt;= <span class="number">60</span> ? <span class="string">"✅ LULUS"</span> : <span class="string">"❌ TIDAK LULUS"</span>;<br><span class="keyword">console</span>.<span class="function">log</span>(status);<br><span class="comment">// Output: ✅ LULUS</span>
+          </div>
+         </div>
+         <div class="bg-white p-5 rounded-xl">
+          <h4 class="font-bold text-lg text-amber-600 mb-2">3️⃣ Harga dengan Diskon</h4>
+          <div class="code-box text-xs"><span class="keyword">let</span> harga = <span class="number">100000</span>;<br><span class="keyword">let</span> member = <span class="keyword">true</span>;<br><span class="keyword">let</span> hargaAkhir = member ? harga * <span class="number">0.8</span> : harga;<br><span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Rp"</span> + hargaAkhir);<br><span class="comment">// Output: Rp80000</span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-green-700 mb-4">🎮 Demo Interaktif - Cek Bilangan</h3>
+        <div class="mb-4"><label for="ternary-number" class="block font-semibold mb-2 text-gray-800">Masukkan Angka:</label> <input type="number" id="ternary-number" class="input-field" placeholder="Contoh: 15">
+        </div><button onclick="checkNumberTernary()" class="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg"> ⚡ Cek dengan Ternary </button>
+        <div id="ternary-output" class="demo-box mt-4 min-h-[100px]">
+         <p class="text-white font-bold text-lg">Coba ternary operator! 🚀</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-rose-700 mb-4">🔗 Nested Ternary (Hati-hati!)</h3>
+        <p class="text-gray-700 mb-4">Ternary bisa di-nested, tapi jangan berlebihan agar kode tetap readable:</p>
+        <div class="code-box mb-4"><span class="comment">// Nested ternary untuk grade</span><br><span class="keyword">let</span> nilai = <span class="number">85</span>;<br><span class="keyword">let</span> grade = nilai &gt;= <span class="number">90</span> ? <span class="string">"A"</span> : nilai &gt;= <span class="number">80</span> ? <span class="string">"B"</span> : nilai &gt;= <span class="number">70</span> ? <span class="string">"C"</span> : nilai &gt;= <span class="number">60</span> ? <span class="string">"D"</span> : <span class="string">"E"</span>;<br><span class="keyword">console</span>.<span class="function">log</span>(grade);<br><span class="comment">// Output: B</span>
+        </div>
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded">
+         <p class="text-yellow-800 font-semibold">⚠️ Tips: Jika nested ternary terlalu kompleks, lebih baik pakai IF-ELSE IF atau SWITCH!</p>
+        </div>
+       </div>
+       <div class="bg-gradient-to-br from-indigo-50 to-blue-100 p-6 rounded-2xl mb-6">
+        <h3 class="text-2xl font-bold text-indigo-700 mb-4">📊 Kapan Pakai Ternary?</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+         <div class="bg-white p-5 rounded-xl border-3 border-green-300">
+          <div class="flex items-center mb-3"><span class="text-3xl mr-3">✅</span>
+           <h4 class="font-bold text-lg text-green-700">Pakai Ternary Jika:</h4>
+          </div>
+          <ul class="space-y-2 text-sm text-gray-700">
+           <li>✓ Kondisi sederhana (true/false)</li>
+           <li>✓ Assign nilai ke variabel</li>
+           <li>✓ Return value dari function</li>
+           <li>✓ Inline di JSX/template</li>
+          </ul>
+         </div>
+         <div class="bg-white p-5 rounded-xl border-3 border-red-300">
+          <div class="flex items-center mb-3"><span class="text-3xl mr-3">❌</span>
+           <h4 class="font-bold text-lg text-red-700">Jangan Pakai Jika:</h4>
+          </div>
+          <ul class="space-y-2 text-sm text-gray-700">
+           <li>✗ Kondisi kompleks/banyak</li>
+           <li>✗ Butuh banyak statement</li>
+           <li>✗ Nested terlalu dalam</li>
+           <li>✗ Mengurangi readability</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="completeSection('ternary')" class="btn-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl"> ✓ Selesai! Materi Pengkondisian Lengkap 🎉 </button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <div class="max-w-6xl mx-auto mt-12 text-center text-white">
+     <p class="text-sm md:text-base opacity-90 mb-6">💡 Practice makes perfect! Terus berlatih coding! 🚀</p><!-- Sumber Materi -->
+     <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 mb-8 text-left max-w-3xl mx-auto">
+      <h3 class="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2">📚 Sumber Referensi Materi</h3>
+      <div class="space-y-3 text-sm md:text-base opacity-90">
+       <div class="flex items-start gap-3"><span class="text-lg">🌐</span>
+        <div>
+         <p class="font-semibold">MDN Web Docs - JavaScript Conditionals</p><a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/conditionals" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-cyan-100 underline break-all"> developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/conditionals </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">📖</span>
+        <div>
+         <p class="font-semibold">W3Schools - JavaScript Conditions</p><a href="https://www.w3schools.com/js/js_if_else.asp" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-cyan-100 underline break-all"> w3schools.com/js/js_if_else.asp </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">💻</span>
+        <div>
+         <p class="font-semibold">JavaScript.info - Conditional Operators</p><a href="https://javascript.info/ifelse" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-cyan-100 underline break-all"> javascript.info/ifelse </a>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-lg">🎓</span>
+        <div>
+         <p class="font-semibold">freeCodeCamp - JavaScript If-Else</p><a href="https://www.freecodecamp.org/news/javascript-if-else-and-if-then-js-conditional-statements/" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-cyan-100 underline break-all"> freecodecamp.org/news/javascript-if-else-and-if-then-js-conditional-statements </a>
+        </div>
+       </div>
+      </div>
+     </div>
+     <a href="index.html" class="inline-block bg-white bg-opacity-20 backdrop-blur-sm text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold hover:bg-opacity-30 transition-all text-sm md:text-base mb-8"> ← Kembali ke Halaman Sebelumnya </a>
+     <div class="border-t border-white border-opacity-20 pt-6 mt-8">
+      <p class="text-xs md:text-sm opacity-70">© 2025 Rsensei. Semua hak dilindungi.</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            main_title: "🎯 Pengkondisian JavaScript",
+            subtitle: "Buat Keputusan Cerdas dalam Kode!",
+            intro_text: "Pengkondisian (Conditional Statements) adalah cara program membuat keputusan berdasarkan kondisi tertentu. Bayangkan seperti lampu lalu lintas: jika merah berhenti, jika hijau jalan! 🚦"
+        };
+
+        let completedSections = new Set();
+
+        const menuLabels = {
+            'intro': 'Pengenalan',
+            'if': 'IF Statement',
+            'ifelse': 'IF-ELSE',
+            'elseif': 'ELSE IF',
+            'switch': 'SWITCH',
+            'ternary': 'TERNARY'
+        };
+
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                icon.textContent = '▲';
+            } else {
+                dropdown.classList.add('hidden');
+                icon.textContent = '▼';
+            }
+        }
+
+        async function onConfigChange(config) {
+            const mainTitle = document.getElementById('main-title');
+            const subtitle = document.getElementById('subtitle');
+            const introText = document.getElementById('intro-text');
+
+            if (mainTitle) {
+                mainTitle.textContent = config.main_title || defaultConfig.main_title;
+            }
+            if (subtitle) {
+                subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+            }
+            if (introText) {
+                introText.textContent = config.intro_text || defaultConfig.intro_text;
+            }
+        }
+
+        function showTab(tabName) {
+            const dropdown = document.getElementById('mobile-menu-dropdown');
+            const icon = document.getElementById('menu-icon');
+            dropdown.classList.add('hidden');
+            icon.textContent = '▼';
+            
+            document.getElementById('current-menu-label').textContent = menuLabels[tabName];
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                tab.classList.remove('tab-active', 'text-blue-700');
+                tab.classList.add('text-white');
+            });
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            
+            const activeTab = document.getElementById('tab-' + tabName);
+            if (activeTab) {
+                activeTab.classList.add('tab-active');
+                activeTab.classList.remove('text-white');
+                activeTab.classList.add('text-blue-700');
+            }
+        }
+
+        function completeSection(section) {
+            completedSections.add(section);
+            updateProgress();
+            
+            const nextTab = {
+                'intro': 'if',
+                'if': 'ifelse',
+                'ifelse': 'elseif',
+                'elseif': 'switch',
+                'switch': 'ternary'
+            };
+            
+            if (nextTab[section]) {
+                showTab(nextTab[section]);
+            }
+        }
+
+        function updateProgress() {
+            const total = 6;
+            const completed = completedSections.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Progress: ${completed}/${total} Materi ✨`;
+        }
+
+        function checkAge() {
+            const age = parseInt(document.getElementById('age-input').value);
+            const output = document.getElementById('age-output');
+            
+            if (!age || age < 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan umur yang valid!</div>';
+                return;
+            }
+            
+            let category, emoji, color;
+            
+            if (age < 5) {
+                category = "Balita";
+                emoji = "👶";
+                color = "bg-pink-500";
+            } else if (age < 13) {
+                category = "Anak-anak";
+                emoji = "🧒";
+                color = "bg-yellow-500";
+            } else if (age < 20) {
+                category = "Remaja";
+                emoji = "🧑";
+                color = "bg-blue-500";
+            } else if (age < 60) {
+                category = "Dewasa";
+                emoji = "👨";
+                color = "bg-green-500";
+            } else {
+                category = "Lansia";
+                emoji = "👴";
+                color = "bg-purple-500";
+            }
+            
+            output.innerHTML = `<div class="result-item ${color} text-white text-xl">${emoji} ${category} (${age} tahun)</div>`;
+        }
+
+        function checkScore() {
+            const score = parseInt(document.getElementById('score-input').value);
+            const output = document.getElementById('score-output');
+            
+            if (!score && score !== 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan nilai ujian!</div>';
+                return;
+            }
+            
+            if (score < 0 || score > 100) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Nilai harus antara 0-100!</div>';
+                return;
+            }
+            
+            output.innerHTML = '';
+            
+            if (score >= 60) {
+                const item1 = document.createElement('div');
+                item1.className = 'result-item bg-green-500 text-white text-lg';
+                item1.textContent = `🎉 Selamat! Anda LULUS dengan nilai ${score}!`;
+                output.appendChild(item1);
+            }
+            
+            if (score >= 80) {
+                const item2 = document.createElement('div');
+                item2.className = 'result-item bg-blue-500 text-white text-lg';
+                item2.textContent = '⭐ Nilai Anda Sangat Bagus!';
+                output.appendChild(item2);
+            }
+            
+            if (score < 60) {
+                const item3 = document.createElement('div');
+                item3.className = 'result-item bg-red-500 text-white text-lg';
+                item3.textContent = `❌ Maaf, Anda belum lulus. Nilai: ${score}`;
+                output.appendChild(item3);
+            }
+        }
+
+        function checkEvenOdd() {
+            const number = parseInt(document.getElementById('number-input').value);
+            const output = document.getElementById('evenodd-output');
+            
+            if (!number && number !== 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan angka!</div>';
+                return;
+            }
+            
+            if (number % 2 === 0) {
+                output.innerHTML = `<div class="result-item bg-blue-500 text-white text-xl">🔵 ${number} adalah bilangan GENAP</div>`;
+            } else {
+                output.innerHTML = `<div class="result-item bg-red-500 text-white text-xl">🔴 ${number} adalah bilangan GANJIL</div>`;
+            }
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            const correctPassword = "rahasia123";
+            const output = document.getElementById('password-output');
+            
+            if (!password) {
+                output.innerHTML = '<div class="result-item bg-orange-500 text-white">⚠️ Masukkan password!</div>';
+                return;
+            }
+            
+            if (password === correctPassword) {
+                output.innerHTML = '<div class="result-item bg-green-500 text-white text-xl">✅ Login Berhasil! Selamat datang! 🎉</div>';
+            } else {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white text-xl">❌ Password Salah! Coba lagi. 🔐</div>';
+            }
+        }
+
+        function calculateGrade() {
+            const score = parseInt(document.getElementById('grade-input').value);
+            const output = document.getElementById('grade-output');
+            
+            if (!score && score !== 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan nilai!</div>';
+                return;
+            }
+            
+            if (score < 0 || score > 100) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Nilai harus 0-100!</div>';
+                return;
+            }
+            
+            let grade, color, message;
+            
+            if (score >= 90) {
+                grade = "A";
+                color = "bg-purple-500";
+                message = "Excellent! 🌟";
+            } else if (score >= 80) {
+                grade = "B";
+                color = "bg-blue-500";
+                message = "Bagus Sekali! 👍";
+            } else if (score >= 70) {
+                grade = "C";
+                color = "bg-green-500";
+                message = "Cukup Baik 👌";
+            } else if (score >= 60) {
+                grade = "D";
+                color = "bg-yellow-500";
+                message = "Perlu Ditingkatkan 📚";
+            } else {
+                grade = "E";
+                color = "bg-red-500";
+                message = "Harus Belajar Lebih Giat! 💪";
+            }
+            
+            output.innerHTML = `
+                <div class="result-item ${color} text-white">
+                    <div class="text-4xl font-bold mb-2">Grade: ${grade}</div>
+                    <div class="text-xl">${message}</div>
+                    <div class="text-lg mt-2">Nilai: ${score}</div>
+                </div>
+            `;
+        }
+
+        function checkTemperature() {
+            const temp = parseFloat(document.getElementById('temp-input').value);
+            const output = document.getElementById('temp-output');
+            
+            if (!temp && temp !== 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan suhu!</div>';
+                return;
+            }
+            
+            let recommendation, color;
+            
+            if (temp >= 35) {
+                recommendation = "🔥 Sangat panas! Minum banyak air dan hindari sinar matahari!";
+                color = "bg-red-600";
+            } else if (temp >= 30) {
+                recommendation = "☀️ Panas! Gunakan sunscreen dan topi!";
+                color = "bg-orange-500";
+            } else if (temp >= 25) {
+                recommendation = "🌤️ Hangat! Cuaca sempurna untuk beraktivitas!";
+                color = "bg-yellow-500";
+            } else if (temp >= 15) {
+                recommendation = "🍂 Sejuk! Pakai jaket tipis ya!";
+                color = "bg-green-500";
+            } else {
+                recommendation = "❄️ Dingin! Pakai jaket tebal dan tetap hangat!";
+                color = "bg-blue-500";
+            }
+            
+            output.innerHTML = `
+                <div class="result-item ${color} text-white">
+                    <div class="text-2xl font-bold mb-2">${temp}°C</div>
+                    <div class="text-lg">${recommendation}</div>
+                </div>
+            `;
+        }
+
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('calc-num1').value);
+            const num2 = parseFloat(document.getElementById('calc-num2').value);
+            const operator = document.getElementById('calc-operator').value;
+            const output = document.getElementById('calc-output');
+            
+            if (isNaN(num1) || isNaN(num2)) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan angka yang valid!</div>';
+                return;
+            }
+            
+            let result;
+            let operatorText;
+            
+            switch (operator) {
+                case "+":
+                    result = num1 + num2;
+                    operatorText = "+";
+                    break;
+                case "-":
+                    result = num1 - num2;
+                    operatorText = "-";
+                    break;
+                case "*":
+                    result = num1 * num2;
+                    operatorText = "×";
+                    break;
+                case "/":
+                    if (num2 === 0) {
+                        output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Tidak bisa dibagi 0!</div>';
+                        return;
+                    }
+                    result = num1 / num2;
+                    operatorText = "÷";
+                    break;
+                default:
+                    output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Operator tidak valid!</div>';
+                    return;
+            }
+            
+            output.innerHTML = `
+                <div class="result-item bg-blue-600 text-white">
+                    <div class="text-xl mb-2">${num1} ${operatorText} ${num2}</div>
+                    <div class="text-3xl font-bold">= ${result}</div>
+                </div>
+            `;
+        }
+
+        function orderFood() {
+            const food = document.getElementById('food-choice').value;
+            const output = document.getElementById('food-output');
+            
+            if (!food) {
+                output.innerHTML = '<div class="result-item bg-orange-500 text-white">⚠️ Pilih makanan dulu!</div>';
+                return;
+            }
+            
+            let message, price, color;
+            
+            switch (food) {
+                case "pizza":
+                    message = "🍕 Pizza Pepperoni";
+                    price = "Rp 85.000";
+                    color = "bg-red-500";
+                    break;
+                case "burger":
+                    message = "🍔 Cheeseburger Deluxe";
+                    price = "Rp 55.000";
+                    color = "bg-yellow-600";
+                    break;
+                case "sushi":
+                    message = "🍣 Sushi Platter";
+                    price = "Rp 120.000";
+                    color = "bg-pink-500";
+                    break;
+                case "pasta":
+                    message = "🍝 Spaghetti Carbonara";
+                    price = "Rp 65.000";
+                    color = "bg-orange-500";
+                    break;
+                case "ramen":
+                    message = "🍜 Ramen Spicy";
+                    price = "Rp 45.000";
+                    color = "bg-amber-600";
+                    break;
+                default:
+                    message = "❌ Makanan tidak tersedia";
+                    price = "";
+                    color = "bg-gray-500";
+            }
+            
+            output.innerHTML = `
+                <div class="result-item ${color} text-white">
+                    <div class="text-3xl mb-2">${message}</div>
+                    <div class="text-xl font-bold">${price}</div>
+                    <div class="text-sm mt-2">✅ Pesanan Anda sedang diproses!</div>
+                </div>
+            `;
+        }
+
+        function checkNumberTernary() {
+            const number = parseInt(document.getElementById('ternary-number').value);
+            const output = document.getElementById('ternary-output');
+            
+            if (!number && number !== 0) {
+                output.innerHTML = '<div class="result-item bg-red-500 text-white">❌ Masukkan angka!</div>';
+                return;
+            }
+            
+            const isPositive = number > 0 ? "Positif ➕" : number < 0 ? "Negatif ➖" : "Nol 0️⃣";
+            const isEven = number % 2 === 0 ? "Genap 🔵" : "Ganjil 🔴";
+            const isLarge = number >= 100 ? "Besar (≥100) 📈" : "Kecil (<100) 📉";
+            
+            output.innerHTML = `
+                <div class="result-item bg-purple-600 text-white">
+                    <div class="text-3xl font-bold mb-3">Angka: ${number}</div>
+                    <div class="text-lg space-y-2">
+                        <div>✨ ${isPositive}</div>
+                        <div>🔢 ${isEven}</div>
+                        <div>📊 ${isLarge}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["main_title", config.main_title || defaultConfig.main_title],
+                    ["subtitle", config.subtitle || defaultConfig.subtitle],
+                    ["intro_text", config.intro_text || defaultConfig.intro_text]
+                ])
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.elementSdk && window.elementSdk.config) {
+                onConfigChange(window.elementSdk.config);
+            } else {
+                onConfigChange(defaultConfig);
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7a2b24453dfd3e',t:'MTc3MDA0MDM0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
