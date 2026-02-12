@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript DOM - Media Pembelajaran Interaktif</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #app {
+            min-height: 100%;
+            overflow-y: auto;
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Background Animations */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.25);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Code Boxes */
+        .code-box {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 24px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 3px solid #16213e;
+            line-height: 1.8;
+        }
+
+        .code-box .keyword { color: #f39c12; font-weight: 700; }
+        .code-box .string { color: #2ecc71; }
+        .code-box .function { color: #3498db; }
+        .code-box .comment { color: #95a5a6; font-style: italic; }
+        .code-box .number { color: #e74c3c; }
+        .code-box .parameter { color: #9b59b6; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-bounce {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Navigation */
+        .nav-desktop {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            padding: 16px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-mobile {
+            display: none;
+            position: relative;
+        }
+
+        .mobile-nav-toggle {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .mobile-nav-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-nav-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            min-width: 280px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow: hidden;
+            left: 0;
+        }
+
+        .mobile-nav-dropdown.active {
+            display: block;
+        }
+
+        .mobile-nav-item {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            background: white;
+            text-align: center;
+        }
+
+        .mobile-nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-item:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            transform: translateX(0);
+        }
+
+        /* Tabs */
+        .tab-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 3px solid transparent;
+            border-radius: 14px;
+            padding: 14px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .tab-active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transform: scale(1.08);
+        }
+
+        /* Demo Output */
+        .demo-output {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            color: white;
+        }
+
+        .result-item {
+            background: white;
+            color: #333;
+            padding: 18px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.4s ease-out;
+            width: 100%;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Input Fields */
+        .input-field {
+            padding: 14px 18px;
+            border: 3px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .badge-easy { background: #2ecc71; color: white; }
+        .badge-medium { background: #f39c12; color: white; }
+        .badge-hard { background: #e74c3c; color: white; }
+
+        /* Progress */
+        .progress-bar {
+            height: 16px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71 0%, #3498db 100%);
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+        }
+
+        /* Interactive Elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #667eea;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #2ecc71;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #f39c12;
+        }
+
+        /* Reference Box */
+        .reference-box {
+            background: white;
+            background-opacity: 20%;
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .reference-item {
+            background: white;
+            background-opacity: 10%;
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        .reference-item a {
+            color: #fbbf24;
+            text-decoration: underline;
+            transition: all 0.3s ease;
+        }
+
+        .reference-item a:hover {
+            color: #fcd34d;
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* DOM Demo Area */
+        .dom-demo-area {
+            background: #f0f4ff;
+            border: 3px solid #667eea;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        .dom-element {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .nav-mobile {
+                display: block;
+            }
+
+            html {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            h3 {
+                font-size: 1.2rem !important;
+            }
+
+            h4 {
+                font-size: 1rem !important;
+            }
+
+            p {
+                font-size: 14px;
+                text-align: justify;
+                line-height: 1.6;
+            }
+
+            .tab-button {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            .code-box {
+                font-size: 11px;
+                padding: 12px;
+            }
+
+            .card {
+                padding: 16px !important;
+            }
+
+            .card:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+
+            .demo-output {
+                padding: 16px;
+                min-height: 120px;
+            }
+
+            .result-item {
+                font-size: 13px;
+                padding: 12px 16px;
+            }
+
+            .input-field {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .btn-primary:hover, .btn-secondary:hover {
+                transform: scale(1.05);
+            }
+
+            .interactive-section {
+                padding: 16px;
+            }
+
+            .concept-box, .success-box, .warning-box {
+                padding: 16px;
+            }
+
+            .reference-box {
+                padding: 16px;
+            }
+
+            .badge {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .max-w-md {
+                width: 100%;
+            }
+
+            .grid {
+                gap: 8px !important;
+            }
+
+            .space-y-6 > * + * {
+                margin-top: 16px !important;
+            }
+
+            .tab-button {
+                flex: 1;
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            h2 {
+                font-size: 1.2rem !important;
+            }
+
+            h3 {
+                font-size: 1rem !important;
+            }
+
+            p {
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 12px !important;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                padding: 10px 16px !important;
+                font-size: 13px;
+            }
+
+            .input-field {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .tab-button {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+        }
+    </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full gradient-bg">
+   <div class="w-full px-4 py-8"><!-- Header -->
+    <div class="max-w-6xl mx-auto mb-8 text-center animate-in">
+     <h1 id="main-title" class="text-5xl md:text-7xl font-bold text-white mb-4 fun-font">📄 Document Object Model (DOM)</h1>
+     <p id="subtitle" class="text-xl md:text-2xl text-white text-center opacity-90 mb-6">Menguasai Cara Memanipulasi Halaman Web dengan JavaScript! 🎨</p>
+     <div class="max-w-md mx-auto">
+      <div class="progress-bar mb-3">
+       <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+      </div>
+      <p id="progress-text" class="text-white font-bold text-lg">Progress: 0/8 Materi ✨</p>
+     </div>
+    </div><!-- Navigation -->
+    <div class="max-w-6xl mx-auto mb-8"><!-- Desktop Navigation -->
+     <div class="nav-desktop"><button onclick="showTab('intro')" id="tab-intro" class="tab-button tab-active"> 🎯 Pengenalan DOM </button> <button onclick="showTab('tree')" id="tab-tree" class="tab-button"> 🌳 DOM Tree </button> <button onclick="showTab('select')" id="tab-select" class="tab-button"> 🔍 Selecting Elements </button> <button onclick="showTab('manipulate')" id="tab-manipulate" class="tab-button"> ✏️ Manipulate DOM </button> <button onclick="showTab('events')" id="tab-events" class="tab-button"> 🎮 Event Handling </button> <button onclick="showTab('styles')" id="tab-styles" class="tab-button"> 🎨 CSS dengan DOM </button> <button onclick="showTab('traverse')" id="tab-traverse" class="tab-button"> 🔗 Traversing DOM </button> <button onclick="showTab('practice')" id="tab-practice" class="tab-button"> 🏆 Challenge </button>
+     </div><!-- Mobile Navigation -->
+     <div class="nav-mobile"><button class="mobile-nav-toggle" onclick="toggleMobileNav()"> ☰ Pilih Materi </button>
+      <div id="mobile-nav-dropdown" class="mobile-nav-dropdown">
+       <div class="mobile-nav-item" onclick="navItemClick('intro', 'Pengenalan DOM')">
+        🎯 Pengenalan DOM
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('tree', 'DOM Tree')">
+        🌳 DOM Tree
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('select', 'Selecting')">
+        🔍 Selecting Elements
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('manipulate', 'Manipulate')">
+        ✏️ Manipulate DOM
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('events', 'Events')">
+        🎮 Event Handling
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('styles', 'CSS')">
+        🎨 CSS dengan DOM
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('traverse', 'Traverse')">
+        🔗 Traversing DOM
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('practice', 'Challenge')">
+        🏆 Challenge
+       </div>
+      </div>
+     </div>
+    </div><!-- Content -->
+    <div class="max-w-6xl mx-auto mb-12"><!-- Tab 1: Pengenalan DOM -->
+     <div id="content-intro" class="tab-content">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🎯 Apa itu DOM?</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">💡 Definisi Lengkap</h3>
+        <p class="text-lg text-gray-800 mb-4"><strong>Document Object Model (DOM)</strong> adalah representasi dari halaman HTML sebagai sebuah struktur pohon yang dapat diakses dan dimanipulasi melalui JavaScript. DOM memungkinkan kita untuk mengubah isi, gaya, dan struktur halaman web secara dinamis! 🚀</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="success-box">
+         <h4 class="text-xl font-bold mb-3">✨ Kemampuan DOM</h4>
+         <ul class="space-y-2 text-gray-800">
+          <li>📝 Mengubah isi elemen HTML</li>
+          <li>🎨 Mengubah gaya CSS</li>
+          <li>➕ Menambah/menghapus elemen</li>
+          <li>👂 Menangani event (klik, ketik, dll)</li>
+          <li>📦 Membaca atribut elemen</li>
+         </ul>
+        </div>
+        <div class="warning-box">
+         <h4 class="text-xl font-bold mb-3">🎮 Contoh Penggunaan DOM</h4>
+         <p class="text-gray-800 mb-3">Aplikasi web interaktif seperti:</p>
+         <ul class="space-y-2 text-gray-800">
+          <li>💬 Chat aplikasi real-time</li>
+          <li>📊 Dashboard dengan grafik</li>
+          <li>🎮 Game browser</li>
+          <li>📱 Web app seperti Trello</li>
+          <li>✅ Todo list interaktif</li>
+         </ul>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// Contoh Manipulasi DOM Dasar</span><br><span class="keyword">const</span> <span class="function">elemen</span> = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"myElement"</span>);<br> elemen.textContent = <span class="string">"Teks berubah! ✨"</span>;<br>elemen.style.color = <span class="string">"red"</span>;<br><span class="keyword">console</span>.<span class="function">log</span>(elemen);
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo Interaktif - Ubah Elemen!</h4>
+        <p class="text-gray-700 mb-4">Klik tombol untuk melihat DOM bekerja secara real-time:</p><button onclick="demoIntroChange()" class="btn-primary px-8 py-4 text-lg mb-4 w-full md:w-auto"> 🎨 Ubah Elemen Ini! </button>
+        <div id="intro-demo-area" class="dom-demo-area">
+         <p id="demo-text" class="text-center text-gray-700 font-bold text-lg">Tekan tombol di atas untuk mengubah aku! 👆</p>
+        </div>
+       </div>
+       <div class="reference-box mb-6">
+        <h4 class="text-2xl font-bold text-dark mb-4">📚 Sumber Referensi Materi</h4>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ DOM Basics</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener noreferrer">MDN: DOM Introduction</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_htmldom.asp" target="_blank" rel="noopener noreferrer">W3Schools: HTML DOM</a></li>
+           <li>🔗 <a href="https://javascript.info/dom-nodes" target="_blank" rel="noopener noreferrer">JavaScript.info: DOM Nodes</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ DOM Methods</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document" target="_blank" rel="noopener noreferrer">MDN: Document API</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/jsref/dom_obj_document.asp" target="_blank" rel="noopener noreferrer">W3Schools: Document Object</a></li>
+           <li>🔗 <a href="https://javascript.info/searching-elements-dom" target="_blank" rel="noopener noreferrer">JavaScript.info: Searching Elements</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ DOM Manipulation</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element" target="_blank" rel="noopener noreferrer">MDN: Element API</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_htmldom_html.asp" target="_blank" rel="noopener noreferrer">W3Schools: Change HTML</a></li>
+           <li>🔗 <a href="https://javascript.info/modifying-document" target="_blank" rel="noopener noreferrer">JavaScript.info: Modifying Document</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ Events</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/Events" target="_blank" rel="noopener noreferrer">MDN: Web Events</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_events.asp" target="_blank" rel="noopener noreferrer">W3Schools: Events</a></li>
+           <li>🔗 <a href="https://javascript.info/event-details" target="_blank" rel="noopener noreferrer">JavaScript.info: Events</a></li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('intro', 'tree')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke DOM Tree ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 2: DOM Tree -->
+     <div id="content-tree" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🌳 Struktur DOM Tree</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">📋 Hierarki Dokumen</h3>
+        <p class="text-lg text-gray-800 mb-4">DOM tersusun seperti pohon dengan hubungan parent-child. Setiap elemen HTML menjadi node dalam pohon ini. Document adalah root (akar) dari semua node lainnya.</p>
+       </div>
+       <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl mb-6">
+        <h4 class="text-xl font-bold text-blue-700 mb-4">🌳 Struktur Hierarki HTML</h4>
+        <div class="code-box text-sm"><span class="keyword">&lt;!DOCTYPE html&gt;</span><br><span class="keyword">&lt;html&gt;</span><br><span class="keyword">&lt;head&gt;</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;</span><span class="string">My Page</span><span class="keyword">&lt;/title&gt;</span><br><span class="keyword">&lt;/head&gt;</span><br><span class="keyword">&lt;body&gt;</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;</span><span class="string">Welcome</span><span class="keyword">&lt;/h1&gt;</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;</span><span class="string">This is a paragraph</span><span class="keyword">&lt;/p&gt;</span><br><span class="keyword">&lt;/body&gt;</span><br><span class="keyword">&lt;/html&gt;</span>
+        </div>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-purple-50 p-6 rounded-2xl border-l-6 border-purple-500">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">👨‍👩‍👧‍👦 Hubungan Elemen:</h4>
+         <ul class="space-y-3 text-gray-800">
+          <li><strong>Parent:</strong> Elemen yang membungkus</li>
+          <li><strong>Child:</strong> Elemen di dalamnya</li>
+          <li><strong>Sibling:</strong> Elemen setingkat</li>
+          <li><strong>Ancestor:</strong> Orang tua, nenek, dll</li>
+          <li><strong>Descendant:</strong> Anak, cucu, dll</li>
+         </ul>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">📊 Jenis-Jenis Node:</h4>
+         <ul class="space-y-3 text-gray-800">
+          <li><strong>Element Node:</strong> Tag HTML</li>
+          <li><strong>Text Node:</strong> Teks dalam elemen</li>
+          <li><strong>Attribute Node:</strong> Atribut elemen</li>
+          <li><strong>Comment Node:</strong> Komentar HTML</li>
+          <li><strong>Document Node:</strong> Root semua node</li>
+         </ul>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Visualisasi DOM Tree</h4>
+        <p class="text-gray-700 mb-4">Lihat struktur DOM dari HTML di bawah:</p>
+        <div class="bg-white p-6 rounded-2xl mb-4 border-2 border-gray-300">
+         <h5 class="font-bold text-gray-700 mb-3">HTML Contoh:</h5>
+         <div id="tree-example" class="bg-gray-50 p-4 rounded text-sm code-font">
+          &lt;div id="container"&gt;<br>
+           &nbsp;&nbsp;&lt;h2&gt;Judul&lt;/h2&gt;<br>
+           &nbsp;&nbsp;&lt;p id="text"&gt;Paragraf 1&lt;/p&gt;<br>
+           &nbsp;&nbsp;&lt;ul&gt;<br>
+           &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Item 1&lt;/li&gt;<br>
+           &nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;Item 2&lt;/li&gt;<br>
+           &nbsp;&nbsp;&lt;/ul&gt;<br>
+           &lt;/div&gt;
+         </div>
+        </div><button onclick="demoTree()" class="w-full btn-primary py-4 text-lg font-bold"> 📊 Tampilkan Struktur DOM! </button>
+        <div id="tree-output" class="demo-output hidden mt-4">
+         <div id="tree-result" style="width: 100%;"></div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('tree', 'select')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Selecting Elements ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 3: Selecting Elements -->
+     <div id="content-select" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🔍 Selecting Elements</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">📍 Cara Memilih Elemen</h3>
+        <p class="text-lg text-gray-800 mb-4">Sebelum kita bisa memanipulasi elemen, kita harus memilih/mengakses elemen terlebih dahulu. Ada berbagai cara untuk memilih elemen dari DOM.</p>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">1️⃣ getElementById</h4>
+         <p class="text-gray-700 mb-3">Memilih elemen berdasarkan id (hanya satu elemen)</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elemen = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"myId"</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(elemen);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-green-700 mb-3">2️⃣ getElementsByClassName</h4>
+         <p class="text-gray-700 mb-3">Memilih elemen berdasarkan class (bisa multiple)</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elements = <span class="keyword">document</span>.<span class="function">getElementsByClassName</span>(<span class="string">"myClass"</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(elements);<br><span class="comment">// HTMLCollection</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">3️⃣ querySelector &amp; querySelectorAll</h4>
+         <p class="text-gray-700 mb-3">Menggunakan CSS selector (sangat fleksibel dan modern)</p>
+         <div class="code-box mb-3 text-sm"><span class="comment">// querySelector - ambil satu elemen pertama</span><br><span class="keyword">const</span> elemen1 = <span class="keyword">document</span>.<span class="function">querySelector</span>(<span class="string">".myClass"</span>);<br><span class="comment">// querySelectorAll - ambil semua elemen</span><br><span class="keyword">const</span> elements2 = <span class="keyword">document</span>.<span class="function">querySelectorAll</span>(<span class="string">"div.container"</span>);<br><span class="comment">// CSS selectors: .class, #id, [attr], etc</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">4️⃣ getElementById &amp; getElementsByTagName</h4>
+         <p class="text-gray-700 mb-3">Memilih berdasarkan tag name</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> allParagraphs = <span class="keyword">document</span>.<span class="function">getElementsByTagName</span>(<span class="string">"p"</span>);<br><span class="keyword">const</span> allDivs = <span class="keyword">document</span>.<span class="function">getElementsByTagName</span>(<span class="string">"div"</span>);
+         </div>
+        </div>
+       </div>
+       <div class="success-box mb-6">
+        <h4 class="text-xl font-bold mb-3">💡 Rekomendasi Penggunaan</h4>
+        <ul class="space-y-2 text-gray-800">
+         <li>✅ <strong>Gunakan querySelector/querySelectorAll</strong> - Paling fleksibel dan modern</li>
+         <li>✅ <strong>getElementById</strong> - Untuk akses cepat elemen dengan id unik</li>
+         <li>⚠️ <strong>Hindari getElementsByClassName</strong> - Sudah ketinggalan zaman</li>
+        </ul>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Pilih Elemen!</h4>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoSelect('id')" class="btn-primary py-4 font-bold"> 🆔 getElementById </button> <button onclick="demoSelect('class')" class="btn-primary py-4 font-bold"> 📦 getElementsByClassName </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoSelect('query')" class="btn-primary py-4 font-bold"> 🔍 querySelector </button> <button onclick="demoSelect('tag')" class="btn-primary py-4 font-bold"> 📋 getElementsByTagName </button>
+        </div>
+        <div id="select-output" class="demo-output hidden mt-4">
+         <div id="select-result" style="width: 100%;"></div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('select', 'manipulate')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Manipulate DOM ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 4: Manipulate DOM -->
+     <div id="content-manipulate" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">✏️ Memanipulasi DOM</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🔧 Mengubah Konten dan Struktur</h3>
+        <p class="text-lg text-gray-800 mb-4">Setelah memilih elemen, kita bisa mengubah isinya, atributnya, atau strukturnya secara dinamis.</p>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">📝 textContent &amp; innerHTML</h4>
+         <p class="text-gray-700 mb-3">Mengubah teks atau konten HTML dalam elemen</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elemen = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"demo"</span>);<br><span class="comment">// textContent - hanya teks (aman)</span><br>elemen.textContent = <span class="string">"Teks baru"</span>;<br><span class="comment">// innerHTML - bisa HTML</span><br>elemen.innerHTML = <span class="string">"&lt;strong&gt;Teks bold&lt;/strong&gt;"</span>;
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-green-700 mb-3">➕ appendChild &amp; insertBefore</h4>
+         <p class="text-gray-700 mb-3">Menambah elemen baru ke DOM</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> newElement = <span class="keyword">document</span>.<span class="function">createElement</span>(<span class="string">"p"</span>);<br> newElement.textContent = <span class="string">"Elemen baru"</span>;<br><span class="comment">// Tambah di akhir</span><br><span class="keyword">document</span>.body.<span class="function">appendChild</span>(newElement);<br><span class="comment">// Tambah di posisi tertentu</span><br><span class="keyword">document</span>.body.<span class="function">insertBefore</span>(newElement, refNode);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">🗑️ removeChild &amp; remove</h4>
+         <p class="text-gray-700 mb-3">Menghapus elemen dari DOM</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elemen = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"toDelete"</span>);<br><span class="comment">// removeChild - dari parent</span><br>elemen.parentNode.<span class="function">removeChild</span>(elemen);<br><span class="comment">// remove - langsung (lebih mudah)<br></span> elemen.<span class="function">remove</span>();
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">🏷️ getAttribute &amp; setAttribute</h4>
+         <p class="text-gray-700 mb-3">Mengubah atribut elemen</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> link = <span class="keyword">document</span>.<span class="function">querySelector</span>(<span class="string">"a"</span>);<br><span class="comment">// Baca atribut</span><br><span class="keyword">let</span> href = link.<span class="function">getAttribute</span>(<span class="string">"href"</span>);<br><span class="comment">// Set atribut</span><br>link.<span class="function">setAttribute</span>(<span class="string">"href"</span>, <span class="string">"https://example.com"</span>);<br>link.<span class="function">setAttribute</span>(<span class="string">"target"</span>, <span class="string">"_blank"</span>);
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Manipulasi Elemen!</h4>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoManipulate('text')" class="btn-primary py-4 font-bold"> 📝 Ubah Text </button> <button onclick="demoManipulate('html')" class="btn-primary py-4 font-bold"> 🏷️ Ubah HTML </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoManipulate('add')" class="btn-primary py-4 font-bold"> ➕ Tambah Elemen </button> <button onclick="demoManipulate('remove')" class="btn-primary py-4 font-bold"> 🗑️ Hapus Elemen </button>
+        </div>
+        <div id="manipulate-demo" class="dom-demo-area">
+         <div id="manip-item1" class="dom-element">
+          Item 1 🎯
+         </div>
+         <div id="manip-item2" class="dom-element">
+          Item 2 🎯
+         </div>
+        </div>
+        <div id="manipulate-output" class="demo-output hidden mt-4">
+         <div id="manipulate-result" style="width: 100%;"></div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('manipulate', 'events')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Event Handling ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 5: Event Handling -->
+     <div id="content-events" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🎮 Event Handling</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">👂 Menangani Interaksi Pengguna</h3>
+        <p class="text-lg text-gray-800 mb-4">Event adalah kejadian yang terjadi pada halaman web. Kita bisa "mendengarkan" event dan meresponsnya dengan kode JavaScript.</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-blue-50 p-6 rounded-2xl border-l-6 border-blue-500">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">🎯 Jenis-Jenis Event:</h4>
+         <ul class="space-y-2 text-gray-800 text-sm">
+          <li><strong>click</strong> - Klik elemen</li>
+          <li><strong>dblclick</strong> - Klik ganda</li>
+          <li><strong>mouseover</strong> - Hover</li>
+          <li><strong>change</strong> - Form berubah</li>
+          <li><strong>input</strong> - Input ketik</li>
+          <li><strong>submit</strong> - Form dikirim</li>
+          <li><strong>keydown</strong> - Tombol ditekan</li>
+          <li><strong>load</strong> - Halaman dimuat</li>
+         </ul>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">📋 Cara Menambah Event:</h4>
+         <ul class="space-y-3 text-gray-800 text-sm">
+          <li><strong>1. addEventListener</strong> (Recommended)</li>
+          <li><strong>2. HTML attribute</strong> (onclick, onchange, dll)</li>
+          <li><strong>3. Property</strong> (elemen.onclick = func)</li>
+         </ul>
+        </div>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">✅ Cara 1: addEventListener (Modern &amp; Best)</h4>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> button = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"myBtn"</span>);<br>button.<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Tombol diklik!"</span>);<br>});<br><br><span class="comment">// Atau dengan Arrow Function</span><br>button.<span class="function">addEventListener</span>(<span class="string">"click"</span>, () =&gt; {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Tombol diklik!"</span>);<br>});
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-green-700 mb-3">❌ Cara 2: HTML Attribute (Old Style)</h4>
+         <div class="code-box mb-3 text-sm"><span class="keyword">&lt;button</span> onclick=<span class="string">"handleClick()"</span><span class="keyword">&gt;</span> Klik Saya <span class="keyword">&lt;/button&gt;</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">📊 Event Object</h4>
+         <p class="text-gray-700 mb-3">Event listener otomatis menerima event object yang berisi informasi tentang event:</p>
+         <div class="code-box mb-3 text-sm">
+          button.<span class="function">addEventListener</span>(<span class="string">"click"</span>, (event) =&gt; {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(event.target);<br><span class="comment">&nbsp;&nbsp;&nbsp;// Elemen yang diklik</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(event.type);<br><span class="comment">&nbsp;&nbsp;&nbsp;// Tipe event</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(event.clientX);<br><span class="comment">&nbsp;&nbsp;&nbsp;// Posisi X mouse</span><br>});
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Event Handling!</h4>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button id="event-click" class="btn-primary py-4 font-bold"> 🖱️ Click Event </button> <button id="event-hover" class="btn-secondary py-4 font-bold"> 🎯 Hover Event </button>
+        </div>
+        <div class="dom-demo-area"><input type="text" id="event-input" placeholder="Ketik sesuatu..." class="input-field mb-3">
+         <div id="event-display" class="text-center text-gray-700 font-bold">
+          Hasil akan tampil di sini ✨
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('events', 'styles')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke CSS dengan DOM ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 6: CSS dengan DOM -->
+     <div id="content-styles" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🎨 Memanipulasi CSS dengan DOM</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🖌️ Mengubah Gaya Elemen</h3>
+        <p class="text-lg text-gray-800 mb-4">Kita bisa mengubah CSS dari elemen melalui JavaScript, baik mengubah inline style maupun menambah/menghapus class.</p>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">1️⃣ Mengubah Inline Style</h4>
+         <p class="text-gray-700 mb-3">Menggunakan property .style</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elemen = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"myDiv"</span>);<br><span class="comment">// CSS property menjadi camelCase</span><br>elemen.style.color = <span class="string">"red"</span>;<br>elemen.style.backgroundColor = <span class="string">"yellow"</span>;<br>elemen.style.fontSize = <span class="string">"20px"</span>;<br> elemen.style.borderRadius = <span class="string">"10px"</span>;<br> elemen.style.display = <span class="string">"none"</span>;
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-green-700 mb-3">2️⃣ Menambah/Menghapus Class (BEST PRACTICE)</h4>
+         <p class="text-gray-700 mb-3">Menggunakan classList - lebih rapi dan manageable</p>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> elemen = <span class="keyword">document</span>.<span class="function">querySelector</span>(<span class="string">".myClass"</span>);<br><span class="comment">// Tambah class</span><br>elemen.<span class="function">classList</span>.<span class="function">add</span>(<span class="string">"active"</span>);<br><span class="comment">// Hapus class</span><br>elemen.<span class="function">classList</span>.<span class="function">remove</span>(<span class="string">"inactive"</span>);<br><span class="comment">// Toggle class (tambah jika tidak ada, hapus jika ada)</span><br>elemen.<span class="function">classList</span>.<span class="function">toggle</span>(<span class="string">"hidden"</span>);<br><span class="comment">// Cek apakah punya class</span><br><span class="keyword">if</span> (elemen.<span class="function">classList</span>.<span class="function">contains</span>(<span class="string">"active"</span>)) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Aktif!"</span>);<br>}
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">📌 Catatan Penting:</h4>
+         <ul class="space-y-2 text-gray-800">
+          <li>✅ <strong>Gunakan classList</strong> untuk mengelola multiple styles</li>
+          <li>✅ <strong>Pisahkan CSS dari JavaScript</strong> - CSS di file CSS, JavaScript di file JS</li>
+          <li>⚠️ <strong>Hindari inline style</strong> terlalu banyak - maintainability rendah</li>
+          <li>💡 <strong>CSS property di JS = camelCase:</strong> background-color → backgroundColor</li>
+         </ul>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Ubah CSS!</h4>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoStyles('inline')" class="btn-primary py-4 font-bold"> 🖼️ Inline Style </button> <button onclick="demoStyles('class')" class="btn-primary py-4 font-bold"> 📦 Add/Remove Class </button>
+        </div>
+        <div id="style-demo" class="dom-demo-area">
+         <div id="style-box" class="text-center font-bold text-lg p-6 bg-blue-500 text-white rounded">
+          Klik tombol untuk ubah style saya! 🎨
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('styles', 'traverse')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Traversing DOM ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 7: Traversing DOM -->
+     <div id="content-traverse" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🔗 Traversing DOM Tree</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🗺️ Navigasi Antar Elemen</h3>
+        <p class="text-lg text-gray-800 mb-4">DOM traversing adalah proses berpindah dari satu node ke node lain. Kita bisa mengakses parent, child, dan sibling dari sebuah elemen.</p>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">👨 Akses Parent Node</h4>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> child = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"child"</span>);<br><span class="comment">// Akses parent</span><br><span class="keyword">const</span> parent = child.parentNode;<br><span class="keyword">console</span>.<span class="function">log</span>(parent);<br><span class="comment">// Akses parent element (lebih baik)</span><br><span class="keyword">const</span> parent2 = child.parentElement;
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-green-700 mb-3">👧 Akses Child Nodes</h4>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> parent = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"parent"</span>);<br><span class="comment">// Semua child (termasuk text nodes)</span><br><span class="keyword">const</span> allChildren = parent.childNodes;<br><span class="comment">// Hanya element nodes</span><br><span class="keyword">const</span> elementChildren = parent.children;<br><span class="comment">// Child pertama &amp; terakhir</span><br><span class="keyword">const</span> first = parent.firstChild;<br><span class="keyword">const</span> last = parent.lastChild;<br><span class="comment">// Lebih aman (element only)</span><br><span class="keyword">const</span> firstEl = parent.firstElementChild;<br><span class="keyword">const</span> lastEl = parent.lastElementChild;
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">👥 Akses Sibling Nodes</h4>
+         <div class="code-box mb-3 text-sm"><span class="keyword">const</span> element = <span class="keyword">document</span>.<span class="function">getElementById</span>(<span class="string">"target"</span>);<br><span class="comment">// Next &amp; Previous sibling</span><br><span class="keyword">const</span> next = element.nextSibling;<br><span class="keyword">const</span> prev = element.previousSibling;<br><span class="comment">// Lebih aman (element only)</span><br><span class="keyword">const</span> nextEl = element.nextElementSibling;<br><span class="keyword">const</span> prevEl = element.previousElementSibling;
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">📊 Property Ringkas</h4>
+         <div class="code-box mb-3 text-sm"><span class="comment">// Akses elemen dengan closest()</span><br><span class="keyword">const</span> closest = element.<span class="function">closest</span>(<span class="string">".parent-class"</span>);<br><span class="comment">// Cek parent sampai menemukan selector yang cocok</span><br><span class="keyword">const</span> form = button.<span class="function">closest</span>(<span class="string">"form"</span>);
+         </div>
+        </div>
+       </div>
+       <div class="success-box mb-6">
+        <h4 class="text-xl font-bold mb-3">💡 Ringkas Node vs Element</h4>
+        <ul class="space-y-2 text-gray-800">
+         <li>🔵 <strong>Node</strong> - Termasuk element, text, comment, dll</li>
+         <li>🔴 <strong>Element</strong> - Hanya tag HTML</li>
+         <li>✅ <strong>Gunakan Element versi</strong> - Lebih aman dan predictable</li>
+        </ul>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Traversing DOM!</h4>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoTraverse('parent')" class="btn-primary py-4 font-bold"> 👨 Parent Node </button> <button onclick="demoTraverse('child')" class="btn-primary py-4 font-bold"> 👧 Child Nodes </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoTraverse('sibling')" class="btn-primary py-4 font-bold"> 👥 Siblings </button> <button onclick="demoTraverse('closest')" class="btn-primary py-4 font-bold"> 🎯 Closest </button>
+        </div>
+        <div class="dom-demo-area mb-4">
+         <div id="traverse-parent" class="bg-gray-100 p-4 rounded border-2 border-blue-500"><strong class="block mb-2">Parent Container</strong>
+          <div id="traverse-child1" class="dom-element mb-2">
+           Child 1
+          </div>
+          <div id="traverse-child2" class="dom-element mb-2">
+           Child 2 (Target) 🎯
+          </div>
+          <div id="traverse-child3" class="dom-element">
+           Child 3
+          </div>
+         </div>
+        </div>
+        <div id="traverse-output" class="demo-output hidden">
+         <div id="traverse-result" style="width: 100%;"></div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('traverse', 'practice')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Challenge 🏆 </button>
+       </div>
+      </div>
+     </div><!-- Tab 8: Challenge -->
+     <div id="content-practice" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🏆 Challenge Interaktif</h2>
+       <div class="space-y-6 mb-6"><!-- Challenge 1 -->
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-blue-700">🎯 Challenge 1: To-Do List</h4><span class="badge badge-easy">Mudah</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat aplikasi to-do list sederhana dengan tambah, selesai, dan hapus!</p>
+         <div class="mb-4">
+          <div class="flex gap-2 mb-3"><input type="text" id="ch1-input" class="input-field" placeholder="Masukkan task baru..."> <button onclick="challenge1Add()" class="btn-primary px-6 py-3 font-bold whitespace-nowrap"> ➕ Tambah </button>
+          </div>
+          <div id="ch1-list" class="dom-demo-area min-h-48">
+           <p class="text-center text-gray-500">List kosong, tambahkan task! ✨</p>
+          </div>
+         </div>
+        </div><!-- Challenge 2 -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-green-700">🎮 Challenge 2: Color Changer</h4><span class="badge badge-medium">Sedang</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat elemen yang bisa mengubah warnanya secara dinamis!</p>
+         <div class="mb-4 space-y-4">
+          <div class="grid md:grid-cols-3 gap-3"><button onclick="challenge2Color('red')" class="btn-primary py-3">🔴 Red</button> <button onclick="challenge2Color('blue')" class="btn-secondary py-3">🔵 Blue</button> <button onclick="challenge2Color('green')" class="btn-primary py-3">🟢 Green</button>
+          </div>
+          <div id="ch2-box" class="dom-demo-area bg-purple-300 text-white font-bold text-2xl">
+           Warna saya berubah! 🎨
+          </div>
+          <div id="ch2-info" class="text-center text-gray-700 font-bold">
+           Warna saat ini: Purple
+          </div>
+         </div>
+        </div><!-- Challenge 3 -->
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-purple-700">🌟 Challenge 3: Form Validator</h4><span class="badge badge-medium">Sedang</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat form dengan validasi real-time!</p>
+         <div class="mb-4 space-y-3">
+          <div><label class="block font-bold text-gray-700 mb-2">Nama (minimal 3 karakter):</label> <input type="text" id="ch3-name" class="input-field" placeholder="Masukkan nama">
+           <div id="ch3-name-error" class="text-red-500 text-sm mt-1 hidden">
+            ❌ Nama terlalu pendek!
+           </div>
+           <div id="ch3-name-success" class="text-green-500 text-sm mt-1 hidden">
+            ✅ Nama valid!
+           </div>
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Email:</label> <input type="email" id="ch3-email" class="input-field" placeholder="Masukkan email">
+           <div id="ch3-email-error" class="text-red-500 text-sm mt-1 hidden">
+            ❌ Email tidak valid!
+           </div>
+           <div id="ch3-email-success" class="text-green-500 text-sm mt-1 hidden">
+            ✅ Email valid!
+           </div>
+          </div><button onclick="challenge3Submit()" class="w-full btn-primary py-4 font-bold text-lg"> 📤 Submit Form </button>
+         </div>
+        </div><!-- Challenge 4 -->
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-orange-700">🎯 Challenge 4: DOM Tree Navigator</h4><span class="badge badge-hard">Sulit</span>
+         </div>
+         <p class="text-gray-700 mb-4">Navigasi struktur DOM dan tampilkan informasi elemen!</p>
+         <div id="ch4-tree" class="dom-demo-area mb-4 bg-white border-2 border-gray-300">
+          <div id="ch4-parent" class="bg-blue-100 p-4 rounded mb-2"><strong>Parent Element</strong>
+           <div id="ch4-child1" class="bg-green-100 p-2 mt-2 rounded">
+            Child 1
+           </div>
+           <div id="ch4-child2" class="bg-yellow-100 p-2 mt-2 rounded">
+            Child 2
+           </div>
+           <div id="ch4-child3" class="bg-red-100 p-2 mt-2 rounded">
+            Child 3
+           </div>
+          </div>
+         </div><button onclick="challenge4Show()" class="w-full btn-primary py-4 font-bold text-lg mb-3"> 🔍 Tampilkan Struktur </button>
+         <div id="ch4-output" class="demo-output hidden">
+          <div id="ch4-result" style="width: 100%;"></div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-r from-yellow-100 to-orange-100 p-8 rounded-2xl border-4 border-yellow-400">
+        <h3 class="text-3xl font-bold text-center text-orange-700 mb-4">🎉 Selamat! 🎉</h3>
+        <p class="text-center text-gray-800 text-lg mb-6">Kamu sudah menyelesaikan semua materi tentang <strong>JavaScript DOM!</strong> 🚀</p>
+        <div class="grid md:grid-cols-2 gap-4 text-gray-800 text-center">
+         <div>
+          <h4 class="font-bold text-lg mb-2">✅ Yang Sudah Dipelajari:</h4>
+          <ul class="text-sm space-y-1">
+           <li>📄 Pengenalan DOM</li>
+           <li>🌳 DOM Tree Structure</li>
+           <li>🔍 Selecting Elements</li>
+           <li>✏️ Manipulate DOM</li>
+           <li>🎮 Event Handling</li>
+           <li>🎨 CSS dengan DOM</li>
+           <li>🔗 Traversing DOM</li>
+          </ul>
+         </div>
+         <div>
+          <h4 class="font-bold text-lg mb-2">🚀 Langkah Selanjutnya:</h4>
+          <ul class="text-sm space-y-1">
+           <li>🔄 Learn Async JavaScript</li>
+           <li>📡 Fetch API &amp; Axios</li>
+           <li>⚛️ React/Vue Framework</li>
+           <li>🛠️ Build Real Projects</li>
+           <li>💾 Learn Backend</li>
+           <li>🎮 Build Web Apps</li>
+           <li>🏆 Join Community</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center mt-8">
+        <p class="text-black text-lg mb-4 text-center">Bagikan pencapaianmu! 🌟</p><button onclick="resetAllChallenges()" class="btn-secondary px-8 py-4 text-lg font-bold"> 🔄 Reset Challenges </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Footer -->
+   <footer class="w-full bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 text-white py-8 mt-12">
+    <div class="max-w-6xl mx-auto px-4">
+     <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <div class="text-center md:text-left"><a href="index.html" class="inline-flex items-center gap-2 btn-secondary px-8 py-4 text-lg font-bold hover:shadow-lg transition-all"> ← Kembali ke Halaman Sebelumnya </a>
+      </div>
+      <div class="text-center md:text-right">
+       <p class="text-lg font-bold">📚 Media Pembelajaran JavaScript DOM</p>
+       <p class="text-sm opacity-80">Dibuat untuk Kelas XI Pemrograman Web</p>
+      </div>
+     </div>
+     <div class="border-t border-white border-opacity-20 pt-6 text-center">
+      <p class="text-sm opacity-70">© 2026 <strong>RSensei</strong> - Belajar Coding Jadi Menyenangkan! 🚀</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+        const defaultConfig = {
+            main_title: "📄 Document Object Model (DOM)",
+            subtitle: "Menguasai Cara Memanipulasi Halaman Web dengan JavaScript! 🎨"
+        };
+
+        let completedSections = new Set();
+        let ch1Tasks = [];
+
+        async function onConfigChange(config) {
+            document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+            document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+        }
+
+        function toggleMobileNav() {
+            const dropdown = document.getElementById('mobile-nav-dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function navItemClick(tabName, label) {
+            toggleMobileNav();
+            showTab(tabName);
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('mobile-nav-dropdown').classList.remove('active');
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            const tabButton = document.getElementById('tab-' + tabName);
+            if (tabButton) {
+                tabButton.classList.add('tab-active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function nextTab(current, next) {
+            completedSections.add(current);
+            updateProgress();
+            showTab(next);
+        }
+
+        function updateProgress() {
+            const total = 8;
+            const completed = completedSections.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Progress: ${completed}/${total} Materi ✨`;
+        }
+
+        // Demo Functions
+        function demoIntroChange() {
+            const demoText = document.getElementById('demo-text');
+            const colors = ['red', 'blue', 'green', 'purple', 'orange'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            demoText.textContent = '✨ Teks telah berubah!';
+            demoText.style.color = randomColor;
+            demoText.style.fontSize = '1.5em';
+            demoText.style.fontWeight = 'bold';
+        }
+
+        function demoTree() {
+            const output = document.getElementById('tree-output');
+            const result = document.getElementById('tree-result');
+            
+            result.innerHTML = `
+                <div style="text-align: left; width: 100%;">
+                    <strong>Struktur DOM:</strong><br><br>
+                    <div style="background: black;padding: 10px; border-radius: 8px; font-family: monospace; font-size: 12px;">
+                        document<br>
+                        └── div#container<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── h2 (Judul)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── p#text (Paragraf 1)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── ul<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── li (Item 1)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── li (Item 2)
+                    </div>
+                </div>
+            `;
+            output.classList.remove('hidden');
+        }
+
+        function demoSelect(type) {
+            const output = document.getElementById('select-output');
+            const result = document.getElementById('select-result');
+            
+            if (type === 'id') {
+                result.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <strong>getElementById:</strong><br>
+                        const el = document.getElementById('myId');<br><br>
+                        ✅ Mengambil 1 elemen berdasarkan ID<br>
+                        ✅ Cepat dan spesifik<br>
+                        ❌ ID harus unik di halaman
+                    </div>
+                `;
+            } else if (type === 'class') {
+                result.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <strong>getElementsByClassName:</strong><br>
+                        const els = document.getElementsByClassName('myClass');<br><br>
+                        ✅ Mengambil multiple elemen<br>
+                        ⚠️ Return HTMLCollection (live collection)<br>
+                        ⚠️ Syntax agak kuno
+                    </div>
+                `;
+            } else if (type === 'query') {
+                result.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <strong>querySelector:</strong><br>
+                        const el = document.querySelector('.class');<br><br>
+                        ✅ Menggunakan CSS selector<br>
+                        ✅ Ambil elemen pertama yang cocok<br>
+                        ✅ Modern dan fleksibel
+                    </div>
+                `;
+            } else if (type === 'tag') {
+                result.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <strong>getElementsByTagName:</strong><br>
+                        const els = document.getElementsByTagName('p');<br><br>
+                        ✅ Ambil semua elemen dengan tag tertentu<br>
+                        ✅ Cepat untuk seleksi berdasarkan tag<br>
+                        ❌ Kurang fleksibel
+                    </div>
+                `;
+            }
+            output.classList.remove('hidden');
+        }
+
+        function demoManipulate(type) {
+            const output = document.getElementById('manipulate-output');
+            const result = document.getElementById('manipulate-result');
+            
+            if (type === 'text') {
+                document.getElementById('manip-item1').textContent = '📝 Teks diubah dengan textContent!';
+                result.innerHTML = 'Teks Item 1 telah diubah! ✅';
+            } else if (type === 'html') {
+                document.getElementById('manip-item2').innerHTML = '<strong>🏷️ HTML diubah</strong> dengan <em>innerHTML!</em>';
+                result.innerHTML = 'HTML Item 2 telah diubah! ✅';
+            } else if (type === 'add') {
+                const newEl = document.createElement('div');
+                newEl.className = 'dom-element';
+                newEl.textContent = '✨ Item Baru! (Ditambah dengan appendChild)';
+                document.getElementById('manipulate-demo').appendChild(newEl);
+                result.innerHTML = 'Elemen baru telah ditambahkan! ➕';
+            } else if (type === 'remove') {
+                const item = document.getElementById('manip-item1');
+                if (item) {
+                    item.remove();
+                    result.innerHTML = 'Item 1 telah dihapus! 🗑️';
+                }
+            }
+            output.classList.remove('hidden');
+        }
+
+        function demoStyles(type) {
+            const box = document.getElementById('style-box');
+            
+            if (type === 'inline') {
+                box.style.backgroundColor = '#e74c3c';
+                box.style.color = 'white';
+                box.style.fontSize = '24px';
+                box.style.borderRadius = '20px';
+                box.style.padding = '30px';
+                box.textContent = '🎨 Inline style diubah!';
+            } else if (type === 'class') {
+                box.classList.toggle('rotated-box');
+                if (!document.getElementById('style-css')) {
+                    const style = document.createElement('style');
+                    style.id = 'style-css';
+                    style.textContent = `
+                        .rotated-box {
+                            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+                            transform: rotate(5deg) scale(1.1);
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                box.textContent = box.classList.contains('rotated-box') ? '🎪 Class ditambahkan!' : '📦 Class dihapus!';
+            }
+        }
+
+        function demoTraverse(type) {
+            const output = document.getElementById('traverse-output');
+            const result = document.getElementById('traverse-result');
+            
+            if (type === 'parent') {
+                const child = document.getElementById('traverse-child2');
+                const parent = child.parentElement;
+                result.innerHTML = `
+                    <strong>Parent dari Child 2:</strong><br>
+                    Tag: ${parent.tagName}<br>
+                    ID: ${parent.id}<br>
+                    Class: ${parent.className}
+                `;
+            } else if (type === 'child') {
+                const parent = document.getElementById('traverse-parent');
+                result.innerHTML = `
+                    <strong>Children dari Parent:</strong><br>
+                    Total: ${parent.children.length} elemen<br>
+                    First: ${parent.children[0].textContent}<br>
+                    Last: ${parent.children[parent.children.length - 1].textContent}
+                `;
+            } else if (type === 'sibling') {
+                const target = document.getElementById('traverse-child2');
+                result.innerHTML = `
+                    <strong>Siblings dari Child 2:</strong><br>
+                    Previous: ${target.previousElementSibling?.textContent}<br>
+                    Next: ${target.nextElementSibling?.textContent}
+                `;
+            } else if (type === 'closest') {
+                const child = document.getElementById('traverse-child2');
+                const closest = child.closest('div[id*="traverse"]');
+                result.innerHTML = `
+                    <strong>Closest parent dengan ID yang cocok:</strong><br>
+                    ID: ${closest.id}<br>
+                    Tag: ${closest.tagName}
+                `;
+            }
+            output.classList.remove('hidden');
+        }
+
+        // Challenge Functions
+        function challenge1Add() {
+            const input = document.getElementById('ch1-input');
+            const list = document.getElementById('ch1-list');
+            const task = input.value.trim();
+            
+            if (!task) return;
+            
+            if (ch1Tasks.length === 0) {
+                list.innerHTML = '';
+            }
+            
+            const taskEl = document.createElement('div');
+            taskEl.className = 'dom-element flex items-center justify-between';
+            taskEl.innerHTML = `
+                <span>${task}</span>
+                <div class="space-x-2">
+                    <button onclick="challenge1Complete(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm">✅</button>
+                    <button onclick="challenge1Delete(this)" class="bg-red-500 text-white px-3 py-1 rounded text-sm">🗑️</button>
+                </div>
+            `;
+            
+            list.appendChild(taskEl);
+            ch1Tasks.push(task);
+            input.value = '';
+        }
+
+        function challenge1Complete(btn) {
+            btn.parentElement.parentElement.style.opacity = '0.5';
+            btn.textContent = '✔️';
+            btn.style.backgroundColor = '#95a5a6';
+        }
+
+        function challenge1Delete(btn) {
+            btn.parentElement.parentElement.remove();
+            if (document.getElementById('ch1-list').children.length === 0) {
+                document.getElementById('ch1-list').innerHTML = '<p class="text-center text-gray-500">List kosong! ✨</p>';
+            }
+        }
+
+        function challenge2Color(color) {
+            const box = document.getElementById('ch2-box');
+            const info = document.getElementById('ch2-info');
+            const colorMap = {
+                'red': { bg: '#e74c3c', text: 'Red' },
+                'blue': { bg: '#3498db', text: 'Blue' },
+                'green': { bg: '#2ecc71', text: 'Green' }
+            };
+            
+            box.style.backgroundColor = colorMap[color].bg;
+            info.textContent = `Warna saat ini: ${colorMap[color].text}`;
+        }
+
+        function challenge3Submit() {
+            const name = document.getElementById('ch3-name').value.trim();
+            const email = document.getElementById('ch3-email').value.trim();
+            const nameError = document.getElementById('ch3-name-error');
+            const nameSuccess = document.getElementById('ch3-name-success');
+            const emailError = document.getElementById('ch3-email-error');
+            const emailSuccess = document.getElementById('ch3-email-success');
+            
+            let valid = true;
+            
+            if (name.length < 3) {
+                nameError.classList.remove('hidden');
+                nameSuccess.classList.add('hidden');
+                valid = false;
+            } else {
+                nameError.classList.add('hidden');
+                nameSuccess.classList.remove('hidden');
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.classList.remove('hidden');
+                emailSuccess.classList.add('hidden');
+                valid = false;
+            } else {
+                emailError.classList.add('hidden');
+                emailSuccess.classList.remove('hidden');
+            }
+            
+            if (valid) {
+                alert(`✅ Form submitted!\nNama: ${name}\nEmail: ${email}`);
+            }
+        }
+
+        function challenge4Show() {
+            const parent = document.getElementById('ch4-parent');
+            const output = document.getElementById('ch4-output');
+            const result = document.getElementById('ch4-result');
+            
+            const structure = `
+                <strong style="font-size: 1.2em; display: block; margin-bottom: 10px;">📊 Struktur DOM:</strong>
+                <div style="text-align: left; font-family: monospace; font-size: 12px; background: black; padding: 10px; border-radius: 8px;">
+                    Parent: ${parent.id}<br>
+                    Children count: ${parent.children.length}<br>
+                    <br>
+                    <strong>Child elements:</strong><br>
+                    ${Array.from(parent.children).map(el => `• ${el.id || el.tagName} - "${el.textContent}"`).join('<br>')}
+                </div>
+            `;
+            
+            result.innerHTML = structure;
+            output.classList.remove('hidden');
+        }
+
+        function resetAllChallenges() {
+            ch1Tasks = [];
+            document.getElementById('ch1-list').innerHTML = '<p class="text-center text-gray-500">List kosong! ✨</p>';
+            document.getElementById('ch1-input').value = '';
+            document.getElementById('ch2-box').style.backgroundColor = '#a855f7';
+            document.getElementById('ch2-info').textContent = 'Warna saat ini: Purple';
+            document.getElementById('ch3-name').value = '';
+            document.getElementById('ch3-email').value = '';
+            document.querySelectorAll('[id^="ch3-"][id$="-error"], [id^="ch3-"][id$="-success"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('ch4-output').classList.add('hidden');
+        }
+
+        // Event demo setup
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickBtn = document.getElementById('event-click');
+            const hoverBtn = document.getElementById('event-hover');
+            const input = document.getElementById('event-input');
+            const display = document.getElementById('event-display');
+            
+            if (clickBtn) {
+                clickBtn.addEventListener('click', function() {
+                    display.innerHTML = '✅ Tombol diklik! Event: click';
+                });
+            }
+            
+            if (hoverBtn) {
+                hoverBtn.addEventListener('mouseenter', function() {
+                    display.innerHTML = '🎯 Cursor hover ke tombol! Event: mouseenter';
+                });
+            }
+            
+            if (input) {
+                input.addEventListener('input', function(event) {
+                    display.innerHTML = `📝 Kamu mengetik: "${event.target.value}"`;
+                });
+            }
+
+            if (window.elementSdk) {
+                window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities: () => ({
+                        recolorables: [],
+                        borderables: [],
+                        fontEditable: undefined,
+                        fontSizeable: undefined
+                    }),
+                    mapToEditPanelValues: (config) => new Map([
+                        ["main_title", config.main_title || defaultConfig.main_title],
+                        ["subtitle", config.subtitle || defaultConfig.subtitle]
+                    ])
+                });
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ccba376b39f8833',t:'MTc3MDg5NDYxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

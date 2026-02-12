@@ -1,0 +1,1456 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Functions - Media Pembelajaran Interaktif</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #app {
+            min-height: 100%;
+            overflow-y: auto;
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Background Animations */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.25);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+        }
+
+        /* Code Boxes */
+        .code-box {
+            background: #1a1a2e;
+            color: #eee;
+            padding: 24px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 3px solid #16213e;
+            line-height: 1.8;
+        }
+
+        .code-box .keyword { color: #f39c12; font-weight: 700; }
+        .code-box .string { color: #2ecc71; }
+        .code-box .function { color: #3498db; }
+        .code-box .comment { color: #95a5a6; font-style: italic; }
+        .code-box .number { color: #e74c3c; }
+        .code-box .parameter { color: #9b59b6; }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-bounce {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Navigation */
+        .nav-desktop {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+            background: rgba(255,255,255,0.2);
+            padding: 16px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-mobile {
+            display: none;
+            position: relative;
+        }
+
+        .mobile-nav-toggle {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-nav-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 16px;
+            min-width: 280px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .mobile-nav-dropdown.active {
+            display: block;
+        }
+
+        .mobile-nav-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .mobile-nav-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-nav-item:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            margin: 10px;
+            transform: translateX(8px);
+        }
+
+        /* Tabs */
+        .tab-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 3px solid transparent;
+            border-radius: 14px;
+            padding: 14px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .tab-active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transform: scale(1.08);
+        }
+
+        /* Demo Output */
+        .demo-output {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 28px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            color: white;
+        }
+
+        .result-item {
+            background: white;
+            color: #333;
+            padding: 18px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Input Fields */
+        .input-field {
+            padding: 14px 18px;
+            border: 3px solid #e0e0e0;
+            border-radius: 14px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .badge-easy { background: #2ecc71; color: white; }
+        .badge-medium { background: #f39c12; color: white; }
+        .badge-hard { background: #e74c3c; color: white; }
+
+        /* Progress */
+        .progress-bar {
+            height: 16px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71 0%, #3498db 100%);
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+        }
+
+        /* Interactive Elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 3px dashed #667eea;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #667eea;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #2ecc71;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-radius: 16px;
+            padding: 24px;
+            border-left: 6px solid #f39c12;
+        }
+
+        /* Reference Box */
+        .reference-box {
+            background: white;
+            background-opacity: 20%;
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .reference-item {
+            background: white;
+            background-opacity: 10%;
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        .reference-item a {
+            color: #fbbf24;
+            text-decoration: underline;
+            transition: all 0.3s ease;
+        }
+
+        .reference-item a:hover {
+            color: #fcd34d;
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .nav-mobile {
+                display: block;
+            }
+
+            html {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            h3 {
+                font-size: 1.2rem !important;
+            }
+
+            h4 {
+                font-size: 1rem !important;
+            }
+
+            p {
+                font-size: 14px;
+                text-align: justify;
+                line-height: 1.6;
+            }
+
+            .tab-button {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            .code-box {
+                font-size: 11px;
+                padding: 12px;
+            }
+
+            .card {
+                padding: 16px !important;
+            }
+
+            .card:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+
+            .demo-output {
+                padding: 16px;
+                min-height: 120px;
+            }
+
+            .result-item {
+                font-size: 13px;
+                padding: 12px 16px;
+            }
+
+            .input-field {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .btn-primary:hover, .btn-secondary:hover {
+                transform: scale(1.05);
+            }
+
+            .interactive-section {
+                padding: 16px;
+            }
+
+            .concept-box, .success-box, .warning-box {
+                padding: 16px;
+            }
+
+            .reference-box {
+                padding: 16px;
+            }
+
+            .badge {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .max-w-md {
+                width: 100%;
+            }
+
+            .grid {
+                gap: 8px !important;
+            }
+
+            .space-y-6 > * + * {
+                margin-top: 16px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            h2 {
+                font-size: 1.2rem !important;
+            }
+
+            h3 {
+                font-size: 1rem !important;
+            }
+
+            p {
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 12px !important;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                padding: 10px 16px !important;
+                font-size: 13px;
+            }
+
+            .input-field {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full gradient-bg">
+   <div class="w-full px-4 py-8"><!-- Header -->
+    <div class="max-w-6xl mx-auto mb-8 text-center animate-in">
+     <h1 id="main-title" class="text-5xl md:text-7xl font-bold text-white mb-4 fun-font">🎮 JavaScript Functions</h1>
+     <p id="subtitle" class="text-xl md:text-2xl text-white text-center opacity-90 mb-6">Pelajari Cara Membuat Kode yang Lebih Rapi &amp; Efisien! 💪</p>
+     <div class="max-w-md mx-auto">
+      <div class="progress-bar mb-3">
+       <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+      </div>
+      <p id="progress-text" class="text-white font-bold text-lg">Progress: 0/7 Materi ✨</p>
+     </div>
+    </div><!-- Navigation -->
+    <div class="max-w-6xl mx-auto mb-8"><!-- Desktop Navigation -->
+     <div class="nav-desktop"><button onclick="showTab('intro')" id="tab-intro" class="tab-button tab-active"> 🎯 Pengenalan </button> <button onclick="showTab('basic')" id="tab-basic" class="tab-button"> 📝 Dasar Function </button> <button onclick="showTab('parameters')" id="tab-parameters" class="tab-button"> 📥 Parameters </button> <button onclick="showTab('return')" id="tab-return" class="tab-button"> 📤 Return Value </button> <button onclick="showTab('arrow')" id="tab-arrow" class="tab-button"> ⚡ Arrow Function </button> <button onclick="showTab('scope')" id="tab-scope" class="tab-button"> 🔍 Scope &amp; Variable </button> <button onclick="showTab('practice')" id="tab-practice" class="tab-button"> 🏆 Challenge </button>
+     </div><!-- Mobile Navigation -->
+     <div class="nav-mobile"><button class="mobile-nav-toggle" onclick="toggleMobileNav()"> ☰ Pilih Materi </button>
+      <div id="mobile-nav-dropdown" class="mobile-nav-dropdown">
+       <div class="mobile-nav-item" onclick="navItemClick('intro', 'Pengenalan')">
+        🎯 Pengenalan
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('basic', 'Dasar Function')">
+        📝 Dasar Function
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('parameters', 'Parameters')">
+        📥 Parameters
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('return', 'Return Value')">
+        📤 Return Value
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('arrow', 'Arrow Function')">
+        ⚡ Arrow Function
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('scope', 'Scope')">
+        🔍 Scope &amp; Variable
+       </div>
+       <div class="mobile-nav-item" onclick="navItemClick('practice', 'Challenge')">
+        🏆 Challenge
+       </div>
+      </div>
+     </div>
+    </div><!-- Content -->
+    <div class="max-w-6xl mx-auto mb-12"><!-- Tab 1: Pengenalan -->
+     <div id="content-intro" class="tab-content">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🎯 Apa itu Function?</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">💡 Definisi Singkat</h3>
+        <p class="text-lg text-gray-800 mb-4"><strong>Function</strong> adalah blok kode yang dapat <strong>digunakan kembali</strong> (reusable). Bayangkan seperti mesin otomatis yang siap menerima input dan memberikan output! 🤖</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="success-box">
+         <h4 class="text-xl font-bold mb-3">✨ Keuntungan Function</h4>
+         <ul class="space-y-2 text-gray-800">
+          <li>✨ Kode lebih terorganisir</li>
+          <li>🔄 Bisa digunakan berkali-kali</li>
+          <li>🐛 Lebih mudah di-debug</li>
+          <li>⚡ Menghemat waktu coding</li>
+          <li>📖 Kode lebih readable</li>
+         </ul>
+        </div>
+        <div class="warning-box">
+         <h4 class="text-xl font-bold mb-3">🎮 Analogi Kehidupan Sehari-hari</h4>
+         <p class="text-gray-800 mb-3">Function seperti <strong>resep masakan</strong>:</p>
+         <ul class="space-y-2 text-gray-800">
+          <li>📋 Input: Bahan-bahan</li>
+          <li>👨‍🍳 Process: Langkah memasak</li>
+          <li>🍲 Output: Hidangan siap makan</li>
+         </ul>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// Contoh Simple Function</span><br> <span class="keyword">function</span> <span class="function">sapaNama</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Halo, aku adalah Function! 👋"</span>);<br>}<br> <span class="comment">// Memanggil function</span><br> <span class="function">sapaNama</span>();<br><span class="comment">// Output: Halo, aku adalah Function! 👋</span>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo Interaktif - Function Pertamamu!</h4>
+        <p class="text-gray-700 mb-4">Klik tombol di bawah untuk memanggil function pertamamu:</p><button onclick="demoIntro()" class="btn-primary px-8 py-4 text-lg mb-4 w-full md:w-auto"> 🚀 Panggil Function Pertama! </button>
+        <div id="intro-output" class="demo-output">
+         <p class="text-xl font-bold">Klik tombol untuk melihat hasilnya! ✨</p>
+        </div>
+       </div>
+       <div class="reference-box mb-6">
+        <h4 class="text-2xl font-bold text-dark mb-4">📚 Sumber Referensi Materi</h4>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ Pengenalan Function</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions" target="_blank" rel="noopener noreferrer">MDN: Functions</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_functions.asp" target="_blank" rel="noopener noreferrer">W3Schools: Functions</a></li>
+           <li>🔗 <a href="https://javascript.info/function-basics" target="_blank" rel="noopener noreferrer">JavaScript.info: Basics</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ Parameters &amp; Return</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#function_parameters" target="_blank" rel="noopener noreferrer">MDN: Parameters</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_function_parameters.asp" target="_blank" rel="noopener noreferrer">W3Schools: Parameters</a></li>
+           <li>🔗 <a href="https://javascript.info/function-basics" target="_blank" rel="noopener noreferrer">JavaScript.info: Return</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ Arrow Function</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank" rel="noopener noreferrer">MDN: Arrow Functions</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_arrow_function.asp" target="_blank" rel="noopener noreferrer">W3Schools: Arrow Functions</a></li>
+           <li>🔗 <a href="https://javascript.info/arrow-functions-basics" target="_blank" rel="noopener noreferrer">JavaScript.info: Arrow</a></li>
+          </ul>
+         </div>
+         <div class="reference-item">
+          <p class="font-bold text-dark mb-3">✅ Scope &amp; Variable</p>
+          <ul class="text-sm space-y-2 text-white">
+           <li>🔗 <a href="https://developer.mozilla.org/en-US/docs/Glossary/Scope" target="_blank" rel="noopener noreferrer">MDN: Scope</a></li>
+           <li>🔗 <a href="https://www.w3schools.com/js/js_scope.asp" target="_blank" rel="noopener noreferrer">W3Schools: Scope</a></li>
+           <li>🔗 <a href="https://javascript.info/closure" target="_blank" rel="noopener noreferrer">JavaScript.info: Closure</a></li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('intro', 'basic')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Dasar Function ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 2: Dasar Function -->
+     <div id="content-basic" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">📝 Dasar-Dasar Function</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">📋 Struktur Function</h3>
+        <p class="text-lg text-gray-800 mb-4">Setiap function memiliki bagian-bagian penting:</p>
+       </div>
+       <div class="code-box mb-6"><span class="keyword">function</span> <span class="function">namaFunction</span>() {<br> <span class="comment">// Kode yang akan dijalankan</span><br> }
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-blue-50 p-6 rounded-2xl border-l-6 border-blue-500">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">🏷️ Penjelasan:</h4>
+         <ul class="space-y-3 text-gray-800">
+          <li><strong>function</strong> - keyword untuk membuat function</li>
+          <li><strong>namaFunction</strong> - nama function (gunakan camelCase)</li>
+          <li><strong>()</strong> - tempat parameter (nanti kita pelajari)</li>
+          <li><strong>{}</strong> - blok kode yang akan dijalankan</li>
+         </ul>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">💡 Cara Menggunakan:</h4>
+         <ol class="space-y-3 text-gray-800">
+          <li>1. Buat function dengan keyword <strong>function</strong></li>
+          <li>2. Beri nama yang deskriptif (PascalCase atau camelCase)</li>
+          <li>3. Isi kode di dalam {}</li>
+          <li>4. Panggil dengan <strong>namaFunction()</strong></li>
+         </ol>
+        </div>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">📚 Contoh 1: Function Sederhana</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">buatMakanBergiziGratis</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Aku akan membuat makanan bergizi gratis untuk kamu!"</span>);<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Yum yum... 😋"</span>);<br>}<br> <span class="function">buatPizzaGratis</span>();
+         </div>
+         <p class="text-gray-700"><strong>Output:</strong> Menampilkan 2 baris pesan tentang pizza</p>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">📚 Contoh 2: Function dengan Logika</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">ucapkanPagi</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> jam = <span class="keyword">new</span> <span class="function">Date</span>().<br><span class="function">&nbsp;&nbsp;&nbsp;getHours</span>();<br> <span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;if</span> (jam &lt; <span class="number">12</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Selamat pagi! 🌅"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Selamat siang! ☀️"</span>);<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>}<br> <span class="function">ucapkanPagi</span>();
+         </div>
+         <p class="text-gray-700"><strong>Output:</strong> Greeting berdasarkan jam saat ini</p>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Buat Function Sendiri!</h4>
+        <p class="text-gray-700 mb-4">Pilih jenis function yang ingin kamu lihat:</p>
+        <div class="grid md:grid-cols-3 gap-4 mb-4"><button onclick="demoBasic('greeting')" class="btn-primary py-4 font-bold text-lg"> 👋 Greeting </button> <button onclick="demoBasic('math')" class="btn-primary py-4 font-bold text-lg"> 🧮 Hitung </button> <button onclick="demoBasic('random')" class="btn-primary py-4 font-bold text-lg"> 🎲 Random </button>
+        </div>
+        <div id="basic-output" class="demo-output">
+         <p class="text-xl font-bold">Pilih salah satu demo! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('basic', 'parameters')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Parameters ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 3: Parameters -->
+     <div id="content-parameters" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">📥 Parameters &amp; Arguments</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🎯 Apa Perbedaannya?</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+         <div>
+          <p class="font-bold text-blue-700 mb-2">📝 Parameter:</p>
+          <p class="text-gray-800">Variabel di dalam function definition</p>
+         </div>
+         <div>
+          <p class="font-bold text-pink-700 mb-2">🎮 Argument:</p>
+          <p class="text-gray-800">Nilai yang kita kirim saat memanggil function</p>
+         </div>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// Parameter dalam definition</span><br> <span class="keyword">function</span> <span class="function">tambahAngka</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {<br> <span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> hasil = a + b;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(hasil);<br>}<br> <span class="comment">// Arguments saat memanggil</span><br><span class="function">tambahAngka</span>(<span class="number">5</span>, <span class="number">3</span>);<br> <span class="comment">// Arguments: 5 dan 3</span><br><span class="function">tambahAngka</span>(<span class="number">10</span>, <span class="number">20</span>);<br><span class="comment">// Arguments: 10 dan 20</span>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">🍕 Contoh: Fungsi Pemesanan Pizza</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">pesanPizza</span>(<span class="parameter">ukuran</span>, <span class="parameter">toping</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">`🍕 Pesan pizza ${ukuran} dengan toping ${toping}`</span>);<br>}<br> <span class="function">pesanPizza</span>(<span class="string">"Besar"</span>, <span class="string">"Pepperoni"</span>);<br><span class="function">pesanPizza</span>(<span class="string">"Medium"</span>, <span class="string">"Sosis"</span>);<br><span class="function">pesanPizza</span>(<span class="string">"Kecil"</span>, <span class="string">"Keju"</span>);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-teal-700 mb-3">🔧 Contoh: Function dengan Banyak Parameter</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">buatProfil</span>(<span class="parameter">nama</span>, <span class="parameter">umur</span>, <span class="parameter">hobby</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">`Nama: ${nama}`</span>);<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">`Umur: ${umur}`</span>);<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">`Hobby: ${hobby}`</span>);<br>}<br><span class="function">buatProfil</span>(<span class="string">"Andi"</span>, <span class="number">16</span>, <span class="string">"Gaming"</span>);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">💡 Default Parameter</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">sapa</span>(<span class="parameter">nama</span> = <span class="string">"Teman"</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">`Halo ${nama}! 👋`</span>);<br>}<br><span class="function">sapa</span>();<br><span class="comment">// Output: Halo Teman! 👋</span><br><span class="function">sapa</span>(<span class="string">"Budi"</span>);<br><span class="comment">// Output: Halo Budi! 👋</span>
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Buat Profil Karakter!</h4>
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+         <div><label class="block font-bold text-gray-700 mb-2">Nama Karakter:</label> <input type="text" id="char-name" class="input-field" placeholder="Contoh: Naruto" value="Naruto">
+         </div>
+         <div><label class="block font-bold text-gray-700 mb-2">Level (1-99):</label> <input type="number" id="char-level" class="input-field" min="1" max="99" value="50">
+         </div>
+         <div><label class="block font-bold text-gray-700 mb-2">Kelas:</label> <input type="text" id="char-class" class="input-field" placeholder="Contoh: Ninja" value="Ninja">
+         </div>
+        </div><button onclick="demoParameters()" class="w-full btn-primary py-4 text-lg font-bold mb-4"> 🎮 Buat Profil Karakter! </button>
+        <div id="parameters-output" class="demo-output">
+         <p class="text-xl font-bold">Isi data karakter dan klik tombol! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('parameters', 'return')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Return Value ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 4: Return Value -->
+     <div id="content-return" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">📤 Return Value</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🎯 Mengapa Perlu Return?</h3>
+        <p class="text-lg text-gray-800 mb-4"><strong>Return</strong> digunakan untuk <strong>mengembalikan hasil</strong> dari function sehingga bisa digunakan di bagian kode lain. Tanpa return, function hanya bisa menampilkan output tapi tidak bisa menyimpan hasilnya.</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-red-50 p-6 rounded-2xl border-l-6 border-red-500">
+         <h4 class="text-xl font-bold text-red-700 mb-3">❌ Tanpa Return:</h4>
+         <div class="code-box text-sm mb-3"><span class="keyword">function</span> <span class="function">kaliBilangan</span>(a, b) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(a * b);<br>}<br> <span class="function">kaliBilangan</span>(<span class="number">3</span>, <span class="number">4</span>);<br><span class="comment">// Hanya tampil, tidak bisa disimpan!</span>
+         </div>
+         <p class="text-gray-700 text-sm">Hasilnya tidak bisa digunakan ulang</p>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">✅ Dengan Return:</h4>
+         <div class="code-box text-sm mb-3"><span class="keyword">function</span> <span class="function">kaliBilangan</span>(a, b) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> a * b;<br>}<br><span class="keyword">let</span> hasil = <span class="function">kaliBilangan</span>(<span class="number">3</span>, <span class="number">4</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(hasil);<br><span class="comment">// 12</span>
+         </div>
+         <p class="text-gray-700 text-sm">Hasil bisa disimpan dan digunakan ulang!</p>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// Struktur Dasar Return</span><br><span class="keyword">function</span> <span class="function">namaFunction</span>() {<br><span class="comment">&nbsp;&nbsp;&nbsp;// Kode</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="string">"Nilai yang dikembalikan"</span>;<br>}<br><span class="keyword">let</span> hasil = <span class="function">namaFunction</span>();<br><span class="keyword">console</span>.<span class="function">log</span>(hasil);
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-pink-50 to-rose-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-rose-700 mb-3">🧮 Contoh 1: Return dengan Perhitungan</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">hitungDiskon</span>(<span class="parameter">harga</span>, <span class="parameter">diskon</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> potongan = harga * (diskon / <span class="number">100</span>);<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> hargaAkhir = harga - potongan;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> hargaAkhir;<br>}<br><span class="keyword">let</span> totalBayar = <span class="function">hitungDiskon</span>(<span class="number">100000</span>, <span class="number">20</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(<span class="string">`Harga akhir: Rp ${totalBayar}`</span>);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-cyan-700 mb-3">📊 Contoh 2: Return dengan Kondisi</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">cekNilai</span>(<span class="parameter">nilai</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;if</span> (nilai &gt;= <span class="number">80</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="string">"A - Sangat Baik 🌟"</span>;<br>&nbsp;&nbsp;&nbsp;&nbsp;}<span class="keyword">else if</span> (nilai &gt;= <span class="number">70</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="string">"B - Baik 👍"</span>;<br>&nbsp;&nbsp;&nbsp;&nbsp;}<span class="keyword">else</span> {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return</span> <span class="string">"C - Cukup 📚"</span>;<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>}<br> <span class="keyword">let</span> grade = <span class="function">cekNilai</span>(<span class="number">85</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(grade);
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">🎁 Contoh 3: Return Array/Object</h4>
+         <div class="code-box mb-4"><span class="keyword">function</span> <span class="function">buatKarakter</span>(<span class="parameter">nama</span>, <span class="parameter">level</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nama: nama,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level: level,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exp: level * <span class="number">100</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hp: level * <span class="number">50</span><br>&nbsp;&nbsp;&nbsp;&nbsp;};<br>}<br><span class="keyword">let</span> hero = <span class="function">buatKarakter</span>(<span class="string">"Andi"</span>, <span class="number">10</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(hero.hp);<br><span class="comment">// 500</span>
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Kalkulator dengan Return!</h4>
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+         <div><label class="block font-bold text-gray-700 mb-2">Angka 1:</label> <input type="number" id="num1" class="input-field" value="10">
+         </div>
+         <div><label class="block font-bold text-gray-700 mb-2">Angka 2:</label> <input type="number" id="num2" class="input-field" value="5">
+         </div>
+         <div><label class="block font-bold text-gray-700 mb-2">Operasi:</label> <select id="operation" class="input-field"> <option value="add">+ Tambah</option> <option value="subtract">- Kurang</option> <option value="multiply">× Kali</option> <option value="divide">÷ Bagi</option> </select>
+         </div>
+        </div><button onclick="demoReturn()" class="w-full btn-primary py-4 text-lg font-bold mb-4"> 🧮 Hitung dengan Return! </button>
+        <div id="return-output" class="demo-output">
+         <p class="text-xl font-bold">Masukkan angka dan operasi! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('return', 'arrow')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Arrow Function ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 5: Arrow Function -->
+     <div id="content-arrow" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">⚡ Arrow Function</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">🚀 Cara Penulisan Ringkas</h3>
+        <p class="text-lg text-gray-800 mb-4"><strong>Arrow Function</strong> adalah cara penulisan function yang lebih singkat dan modern (ES6+). Menggunakan simbol <strong>=&gt;</strong> (panah) untuk merepresentasikan function. Sama saja hasilnya, tapi penulisannya lebih elegant! ✨</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-orange-50 p-6 rounded-2xl border-l-6 border-orange-500">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">📝 Regular Function:</h4>
+         <div class="code-box text-sm"><span class="keyword">function</span> <span class="function">tambah</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> a + b;<br>}<br><span class="function">tambah</span>(<span class="number">5</span>, <span class="number">3</span>);
+         </div>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">⚡ Arrow Function:</h4>
+         <div class="code-box text-sm"><span class="keyword">const</span> <span class="function">tambah</span> = (<span class="parameter">a</span>, <span class="parameter">b</span>) =&gt; {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span> a + b;<br>};<br><span class="function">tambah</span>(<span class="number">5</span>, <span class="number">3</span>);
+         </div>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// Berbagai bentuk Arrow Function:</span><br><span class="comment">// 1. Dengan satu parameter (bisa tanpa kurung)</span><br><span class="keyword">const</span> <span class="function">kuadrat</span> = <span class="parameter">x</span> =&gt; x * x;<br><span class="comment">// 2. Dengan dua parameter</span><br><span class="keyword">const</span> <span class="function">kali</span> = (<span class="parameter">a</span>, <span class="parameter">b</span>) =&gt; a * b;<br><span class="comment">// 3. Implicit return (satu baris)</span><br><span class="keyword">const</span> <span class="function">sapa</span> = <span class="parameter">nama</span> =&gt; <span class="string">`Halo ${nama}!`</span>;<br><span class="comment">// 4. Explicit return (lebih dari satu baris)</span><br><span class="keyword">const</span> <span class="function">prosesData</span> = (<span class="parameter">data</span>) =&gt; {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> hasil = data * <span class="number">2</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span>hasil;<br>};
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-pink-50 to-rose-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-rose-700 mb-3">💪 Contoh 1: Arrow Function Sederhana</h4>
+         <div class="code-box mb-4"><span class="keyword">const</span> <span class="function">luasKotak</span> = <span class="parameter">sisi</span> =&gt; sisi * sisi;<br><span class="keyword">console</span>.<span class="function">log</span>(<span class="function">luasKotak</span>(<span class="number">5</span>));<br><span class="comment">// 25</span><br><span class="keyword">console</span>.<span class="function">log</span>(<span class="function">luasKotak</span>(<span class="number">10</span>));<br><span class="comment">// 100</span><br><span class="comment">// Jauh lebih ringkas daripada penulisan regular function!</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-cyan-700 mb-3">🎮 Contoh 2: Arrow Function dengan Filter</h4>
+         <div class="code-box mb-4"><span class="keyword">const</span> angka = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];<br><span class="comment">// Ambil hanya angka genap</span><br><span class="keyword">const</span> <span class="function">genap</span> = angka.<span class="function">filter</span>(<span class="parameter">n</span> =&gt; n % <span class="number">2</span> === <span class="number">0</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(genap);<br><span class="comment">// output [2, 4, 6]</span><br><span class="comment">// Kalikan semua dengan 2</span><br><span class="keyword">const</span> <span class="function">kaliDua</span> = angka.<span class="function">map</span>(<span class="parameter">n</span> =&gt; n * <span class="number">2</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(kaliDua);<br><span class="comment">// output : [2, 4, 6, 8, 10, 12]</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">🌟 Contoh 3: Arrow Function dengan Object</h4>
+         <div class="code-box mb-4"><span class="keyword">const</span> <span class="function">buatMenu</span> = (<span class="parameter">nama</span>, <span class="parameter">harga</span>) =&gt; ({<br>&nbsp;&nbsp;&nbsp;&nbsp;nama: nama,<br>&nbsp;&nbsp;&nbsp;&nbsp;harga: harga,<br>&nbsp;&nbsp;&nbsp;&nbsp;kategori: <span class="string">"Menu Utama"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;diskon: harga * <span class="number">0.1</span><br> });<br><span class="keyword">let</span> menu1 = <span class="function">buatMenu</span>(<span class="string">"Nasi Goreng"</span>, <span class="number">50000</span>);<br><span class="keyword">console</span>.<span class="function">log</span>(menu1);
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Arrow Function Converter</h4>
+        <p class="text-gray-700 mb-4">Lihat perbandingan Regular Function dan Arrow Function:</p>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoArrow('temperature')" class="btn-primary py-4 font-bold"> 🌡️ Konversi Suhu </button> <button onclick="demoArrow('discount')" class="btn-primary py-4 font-bold"> 💰 Hitung Diskon </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoArrow('greet')" class="btn-primary py-4 font-bold"> 👋 Sapaan Greeting </button> <button onclick="demoArrow('filter')" class="btn-primary py-4 font-bold"> 🔍 Filter Bilangan </button>
+        </div>
+        <div id="arrow-output" class="demo-output">
+         <p class="text-xl font-bold">Pilih demo untuk melihat perbedaannya! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('arrow', 'scope')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Scope ➡️ </button>
+       </div>
+      </div>
+     </div><!-- Tab 6: Scope & Variable -->
+     <div id="content-scope" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🔍 Scope &amp; Variable</h2>
+       <div class="concept-box mb-6">
+        <h3 class="text-2xl font-bold mb-4">📍 Apa itu Scope?</h3>
+        <p class="text-lg text-gray-800 mb-4"><strong>Scope</strong> adalah area atau "jangkauan" di mana sebuah variabel bisa diakses. Ada 3 jenis scope: Global, Function, dan Block scope.</p>
+       </div>
+       <div class="grid md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-red-50 p-6 rounded-2xl border-l-6 border-red-500">
+         <h4 class="text-xl font-bold text-red-700 mb-3">🌍 Global Scope</h4>
+         <p class="text-gray-800 text-sm mb-3">Variabel bisa diakses di mana saja dalam kode</p>
+         <div class="code-box text-xs"><span class="keyword">let</span> nama = <span class="string">"Andi"</span>;<br><span class="keyword">function</span> <span class="function">test</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(nama);<br>}
+         </div>
+        </div>
+        <div class="bg-blue-50 p-6 rounded-2xl border-l-6 border-blue-500">
+         <h4 class="text-xl font-bold text-blue-700 mb-3">🎯 Function Scope</h4>
+         <p class="text-gray-800 text-sm mb-3">Variabel hanya bisa diakses dalam function tertentu</p>
+         <div class="code-box text-xs"><span class="keyword">function</span> <span class="function">test</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> nama = <span class="string">"Budi"</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(nama);<br>}<br><span class="comment">// nama tidak bisa diakses di sini</span>
+         </div>
+        </div>
+        <div class="bg-green-50 p-6 rounded-2xl border-l-6 border-green-500">
+         <h4 class="text-xl font-bold text-green-700 mb-3">📦 Block Scope</h4>
+         <p class="text-gray-800 text-sm mb-3">Variabel hanya dalam blok {} (if, loop, dsb)</p>
+         <div class="code-box text-xs"><span class="keyword">if</span> (<span class="keyword">true</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> x = <span class="number">5</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(x);<br>}<br><span class="comment">// x tidak bisa diakses di sini</span>
+         </div>
+        </div>
+       </div>
+       <div class="code-box mb-6"><span class="comment">// ========== GLOBAL SCOPE ==========</span><br><span class="keyword">let</span> nilaiGlobal = <span class="number">100</span>;<br><span class="keyword">function</span> <span class="function">fungsiA</span>() {<br><span class="comment">&nbsp;&nbsp;&nbsp;// ========== FUNCTION SCOPE ==========</span> <br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> nilaiFungsi = <span class="number">50</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(nilaiGlobal);<br><span class="comment">&nbsp;&nbsp;&nbsp;// ✅ Bisa (karena global)</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(nilaiFungsi);<br><span class="comment">&nbsp;&nbsp;&nbsp;// ✅ Bisa (function scope)</span><br>}<br><span class="function">fungsiA</span>();<br><span class="keyword">console</span>.<span class="function">log</span>(nilaiGlobal);<br><span class="comment">// ✅ Bisa (karena global)</span><br><span class="keyword">console</span>.<span class="function">log</span>(nilaiFungsi);<br><span class="comment">// ❌ Error! (karena function scope)</span>
+       </div>
+       <div class="space-y-6 mb-6">
+        <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-purple-700 mb-3">📚 Contoh 1: let vs var vs const</h4>
+         <div class="code-box mb-4"><span class="keyword">let</span> x = <span class="number">5</span>;<br><span class="comment">// Block scope (modern)</span><br><span class="keyword">var</span> y = <span class="number">10</span>;<br><span class="comment">// Function scope (lama, hindari)</span><br><span class="keyword">const</span> z = <span class="number">15</span>;<br><span class="comment">// Constant (tidak bisa diubah)</span><br><span class="keyword">if</span> (<span class="keyword">true</span>) {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> x = <span class="number">100</span>;<br><span class="comment">&nbsp;&nbsp;&nbsp;// Variable baru dalam block ini</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(x);<br><span class="comment">&nbsp;&nbsp;&nbsp;// 100</span><br>}<br><span class="keyword">console</span>.<span class="function">log</span>(x);<br><span class="comment">// 5 (x luar tidak berubah)</span>
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-cyan-700 mb-3">🎮 Contoh 2: Nested Function Scope</h4>
+         <div class="code-box mb-4"><span class="keyword">let</span> global = <span class="string">"Saya global"</span>;<br><span class="keyword">function</span> <span class="function">outer</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> outer_var = <span class="string">"Dari outer"</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;function</span> <span class="function">inner</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let</span> inner_var = <span class="string">"Dari inner"</span>;<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(global);<br><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// ✅ Bisa</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(outer_var);<br><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// ✅ Bisa</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(inner_var);<br><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// ✅ Bisa</span><br>&nbsp;&nbsp;&nbsp;&nbsp;}<br><span class="function">&nbsp;&nbsp;&nbsp;&nbsp;inner</span>();<br>}<br><span class="function">outer</span>();
+         </div>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-2xl">
+         <h4 class="text-xl font-bold text-orange-700 mb-3">⚠️ Contoh 3: Variable Shadowing</h4>
+         <div class="code-box mb-4"><span class="keyword">let</span> nilai = <span class="number">10</span>;<br><span class="keyword">function</span> <span class="function">ubahNilai</span>() {<br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;let</span> nilai = <span class="number">20</span>;<br><span class="comment">&nbsp;&nbsp;&nbsp;// Nama sama, scope berbeda</span><br><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;console</span>.<span class="function">log</span>(<span class="string">"Dalam function:"</span>, nilai);<br><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;// 20</span><br>}<br><span class="function">ubahNilai</span>();<br><span class="keyword">console</span>.<span class="function">log</span>(<span class="string">"Luar function:"</span>, nilai);<br><span class="comment">// 10 (tidak berubah!)</span>
+         </div>
+        </div>
+       </div>
+       <div class="interactive-section mb-6">
+        <h4 class="text-2xl font-bold mb-4">🎮 Demo: Scope Visualizer</h4>
+        <p class="text-gray-700 mb-4">Pilih scenario untuk melihat bagaimana scope bekerja:</p>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoScope('global')" class="btn-primary py-4 font-bold"> 🌍 Global Scope </button> <button onclick="demoScope('function')" class="btn-primary py-4 font-bold"> 🎯 Function Scope </button>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-4"><button onclick="demoScope('block')" class="btn-primary py-4 font-bold"> 📦 Block Scope </button> <button onclick="demoScope('nested')" class="btn-primary py-4 font-bold"> 🔗 Nested Function </button>
+        </div>
+        <div id="scope-output" class="demo-output">
+         <p class="text-xl font-bold">Pilih scenario untuk melihat scope bekerja! 🎯</p>
+        </div>
+       </div>
+       <div class="text-center"><button onclick="nextTab('scope', 'practice')" class="btn-primary px-8 py-4 text-lg font-bold"> Lanjut ke Challenge 🏆 </button>
+       </div>
+      </div>
+     </div><!-- Tab 7: Challenge -->
+     <div id="content-practice" class="tab-content hidden">
+      <div class="card p-8 mb-6">
+       <h2 class="text-4xl font-bold text-purple-700 mb-6">🏆 Challenge Interaktif</h2>
+       <div class="space-y-6 mb-6"><!-- Challenge 1 -->
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-blue-700">💸 Challenge 1: Hitung Total Belanja</h4><span class="badge badge-easy">Mudah</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat function yang menghitung total belanja dengan diskon otomatis!</p>
+         <div class="grid md:grid-cols-3 gap-4 mb-4">
+          <div><label class="block font-bold text-gray-700 mb-2">Harga Item:</label> <input type="number" id="ch1-price" class="input-field" value="50000" min="0" step="1000">
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Jumlah:</label> <input type="number" id="ch1-qty" class="input-field" value="2" min="1">
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Diskon (%):</label> <input type="number" id="ch1-disc" class="input-field" value="10" min="0" max="100">
+          </div>
+         </div><button onclick="challenge1()" class="w-full btn-primary py-4 font-bold text-lg mb-4"> 💰 Hitung Total! </button>
+         <div id="ch1-output" class="demo-output hidden">
+          <div id="ch1-result" class="result-item"></div>
+         </div>
+        </div><!-- Challenge 2 -->
+        <div class="bg-gradient-to-br from-pink-50 to-rose-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-pink-700">🎓 Challenge 2: Grade Calculator</h4><span class="badge badge-medium">Sedang</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat function yang mengkonversi nilai angka menjadi grade (A, B, C, D)!</p>
+         <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div><label class="block font-bold text-gray-700 mb-2">Nama Siswa:</label> <input type="text" id="ch2-name" class="input-field" placeholder="Nama siswa" value="Andi">
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Nilai (0-100):</label> <input type="number" id="ch2-score" class="input-field" value="75" min="0" max="100">
+          </div>
+         </div><button onclick="challenge2()" class="w-full btn-primary py-4 font-bold text-lg mb-4"> 📊 Cari Grade! </button>
+         <div id="ch2-output" class="demo-output hidden">
+          <div id="ch2-result" class="result-item"></div>
+         </div>
+        </div><!-- Challenge 3 -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-green-700">🎮 Challenge 3: Filter Array</h4><span class="badge badge-medium">Sedang</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat arrow function yang memfilter bilangan genap dari sebuah array!</p>
+         <div class="mb-4"><label class="block font-bold text-gray-700 mb-2">Masukkan bilangan (pisahkan dengan koma):</label> <input type="text" id="ch3-numbers" class="input-field" placeholder="Contoh: 1,2,3,4,5,6,7,8,9,10" value="1,2,3,4,5,6,7,8,9,10">
+         </div><button onclick="challenge3()" class="w-full btn-primary py-4 font-bold text-lg mb-4"> 🔍 Filter Bilangan! </button>
+         <div id="ch3-output" class="demo-output hidden">
+          <div id="ch3-result" class="result-item"></div>
+         </div>
+        </div><!-- Challenge 4 -->
+        <div class="bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+          <h4 class="text-2xl font-bold text-purple-700">🌟 Challenge 4: Karakter Generator</h4><span class="badge badge-hard">Sulit</span>
+         </div>
+         <p class="text-gray-700 mb-4">Buat function lengkap yang membuat object karakter game dengan stats otomatis!</p>
+         <div class="grid md:grid-cols-3 gap-4 mb-4">
+          <div><label class="block font-bold text-gray-700 mb-2">Nama Karakter:</label> <input type="text" id="ch4-name" class="input-field" value="Hero">
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Level (1-99):</label> <input type="number" id="ch4-level" class="input-field" value="5" min="1" max="99">
+          </div>
+          <div><label class="block font-bold text-gray-700 mb-2">Tipe Kelas:</label> <select id="ch4-class" class="input-field"> <option value="warrior">🛡️ Warrior</option> <option value="mage">🔮 Mage</option> <option value="archer">🏹 Archer</option> </select>
+          </div>
+         </div><button onclick="challenge4()" class="w-full btn-primary py-4 font-bold text-lg mb-4"> 🎮 Generate Karakter! </button>
+         <div id="ch4-output" class="demo-output hidden">
+          <div id="ch4-result" class="result-item"></div>
+         </div>
+        </div>
+       </div>
+       <div class="bg-gradient-to-r from-yellow-100 to-orange-100 p-8 rounded-2xl border-4 border-yellow-400">
+        <h3 class="text-3xl font-bold text-center text-orange-700 mb-4">🎉 Selamat! 🎉</h3>
+        <p class="text-center text-gray-800 text-lg mb-6">Kamu sudah menyelesaikan semua materi tentang <strong>JavaScript Functions!</strong> 🚀</p>
+        <div class="grid md:grid-cols-2 gap-4 text-gray-800 text-center">
+         <div>
+          <h4 class="font-bold text-lg mb-2">✅ Yang Sudah Dipelajari:</h4>
+          <ul class="text-sm space-y-1">
+           <li>📝 Dasar-dasar Function</li>
+           <li>📥 Parameters &amp; Arguments</li>
+           <li>📤 Return Value</li>
+           <li>⚡ Arrow Function</li>
+           <li>🔍 Scope &amp; Variable</li>
+          </ul>
+         </div>
+         <div>
+          <h4 class="font-bold text-lg mb-2">🚀 Langkah Selanjutnya:</h4>
+          <ul class="text-sm space-y-1">
+           <li>🎮 Pelajari DOM Manipulation</li>
+           <li>📚 Explore Array Methods</li>
+           <li>🔄 Learn Async/Await</li>
+           <li>🛠️ Build Real Projects</li>
+           <li>🏆 Join Challenge Coding</li>
+          </ul>
+         </div>
+        </div>
+       </div>
+       <div class="text-center mt-8">
+        <p class="text-white text-lg mb-4">Bagikan pencapaianmu! 🌟</p><button onclick="resetAllChallenges()" class="btn-secondary px-8 py-4 text-lg font-bold"> 🔄 Coba Lagi Challenge </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Footer -->
+   <footer class="w-full bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 text-white py-8 mt-12">
+    <div class="max-w-6xl mx-auto px-4">
+     <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <div class="text-center md:text-left">
+        <a href="index.html" class="inline-flex items-center gap-2 btn-secondary px-8 py-4 text-lg font-bold hover:shadow-lg transition-all"> ← Kembali ke Halaman Sebelumnya </a>
+      </div>
+      <div class="text-center md:text-right">
+       <p class="text-lg font-bold">📚 Media Pembelajaran JavaScript Functions</p>
+       <p class="text-sm opacity-80">Dibuat untuk Kelas XI Pemrograman Web</p>
+      </div>
+     </div>
+     <div class="border-t border-white border-opacity-20 pt-6 text-center">
+      <p class="text-sm opacity-70">© 2026 <strong>RSensei</strong> - Belajar Coding Jadi Menyenangkan! 🚀</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+        const defaultConfig = {
+            main_title: "🎮 JavaScript Functions",
+            subtitle: "Pelajari Cara Membuat Kode yang Lebih Rapi & Efisien! 💪",
+            intro_text: "Function adalah blok kode yang dapat digunakan kembali (reusable). Bayangkan seperti mesin otomatis yang siap menerima input dan memberikan output!"
+        };
+
+        let completedSections = new Set();
+
+        async function onConfigChange(config) {
+            document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+            document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+        }
+
+        function toggleMobileNav() {
+            const dropdown = document.getElementById('mobile-nav-dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function navItemClick(tabName, label) {
+            toggleMobileNav();
+            showTab(tabName);
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('mobile-nav-dropdown').classList.remove('active');
+            
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            const tabButton = document.getElementById('tab-' + tabName);
+            if (tabButton) {
+                tabButton.classList.add('tab-active');
+            }
+        }
+
+        function nextTab(current, next) {
+            completedSections.add(current);
+            updateProgress();
+            showTab(next);
+        }
+
+        function updateProgress() {
+            const total = 7;
+            const completed = completedSections.size;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `Progress: ${completed}/${total} Materi ✨`;
+        }
+
+        // Demo Functions
+        function demoIntro() {
+            const output = document.getElementById('intro-output');
+            output.innerHTML = `
+                <div class="result-item bg-green-500 text-white text-lg font-bold animate-bounce">
+                    👋 Halo! Aku adalah Function Pertamamu!
+                </div>
+                <div class="result-item bg-blue-500 text-white text-lg font-bold animate-bounce" style="animation-delay: 0.1s">
+                    🚀 Aku siap membantu mempermudah kodingmu!
+                </div>
+            `;
+        }
+
+        function demoBasic(type) {
+            const output = document.getElementById('basic-output');
+            output.innerHTML = '';
+
+            if (type === 'greeting') {
+                const items = ['Halo! 👋', 'Apa kabar? 😊', 'Senang bertemu denganmu! 🤝', 'Mari belajar programming! 💻'];
+                items.forEach((item, i) => {
+                    setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = 'result-item bg-green-500 text-white';
+                        div.textContent = item;
+                        output.appendChild(div);
+                    }, i * 300);
+                });
+            } else if (type === 'math') {
+                const results = [
+                    '2 + 3 = 5 ✅',
+                    '10 × 5 = 50 ✅',
+                    '100 ÷ 4 = 25 ✅',
+                    '9² = 81 ✅'
+                ];
+                results.forEach((result, i) => {
+                    setTimeout(() => {
+                        const div = document.createElement('div');
+                        div.className = 'result-item bg-blue-500 text-white';
+                        div.textContent = result;
+                        output.appendChild(div);
+                    }, i * 300);
+                });
+            } else if (type === 'random') {
+                const random1 = Math.floor(Math.random() * 100) + 1;
+                const random2 = Math.floor(Math.random() * 100) + 1;
+                output.innerHTML = `
+                    <div class="result-item bg-purple-500 text-white text-xl">
+                        🎲 Angka Random 1: ${random1}
+                    </div>
+                    <div class="result-item bg-purple-500 text-white text-xl">
+                        🎲 Angka Random 2: ${random2}
+                    </div>
+                    <div class="result-item bg-pink-500 text-white text-xl">
+                        ➕ Total: ${random1 + random2}
+                    </div>
+                `;
+            }
+        }
+
+        function demoParameters() {
+            const name = document.getElementById('char-name').value || 'Karakter';
+            const level = parseInt(document.getElementById('char-level').value) || 1;
+            const charClass = document.getElementById('char-class').value || 'Warrior';
+            const output = document.getElementById('parameters-output');
+
+            const hp = level * 30;
+            const attack = level * 5;
+            const defense = level * 3;
+
+            output.innerHTML = `
+                <div class="result-item bg-yellow-500 text-white text-center">
+                    <div class="text-2xl font-bold">⚔️ ${name}</div>
+                    <div class="text-lg">Level ${level} - ${charClass}</div>
+                </div>
+                <div class="result-item bg-green-500 text-white">
+                    ❤️ HP: ${hp}
+                </div>
+                <div class="result-item bg-orange-500 text-white">
+                    ⚡ Attack: ${attack}
+                </div>
+                <div class="result-item bg-blue-500 text-white">
+                    🛡️ Defense: ${defense}
+                </div>
+            `;
+        }
+
+        function demoReturn() {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            const op = document.getElementById('operation').value;
+            const output = document.getElementById('return-output');
+
+            let result, symbol;
+            if (op === 'add') { result = num1 + num2; symbol = '+'; }
+            else if (op === 'subtract') { result = num1 - num2; symbol = '-'; }
+            else if (op === 'multiply') { result = num1 * num2; symbol = '×'; }
+            else if (op === 'divide') { result = num2 !== 0 ? num1 / num2 : 'Error: Dibagi 0!'; symbol = '÷'; }
+
+            output.innerHTML = `
+                <div class="result-item bg-blue-500 text-white text-center text-xl">
+                    ${num1} ${symbol} ${num2}
+                </div>
+                <div class="result-item bg-green-500 text-white text-center text-2xl">
+                    ✅ Hasil: ${result}
+                </div>
+            `;
+        }
+
+        function demoArrow(type) {
+            const output = document.getElementById('arrow-output');
+            output.innerHTML = '';
+
+            if (type === 'temperature') {
+                output.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <div class="result-item bg-red-500 text-white mb-3">
+                            📝 Regular Function:<br>
+                            function celsiusKeF(c) {<br>&nbsp;&nbsp;return (c × 9/5) + 32;<br>}
+                        </div>
+                        <div class="result-item bg-green-500 text-white mb-3">
+                            ⚡ Arrow Function:<br>
+                            const celsiusKeF = c => (c × 9/5) + 32;
+                        </div>
+                        <div class="result-item bg-yellow-500 text-white">
+                            🌡️ Hasil: 25°C = ${((25 * 9/5) + 32).toFixed(1)}°F
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'discount') {
+                output.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <div class="result-item bg-blue-600 text-white mb-2">
+                            💰 Arrow: const discount = (p, d) => p * (d/100);
+                        </div>
+                        <div class="result-item bg-yellow-500 text-white">
+                            Diskon 20% dari Rp 100.000 = Rp ${100000 * 0.2}
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'greet') {
+                output.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <div class="result-item bg-green-600 text-white mb-2">
+                            👋 Arrow: const sapa = name => \`Halo \${name}!\`;
+                        </div>
+                        <div class="result-item bg-blue-500 text-white">
+                            ${['Andi', 'Budi', 'Citra'].map(n => `👋 Halo ${n}!`).join('<br>')}
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'filter') {
+                const angka = [1,2,3,4,5,6,7,8,9,10];
+                const genap = angka.filter(n => n % 2 === 0);
+                output.innerHTML = `
+                    <div style="text-align: left; width: 100%;">
+                        <div class="result-item bg-purple-600 text-white mb-2">
+                            🔍 Arrow: array.filter(n => n % 2 === 0)
+                        </div>
+                        <div class="result-item bg-green-500 text-white">
+                            🔢 Bilangan Genap: ${genap.join(', ')}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function demoScope(type) {
+            const output = document.getElementById('scope-output');
+            output.innerHTML = '';
+
+            if (type === 'global') {
+                output.innerHTML = `
+                    <div class="result-item bg-blue-600 text-white mb-2">
+                        let global = "Saya bisa diakses dimana saja";
+                    </div>
+                    <div class="result-item bg-green-500 text-white">
+                        ✅ Accessible di function
+                    </div>
+                    <div class="result-item bg-green-500 text-white">
+                        ✅ Accessible di luar function
+                    </div>
+                `;
+            } else if (type === 'function') {
+                output.innerHTML = `
+                    <div class="result-item bg-purple-600 text-white mb-2">
+                        let x = 10;<br>
+                        function test() {<br>&nbsp;&nbsp;let y = 20;<br>&nbsp;&nbsp;console.log(y);<br>}
+                    </div>
+                    <div class="result-item bg-green-500 text-white">
+                        ✅ Bisa akses y dalam function
+                    </div>
+                    <div class="result-item bg-red-500 text-white">
+                        ❌ Tidak bisa akses y di luar function
+                    </div>
+                `;
+            } else if (type === 'block') {
+                output.innerHTML = `
+                    <div class="result-item bg-orange-600 text-white mb-2">
+                        if (true) {<br>&nbsp;&nbsp;let z = 30;<br>}<br>
+                        console.log(z);
+                    </div>
+                    <div class="result-item bg-red-500 text-white">
+                        ❌ Z hanya ada dalam block if
+                    </div>
+                    <div class="result-item bg-yellow-500 text-white">
+                        💡 Gunakan let/const, bukan var!
+                    </div>
+                `;
+            } else if (type === 'nested') {
+                output.innerHTML = `
+                    <div class="result-item bg-green-600 text-white mb-2">
+                        ✅ Inner function bisa akses outer variable
+                    </div>
+                    <div class="result-item bg-blue-500 text-white mb-2">
+                        let global = 1;
+                    </div>
+                    <div class="result-item bg-purple-500 text-white mb-2">
+                        function outer() {<br>&nbsp;&nbsp;let outer_var = 2;
+                    </div>
+                    <div class="result-item bg-orange-500 text-white">
+                        function inner() { ... }
+                    </div>
+                `;
+            }
+        }
+
+        // Challenge Functions
+        function challenge1() {
+            const price = parseFloat(document.getElementById('ch1-price').value) || 0;
+            const qty = parseInt(document.getElementById('ch1-qty').value) || 1;
+            const disc = parseInt(document.getElementById('ch1-disc').value) || 0;
+
+            const subtotal = price * qty;
+            const discount = subtotal * (disc / 100);
+            const total = subtotal - discount;
+
+            const output = document.getElementById('ch1-output');
+            const result = document.getElementById('ch1-result');
+
+            result.innerHTML = `
+                <strong>Subtotal:</strong> Rp ${subtotal.toLocaleString()}<br>
+                <strong>Diskon ${disc}%:</strong> -Rp ${discount.toLocaleString()}<br>
+                <strong style="color: #2ecc71; font-size: 1.2em;">TOTAL: Rp ${total.toLocaleString()}</strong>
+            `;
+            output.classList.remove('hidden');
+        }
+
+        function challenge2() {
+            const name = document.getElementById('ch2-name').value || 'Siswa';
+            const score = parseInt(document.getElementById('ch2-score').value) || 0;
+
+            let grade, emoji;
+            if (score >= 90) { grade = 'A'; emoji = '⭐'; }
+            else if (score >= 80) { grade = 'B'; emoji = '👍'; }
+            else if (score >= 70) { grade = 'C'; emoji = '📚'; }
+            else if (score >= 60) { grade = 'D'; emoji = '⚠️'; }
+            else { grade = 'E'; emoji = '❌'; }
+
+            const output = document.getElementById('ch2-output');
+            const result = document.getElementById('ch2-result');
+
+            result.innerHTML = `
+                <strong>${name}</strong><br>
+                Nilai: ${score}<br>
+                <strong style="font-size: 1.5em; color: #3498db;">Grade: ${emoji} ${grade}</strong>
+            `;
+            output.classList.remove('hidden');
+        }
+
+        function challenge3() {
+            const input = document.getElementById('ch3-numbers').value;
+            const numbers = input.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+            
+            const genap = numbers.filter(n => n % 2 === 0);
+
+            const output = document.getElementById('ch3-output');
+            const result = document.getElementById('ch3-result');
+
+            result.innerHTML = `
+                <strong>Input:</strong> [${numbers.join(', ')}]<br>
+                <strong>Bilangan Genap:</strong> [${genap.join(', ')}]<br>
+                <strong style="color: #2ecc71; font-size: 1.2em;">Total Genap: ${genap.length}</strong>
+            `;
+            output.classList.remove('hidden');
+        }
+
+        function challenge4() {
+            const name = document.getElementById('ch4-name').value || 'Hero';
+            const level = parseInt(document.getElementById('ch4-level').value) || 1;
+            const charClass = document.getElementById('ch4-class').value;
+
+            let baseHP, baseATK, baseDEF, classEmoji;
+            if (charClass === 'warrior') {
+                baseHP = 100; baseATK = 10; baseDEF = 15; classEmoji = '🛡️';
+            } else if (charClass === 'mage') {
+                baseHP = 60; baseATK = 20; baseDEF = 5; classEmoji = '🔮';
+            } else {
+                baseHP = 80; baseATK = 18; baseDEF = 8; classEmoji = '🏹';
+            }
+
+            const character = {
+                nama: name,
+                level: level,
+                kelas: charClass,
+                hp: baseHP + (level * 10),
+                attack: baseATK + (level * 2),
+                defense: baseDEF + (level * 1),
+                exp: level * 100,
+                gold: level * 50
+            };
+
+            const output = document.getElementById('ch4-output');
+            const result = document.getElementById('ch4-result');
+
+            result.innerHTML = `
+                <div style="text-align: center;">
+                    <strong style="font-size: 1.5em;">${classEmoji} ${character.nama}</strong><br>
+                    <strong>Level ${character.level} ${character.kelas}</strong><br>
+                    <br>
+                    ❤️ HP: ${character.hp}<br>
+                    ⚡ Attack: ${character.attack}<br>
+                    🛡️ Defense: ${character.defense}<br>
+                    💎 EXP: ${character.exp}<br>
+                    💰 Gold: ${character.gold}
+                </div>
+            `;
+            output.classList.remove('hidden');
+        }
+
+        function resetAllChallenges() {
+            document.querySelectorAll('[id^="ch"][id$="-output"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            alert('Semua challenge direset! Silakan coba lagi! 🎮');
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities: () => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["main_title", config.main_title || defaultConfig.main_title],
+                    ["subtitle", config.subtitle || defaultConfig.subtitle]
+                ])
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ccb335620c0fd1b',t:'MTc3MDg5MDAyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
