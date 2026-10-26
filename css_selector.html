@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran CSS: Grouping Selector & Target Elemen</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        /* Custom scrollbar for playground */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Target Highlight Animation in Sandbox */
+        .targeted-element {
+            outline: 3px solid #f59e0b !important;
+            outline-offset: 2px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5) !important;
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 glass-nav border-b border-slate-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-amber-500 to-orange-600 text-slate-950 p-2 rounded-xl font-bold shadow-md shadow-amber-500/20">
+                    <i class="fa-solid fa-bullseye text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block">Pemrograman Web · CSS Lanjutan</span>
+                    <h1 class="text-base font-bold text-white leading-none sm:text-lg">Grouping Selector & Target Elemen</h1>
+                </div>
+            </div>
+            
+            <!-- Quick Navigation Desktop -->
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
+                <a href="#materi" class="hover:text-amber-400 transition">Konsep Selector</a>
+                <a href="#playground" class="hover:text-amber-400 transition">Interactive Playground</a>
+                <a href="#video" class="hover:text-amber-400 transition">Video Pembelajaran</a>
+                <a href="#kuis" class="hover:text-amber-400 transition">Tantangan Kuis</a>
+            </nav>
+
+            <div>
+                <a href="#playground" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-lg text-sm font-bold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-flask"></i> <span>Coba Sandbox</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 border-b border-slate-800/80 py-12 lg:py-16 overflow-hidden">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center space-x-2 bg-amber-500/10 text-amber-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-4 border border-amber-500/20">
+                <i class="fa-solid fa-code"></i>
+                <span>Efisien & Rapi dalam Penulisan CSS</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                Kuasai <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200">Group Selector</span> & Targeting Elemen
+            </h1>
+            <p class="mt-4 text-base sm:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                Pelajari cara mengelompokkan beberapa elemen sekaligus (Grouping Selector) untuk menghindari duplikasi kode, serta cara menargetkan elemen HTML secara spesifik dan akurat tanpa merusak tata letak elemen lain!
+            </p>
+            
+            <div class="mt-8 flex flex-wrap justify-center gap-3 text-xs sm:text-sm font-medium text-slate-300">
+                <span class="bg-slate-900/80 border border-slate-800 px-3.5 py-2 rounded-xl flex items-center">
+                    <i class="fa-solid fa-layer-group text-amber-400 mr-2"></i> Koma ( , ) = Grouping
+                </span>
+                <span class="bg-slate-900/80 border border-slate-800 px-3.5 py-2 rounded-xl flex items-center">
+                    <i class="fa-solid fa-arrows-split-up-and-left text-sky-400 mr-2"></i> Spasi = Keturunan (Descendant)
+                </span>
+                <span class="bg-slate-900/80 border border-slate-800 px-3.5 py-2 rounded-xl flex items-center">
+                    <i class="fa-solid fa-angle-right text-emerald-400 mr-2"></i> &gt; = Anak Langsung (Direct Child)
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- 1. MATERI KONSEP SELECTOR -->
+        <section id="materi" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/20">1</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Memahami Konsep Target & Grouping</h2>
+                    <p class="text-xs text-slate-400">Bagaimana cara menargetkan elemen dengan tepat dan efisien?</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Grouping Selector -->
+                <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 flex flex-col justify-between hover:border-amber-500/40 transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-amber-500/10 text-amber-400 text-xs font-mono font-bold px-3 py-1 rounded-lg border border-amber-500/20">
+                                h1, h2, .title
+                            </span>
+                            <i class="fa-solid fa-layer-group text-amber-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">1. Grouping Selector (Koma)</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Digunakan untuk memberikan <strong class="text-slate-200">gaya yang sama</strong> pada beberapa elemen sekaligus. Dipisahkan dengan tanda <strong class="text-amber-400 font-mono">koma (,)</strong>. Ini sangat menghemat jumlah baris kode (DRY - Don't Repeat Yourself).
+                        </p>
+                        
+                        <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs">
+                            <span class="text-slate-500">// Sebelum (Boros kode):</span><br>
+                            <span class="text-sky-400">h1</span> { <span class="text-amber-300">color</span>: <span class="text-emerald-400">blue</span>; }<br>
+                            <span class="text-sky-400">h2</span> { <span class="text-amber-300">color</span>: <span class="text-emerald-400">blue</span>; }<br><br>
+                            <span class="text-slate-500">// Sesudah (Group Selector):</span><br>
+                            <span class="text-sky-400">h1, h2</span> { <span class="text-amber-300">color</span>: <span class="text-emerald-400">blue</span>; }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specificity & Combinator -->
+                <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 flex flex-col justify-between hover:border-amber-500/40 transition">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-sky-500/10 text-sky-400 text-xs font-mono font-bold px-3 py-1 rounded-lg border border-sky-500/20">
+                                .card &gt; p.highlight
+                            </span>
+                            <i class="fa-solid fa-crosshair text-sky-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">2. Precision Targeting (Kombinasi)</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Digunakan saat kita ingin menargetkan elemen secara <strong class="text-slate-200">spesifik berdasarkan lokasi/strukturnya</strong> agar elemen lain tidak tidak sengaja terkena dampaknya.
+                        </p>
+                        
+                        <div class="space-y-2 text-xs font-mono">
+                            <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                                <div><span class="text-sky-400">div p</span> <span class="text-slate-500">(Spasi)</span></div>
+                                <span class="text-slate-400 font-sans">Semua &lt;p&gt; di dalam &lt;div&gt; (Keturunan)</span>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                                <div><span class="text-sky-400">div &gt; p</span> <span class="text-slate-500">(&gt;)</span></div>
+                                <span class="text-slate-400 font-sans">Hanya &lt;p&gt; anak langsung dari &lt;div&gt;</span>
+                            </div>
+                            <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                                <div><span class="text-sky-400">h1.judul</span> <span class="text-slate-500">(Tanpa spasi)</span></div>
+                                <span class="text-slate-400 font-sans">Elemen &lt;h1&gt; yang memilik class 'judul'</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. INTERACTIVE CSS PLAYGROUND -->
+        <section id="playground" class="scroll-mt-20">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-2">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/20">2</div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Interactive CSS Selector Playground</h2>
+                        <p class="text-xs text-slate-400">Ketikkan selector CSS di bawah untuk melihat elemen mana yang menjadi target!</p>
+                    </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <span class="text-slate-400 self-center font-semibold">Uji Preset:</span>
+                    <button onclick="applyPreset('h1, h2')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-mono px-2.5 py-1 rounded-md border border-slate-700 transition">h1, h2</button>
+                    <button onclick="applyPreset('.card, .badge')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-mono px-2.5 py-1 rounded-md border border-slate-700 transition">.card, .badge</button>
+                    <button onclick="applyPreset('.box p')" class="bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono px-2.5 py-1 rounded-md border border-slate-700 transition">.box p</button>
+                    <button onclick="applyPreset('#main-header')" class="bg-slate-800 hover:bg-slate-700 text-emerald-300 font-mono px-2.5 py-1 rounded-md border border-slate-700 transition">#main-header</button>
+                    <button onclick="applyPreset('h1, p.highlight')" class="bg-slate-800 hover:bg-slate-700 text-purple-300 font-mono px-2.5 py-1 rounded-md border border-slate-700 transition">h1, p.highlight</button>
+                </div>
+            </div>
+
+            <!-- Playground Sandbox Container -->
+            <div class="grid lg:grid-cols-12 gap-6 bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-6 shadow-2xl">
+                
+                <!-- Left Column: Code Editor Input -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                        <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+                            <span class="text-xs font-mono font-semibold text-slate-400 flex items-center gap-2">
+                                <i class="fa-solid fa-code text-amber-400"></i> CSS Editor Input
+                            </span>
+                            <span id="target-count" class="text-[11px] bg-amber-500/20 text-amber-400 font-semibold px-2 py-0.5 rounded-full">
+                                0 Elemen Terpilih
+                            </span>
+                        </div>
+
+                        <div class="space-y-3 font-mono text-sm">
+                            <div class="relative">
+                                <label for="css-selector-input" class="text-xs text-slate-500 block mb-1">Target Selector:</label>
+                                <input type="text" id="css-selector-input" value="h1, h2" placeholder="Contoh: h1, .card, #header" 
+                                    class="w-full bg-slate-900 text-amber-400 font-bold px-3 py-2.5 rounded-lg border border-amber-500/40 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm transition">
+                            </div>
+
+                            <div class="bg-slate-900 p-3 rounded-lg border border-slate-800/80 text-xs text-slate-400 space-y-1">
+                                <span class="text-slate-300 font-semibold block border-b border-slate-800 pb-1 mb-1">Aturan Style Terpasang:</span>
+                                <div><span class="text-amber-300">outline</span>: <span class="text-emerald-400">3px solid #f59e0b</span>;</div>
+                                <div><span class="text-amber-300">box-shadow</span>: <span class="text-emerald-400">0 0 15px rgba(...)</span>;</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structure DOM Explorer -->
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 text-xs font-mono">
+                        <span class="text-slate-400 font-bold block mb-2 font-sans border-b border-slate-800 pb-1">
+                            <i class="fa-solid fa-sitemap mr-1"></i> Struktur HTML Sandbox Saat Ini:
+                        </span>
+                        <pre class="text-slate-400 overflow-x-auto leading-relaxed">
+&lt;<span class="text-sky-400">header</span> <span class="text-purple-300">id</span>=<span class="text-emerald-300">"main-header"</span>&gt;
+  &lt;<span class="text-sky-400">h1</span>&gt;Judul Utama Web&lt;/<span class="text-sky-400">h1</span>&gt;
+&lt;/<span class="text-sky-400">header</span>&gt;
+
+&lt;<span class="text-sky-400">div</span> <span class="text-purple-300">class</span>=<span class="text-emerald-300">"box"</span>&gt;
+  &lt;<span class="text-sky-400">h2</span>&gt;Sub Judul Pertama&lt;/<span class="text-sky-400">h2</span>&gt;
+  &lt;<span class="text-sky-400">p</span> <span class="text-purple-300">class</span>=<span class="text-emerald-300">"highlight"</span>&gt;Paragraf Penting&lt;/<span class="text-sky-400">p</span>&gt;
+  &lt;<span class="text-sky-400">span</span> <span class="text-purple-300">class</span>=<span class="text-emerald-300">"badge"</span>&gt;Badge 1&lt;/<span class="text-sky-400">span</span>&gt;
+&lt;/<span class="text-sky-400">div</span>&gt;
+
+&lt;<span class="text-sky-400">div</span> <span class="text-purple-300">class</span>=<span class="text-emerald-300">"card"</span>&gt;
+  &lt;<span class="text-sky-400">h2</span>&gt;Sub Judul Kedua&lt;/<span class="text-sky-400">h2</span>&gt;
+  &lt;<span class="text-sky-400">p</span>&gt;Paragraf Biasa&lt;/<span class="text-sky-400">p</span>&gt;
+  &lt;<span class="text-sky-400">span</span> <span class="text-purple-300">class</span>=<span class="text-emerald-300">"badge"</span>&gt;Badge 2&lt;/<span class="text-sky-400">span</span>&gt;
+&lt;/<span class="text-sky-400">div</span>&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Visual Render -->
+                <div class="lg:col-span-7 flex flex-col">
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 flex-1 flex flex-col">
+                        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
+                            <span class="text-xs font-mono font-semibold text-slate-400 flex items-center gap-2">
+                                <i class="fa-solid fa-eye text-emerald-400"></i> Visual Preview (Live Canvas)
+                            </span>
+                            <span class="text-[11px] text-slate-500">Elemen bersinar = Terkena Target CSS</span>
+                        </div>
+
+                        <!-- Live Render Area -->
+                        <div id="sandbox-area" class="bg-slate-900 p-6 rounded-lg border border-slate-800 space-y-6 flex-1 text-slate-200">
+                            
+                            <!-- Header Element -->
+                            <header id="main-header" class="p-4 bg-slate-800/60 rounded-lg border border-slate-700/60 transition-all">
+                                <h1 class="text-xl font-bold text-white transition-all">Judul Utama Web (&lt;h1&gt;)</h1>
+                                <span class="text-[10px] text-slate-400 font-mono block mt-1">id="main-header"</span>
+                            </header>
+
+                            <!-- Div Box -->
+                            <div class="box p-4 bg-slate-800/60 rounded-lg border border-slate-700/60 space-y-2 transition-all">
+                                <div class="text-[10px] text-slate-400 font-mono font-semibold">class="box"</div>
+                                <h2 class="text-base font-bold text-white transition-all">Sub Judul Pertama (&lt;h2&gt;)</h2>
+                                <p class="highlight text-xs text-amber-200/90 p-2 bg-amber-500/10 rounded border border-amber-500/20 transition-all">
+                                    Paragraf Penting (&lt;p class="highlight"&gt;)
+                                </p>
+                                <span class="badge inline-block text-[11px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded transition-all">
+                                    Badge 1 (&lt;span class="badge"&gt;)
+                                </span>
+                            </div>
+
+                            <!-- Div Card -->
+                            <div class="card p-4 bg-slate-800/60 rounded-lg border border-slate-700/60 space-y-2 transition-all">
+                                <div class="text-[10px] text-slate-400 font-mono font-semibold">class="card"</div>
+                                <h2 class="text-base font-bold text-white transition-all">Sub Judul Kedua (&lt;h2&gt;)</h2>
+                                <p class="text-xs text-slate-300 transition-all">
+                                    Paragraf Biasa (&lt;p&gt;)
+                                </p>
+                                <span class="badge inline-block text-[11px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded transition-all">
+                                    Badge 2 (&lt;span class="badge"&gt;)
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. VIDEO PEMBELAJARAN YOUTUBE -->
+        <section id="video" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/20">3</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Video Pembelajaran Pendukung</h2>
+                    <p class="text-xs text-slate-400">Simak penjelasan rinci tentang CSS Selector dari video tutorial YouTube pilihan berikut</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Video 1 -->
+                <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="relative w-full aspect-video bg-slate-950">
+                            <iframe class="absolute top-0 left-0 w-full h-full" 
+                                src="https://www.youtube.com/embed/_ryPm4FGwus" 
+                                title="Tutorial CSS Selector 1" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Materi Video 1</span>
+                            <h3 class="text-lg font-bold text-white mb-2">Konsep Dasar & Pengelompokan CSS Selector</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Pelajari bagaimana struktur dasar penulisan selector CSS dan bagaimana cara menggabungkan beberapa selector dengan efisien.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-0">
+                        <a href="https://youtu.be/_ryPm4FGwus" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-amber-400 transition flex items-center gap-1 font-semibold">
+                            <i class="fa-brands fa-youtube text-red-500 text-sm"></i> Tonton langsung di YouTube
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="relative w-full aspect-video bg-slate-950">
+                            <iframe class="absolute top-0 left-0 w-full h-full" 
+                                src="https://www.youtube.com/embed/PK8LfL39vAw" 
+                                title="Tutorial CSS Selector 2" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[11px] font-bold text-sky-400 uppercase tracking-wider block mb-1">Materi Video 2</span>
+                            <h3 class="text-lg font-bold text-white mb-2">Targeting Elemen Secara Spesifik & Kompleks</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Pelajari teknik spesifisitas selector, penargetan elemen berdasarkan hirarki parent-child, serta pencegahan efek style bentrok.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-0">
+                        <a href="https://youtu.be/PK8LfL39vAw" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-amber-400 transition flex items-center gap-1 font-semibold">
+                            <i class="fa-brands fa-youtube text-red-500 text-sm"></i> Tonton langsung di YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. KUIS MANDIRI INTERAKTIF -->
+        <section id="kuis" class="scroll-mt-20">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-xl">
+                <div class="max-w-3xl">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-lg border border-amber-500/20">4</div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Uji Pemahaman: Tantangan Selector</h2>
+                            <p class="text-xs text-slate-400">Uji seberapa paham kamu mengenai penargetan elemen CSS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mt-6">
+                    <!-- Pertanyaan 1 -->
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <p class="text-sm font-semibold text-slate-200 mb-3">
+                            1. Kamu ingin memberi warna <code class="text-amber-400">red</code> pada tag <code class="text-sky-400">&lt;h1&gt;</code>, <code class="text-sky-400">&lt;h2&gt;</code>, dan elemen dengan class <code class="text-emerald-400">.sub-judul</code>. Penulisan Group Selector CSS yang paling tepat adalah?
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-2 text-xs font-mono">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                A. h1 h2 .sub-judul { color: red; }
+                            </button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                B. h1, h2, .sub-judul { color: red; }
+                            </button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                C. h1 + h2 + .sub-judul { color: red; }
+                            </button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                D. h1 & h2 & .sub-judul { color: red; }
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pertanyaan 2 -->
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <p class="text-sm font-semibold text-slate-200 mb-3">
+                            2. Perhatikan selector ini: <code class="text-amber-400">.container p</code> (dipisahkan spasi). Manakah arti penargetan yang paling tepat?
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-2 text-xs font-mono">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                A. Menargetkan elemen .container DAN tag &lt;p&gt; sekaligus
+                            </button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                B. Menargetkan SEMUA tag &lt;p&gt; yang berada di DALAM .container
+                            </button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                C. Menargetkan elemen .container yang JUGA memiliki tag &lt;p&gt;
+                            </button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-lg border border-slate-800 text-left transition">
+                                D. Menargetkan tag &lt;p&gt; yang berada tepat di samping .container
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-500 border-t border-slate-800 py-8 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <p class="font-semibold text-slate-400">Media Pembelajaran Interaktif CSS</p>
+                <p class="mt-0.5">Topik: Grouping Selector & Targeting Elemen</p>
+            </div>
+            <div class="text-right">
+                <p>Pemrograman Web Dasar</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT LOGIC FOR PLAYGROUND & KUIS -->
+    <script>
+        const inputSelector = document.getElementById('css-selector-input');
+        const targetCountEl = document.getElementById('target-count');
+        const sandboxArea = document.getElementById('sandbox-area');
+
+        // Function to update highlighted elements in sandbox
+        function updateHighlights() {
+            const selectorValue = inputSelector.value.trim();
+
+            // Clear previous target highlights
+            const currentHighlighted = sandboxArea.querySelectorAll('.targeted-element');
+            currentHighlighted.forEach(el => el.classList.remove('targeted-element'));
+
+            if (!selectorValue) {
+                targetCountEl.textContent = '0 Elemen Terpilih';
+                targetCountEl.className = 'text-[11px] bg-slate-800 text-slate-400 font-semibold px-2 py-0.5 rounded-full';
+                return;
+            }
+
+            try {
+                // Query all elements inside sandbox area matching the user selector
+                const matches = sandboxArea.querySelectorAll(selectorValue);
+                
+                matches.forEach(el => {
+                    el.classList.add('targeted-element');
+                });
+
+                targetCountEl.textContent = `${matches.length} Elemen Terpilih`;
+                targetCountEl.className = 'text-[11px] bg-amber-500/20 text-amber-400 font-semibold px-2 py-0.5 rounded-full animate-pulse';
+            } catch (error) {
+                // Invalid CSS selector syntax handling
+                targetCountEl.textContent = 'Syntax Error';
+                targetCountEl.className = 'text-[11px] bg-rose-500/20 text-rose-400 font-semibold px-2 py-0.5 rounded-full';
+            }
+        }
+
+        // Apply preset selector button
+        function applyPreset(selectorStr) {
+            inputSelector.value = selectorStr;
+            updateHighlights();
+        }
+
+        // Event listener for user typing input
+        inputSelector.addEventListener('input', updateHighlights);
+
+        // Initial highlight run on page load
+        window.addEventListener('DOMContentLoaded', updateHighlights);
+
+        // Interactive Quiz Logic
+        function checkAnswer(btnElement, isCorrect) {
+            const parentBlock = btnElement.closest('.grid');
+            const allBtns = parentBlock.querySelectorAll('.quiz-btn');
+
+            // Disable all buttons in this question
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            btnElement.classList.remove('opacity-50');
+
+            if (isCorrect) {
+                btnElement.classList.remove('bg-slate-900', 'border-slate-800');
+                btnElement.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-300', 'font-bold');
+                btnElement.innerHTML += ' <span class="text-emerald-400 ml-2"><i class="fa-solid fa-check"></i> Benar!</span>';
+            } else {
+                btnElement.classList.remove('bg-slate-900', 'border-slate-800');
+                btnElement.classList.add('bg-rose-500/20', 'border-rose-500', 'text-rose-300', 'font-bold');
+                btnElement.innerHTML += ' <span class="text-rose-400 ml-2"><i class="fa-solid fa-xmark"></i> Salah</span>';
+            }
+        }
+    </script>
+</body>
+</html>
