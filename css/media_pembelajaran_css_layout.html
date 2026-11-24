@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Pembelajaran Interaktif: Praktik CSS Layout</title>
+  <!-- Memuat Tailwind CSS untuk styling UI aplikasi -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Memuat Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+  <!-- Toast Notifikasi Salin Kode -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 text-sm font-medium pointer-events-none">
+    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <span id="toast-msg">Kode berhasil disalin!</span>
+  </div>
+
+  <!-- Navigasi Utama -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+          </svg>
+        </div>
+        <div>
+          <span class="font-bold text-slate-900 text-base sm:text-lg tracking-tight block leading-none">CSS Layout Lab</span>
+          <span class="text-xs text-slate-500 hidden sm:inline">Wireframe ke Layout Web</span>
+        </div>
+      </div>
+
+      <!-- Menu Navigasi Desktop & Mobile -->
+      <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto py-1">
+        <a href="#alur" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap">1. Alur Kerja</a>
+        <a href="#sandbox" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap">2. Lab Interaktif</a>
+        <a href="#perbandingan" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap">3. Sebelum vs Sesudah</a>
+        <a href="#checklist" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap">4. Uji DevTools</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section: Gambaran Umum & Konteks -->
+  <section class="bg-gradient-to-b from-indigo-50/80 via-white to-slate-50 border-b border-slate-200/80 pt-10 pb-12 px-4 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+        Modul Praktik Pemrograman Web
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 max-w-3xl leading-tight">
+        Menerjemahkan Wireframe Menjadi Layout Web Modern & Responsif
+      </h1>
+      <p class="text-slate-600 text-base sm:text-lg max-w-3xl mb-6 leading-relaxed">
+        <strong>Prinsip Utama:</strong> Pecah wireframe menjadi kontainer-kontainer utama terlebih dahulu (<code class="bg-slate-200/70 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">header</code>, <code class="bg-slate-200/70 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">nav</code>, <code class="bg-slate-200/70 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">main</code>, <code class="bg-slate-200/70 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">aside</code>, <code class="bg-slate-200/70 text-slate-800 px-1.5 py-0.5 rounded text-sm font-mono">footer</code>) sebelum mengatur detail komponen di dalamnya.
+      </p>
+
+      <!-- Badge Fokus Teknik -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl">
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider block mb-1">Teknik 1</span>
+          <span class="font-bold text-slate-800 text-sm">Box Model</span>
+          <p class="text-xs text-slate-500 font-mono mt-0.5">box-sizing: border-box</p>
+        </div>
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider block mb-1">Teknik 2</span>
+          <span class="font-bold text-slate-800 text-sm">Flexbox (1D)</span>
+          <p class="text-xs text-slate-500 font-mono mt-0.5">display: flex & gap</p>
+        </div>
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-amber-600 uppercase tracking-wider block mb-1">Teknik 3</span>
+          <span class="font-bold text-slate-800 text-sm">CSS Grid (2D)</span>
+          <p class="text-xs text-slate-500 font-mono mt-0.5">grid-template-columns</p>
+        </div>
+        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-rose-600 uppercase tracking-wider block mb-1">Teknik 4</span>
+          <span class="font-bold text-slate-800 text-sm">Responsivitas</span>
+          <p class="text-xs text-slate-500 font-mono mt-0.5">@media (max-width)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Konten Utama -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-16">
+
+    <!-- BAGIAN 1: Alur Menerjemahkan Wireframe (Stepper Interaktif) -->
+    <section id="alur" class="scroll-mt-24">
+      <div class="mb-6">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900">1. Alur Menerjemahkan Wireframe Menjadi Layout Web</h2>
+        <p class="text-slate-600 text-sm sm:text-base mt-1">Klik setiap tahapan di bawah ini untuk melihat aktivitas utama, fokus hasil, dan ilustrasi visual prosesnya.</p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <!-- Tab Navigasi 5 Tahap -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 border-b border-slate-200 bg-slate-50/70" id="step-buttons">
+          <button onclick="selectStep(0)" class="step-btn active text-left p-4 border-b-2 border-indigo-600 bg-white transition focus:outline-none">
+            <span class="text-xs font-bold text-indigo-600 block">Tahap 1</span>
+            <span class="font-semibold text-slate-900 text-sm">Pemetaan Blok</span>
+          </button>
+          <button onclick="selectStep(1)" class="step-btn text-left p-4 border-b-2 border-transparent hover:bg-white/60 transition focus:outline-none">
+            <span class="text-xs font-bold text-slate-400 block">Tahap 2</span>
+            <span class="font-semibold text-slate-700 text-sm">Reset & Box-Sizing</span>
+          </button>
+          <button onclick="selectStep(2)" class="step-btn text-left p-4 border-b-2 border-transparent hover:bg-white/60 transition focus:outline-none">
+            <span class="text-xs font-bold text-slate-400 block">Tahap 3</span>
+            <span class="font-semibold text-slate-700 text-sm">CSS Layout</span>
+          </button>
+          <button onclick="selectStep(3)" class="step-btn text-left p-4 border-b-2 border-transparent hover:bg-white/60 transition focus:outline-none">
+            <span class="text-xs font-bold text-slate-400 block">Tahap 4</span>
+            <span class="font-semibold text-slate-700 text-sm">Responsivitas</span>
+          </button>
+          <button onclick="selectStep(4)" class="step-btn text-left p-4 border-b-2 border-transparent hover:bg-white/60 transition focus:outline-none col-span-2 sm:col-span-1">
+            <span class="text-xs font-bold text-slate-400 block">Tahap 5</span>
+            <span class="font-semibold text-slate-700 text-sm">Pengujian</span>
+          </button>
+        </div>
+
+        <!-- Konten Detail Tahapan -->
+        <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center" id="step-content">
+          <!-- Diisi dinamis oleh JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- BAGIAN 2: Laboratorium Interaktif Fitur CSS Layout -->
+    <section id="sandbox" class="scroll-mt-24 space-y-8">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900">2. Laboratorium Interaktif & Panduan Kode CSS Layout</h2>
+        <p class="text-slate-600 text-sm sm:text-base mt-1">Ubah pengaturan di panel kontrol untuk melihat efek langsung pada elemen HTML serta kode CSS yang dihasilkan.</p>
+      </div>
+
+      <!-- SUB-LAB A: Box Model (content-box vs border-box) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-100 text-indigo-700 text-xs font-bold mb-1">A. Reset & Box Model</span>
+            <h3 class="text-lg font-bold text-slate-900">Perbandingan <code class="font-mono text-indigo-600">content-box</code> vs <code class="font-mono text-indigo-600">border-box</code></h3>
+          </div>
+          <button onclick="copyCode('code-boxmodel')" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Salin CSS
+          </button>
+        </div>
+
+        <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Kontrol Interaktif Box Model -->
+          <div class="lg:col-span-5 space-y-4">
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Secara default, properti <code class="font-mono bg-slate-100 px-1 rounded">width</code> hanya menghitung area konten. Aktifkan <code class="font-mono bg-slate-100 px-1 rounded">border-box</code> agar padding dan border tidak membuat kotak membengkak!
+            </p>
+
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div>
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-2">Mode Box-Sizing</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button id="btn-border-box" onclick="setBoxSizing('border-box')" class="py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-indigo-600 text-white shadow-sm transition">
+                    border-box (Rekomendasi)
+                  </button>
+                  <button id="btn-content-box" onclick="setBoxSizing('content-box')" class="py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition">
+                    content-box (Default)
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium text-slate-700 mb-1">
+                  <span>Padding: <strong id="val-padding" class="font-mono text-indigo-600">20px</strong></span>
+                  <span>Border: <strong id="val-border" class="font-mono text-indigo-600">4px</strong></span>
+                </div>
+                <input type="range" id="range-padding" min="0" max="40" value="20" oninput="updateBoxModel()" class="w-full accent-indigo-600 cursor-pointer">
+                <input type="range" id="range-border" min="0" max="15" value="4" oninput="updateBoxModel()" class="w-full accent-indigo-600 cursor-pointer mt-2">
+              </div>
+            </div>
+
+            <!-- Kode CSS Box Model -->
+            <pre id="code-boxmodel" class="bg-slate-900 text-slate-100 p-4 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed">*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.kotak-ukur {
+  width: 260px;
+  padding: 20px;
+  border: 4px solid #1e293b;
+}</pre>
+          </div>
+
+          <!-- Visualisasi Langsung Box Model -->
+          <div class="lg:col-span-7 bg-slate-100 rounded-xl border border-slate-200 p-6 flex flex-col items-center justify-center min-h-[280px] relative overflow-x-auto">
+            <div class="text-xs font-mono text-slate-500 mb-4 text-center">
+              Target CSS <code class="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-800">width: 260px</code>
+            </div>
+
+            <!-- Penggaris Indikator Lebar -->
+            <div class="w-[260px] border-x-2 border-dashed border-indigo-400 flex justify-between text-[11px] font-mono text-indigo-600 pb-1 mb-1">
+              <span>0px</span>
+              <span>Batas 260px</span>
+            </div>
+
+            <!-- Elemen Kotak Simulasi -->
+            <div id="sim-box" style="box-sizing: border-box; width: 260px; padding: 20px; border: 4px solid #1e293b;" class="bg-amber-100 transition-all duration-200 shadow-md">
+              <div class="bg-indigo-600 text-white p-3 rounded text-center text-xs font-mono">
+                <div class="font-bold">Area Konten</div>
+                <div id="sim-box-info" class="text-[11px] text-indigo-100 mt-1">Total Lebar: 260px (Pas!)</div>
+              </div>
+            </div>
+
+            <div id="sim-box-alert" class="mt-4 px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-medium text-center">
+              Total lebar tetap <strong>260px</strong> sesuai rencana wireframe!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-LAB B: Flexbox (Tata Letak 1 Dimensi) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-bold mb-1">B. Flexbox (display: flex)</span>
+            <h3 class="text-lg font-bold text-slate-900">Tata Letak Satu Dimensi: Navbar & Baris Kartu</h3>
+          </div>
+          <button onclick="copyCode('code-flexbox')" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Salin CSS
+          </button>
+        </div>
+
+        <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Kontrol Flexbox -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div>
+                <label class="text-xs font-bold text-slate-700 block mb-1">justify-content (Sumbu Utama)</label>
+                <select id="flex-justify" onchange="updateFlexbox()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-500">
+                  <option value="space-between" selected>space-between</option>
+                  <option value="flex-start">flex-start</option>
+                  <option value="center">center</option>
+                  <option value="space-around">space-around</option>
+                  <option value="space-evenly">space-evenly</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-slate-700 block mb-1">align-items (Sumbu Silang)</label>
+                <select id="flex-align" onchange="updateFlexbox()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-500">
+                  <option value="center" selected>center</option>
+                  <option value="flex-start">flex-start</option>
+                  <option value="flex-end">flex-end</option>
+                  <option value="stretch">stretch</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">flex-wrap</label>
+                  <select id="flex-wrap" onchange="updateFlexbox()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-800">
+                    <option value="wrap" selected>wrap</option>
+                    <option value="nowrap">nowrap</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-xs font-bold text-slate-700 block mb-1">gap: <span id="val-flex-gap" class="text-indigo-600 font-mono">12px</span></label>
+                  <input type="range" id="flex-gap" min="0" max="32" value="12" oninput="updateFlexbox()" class="w-full accent-emerald-600 mt-2 cursor-pointer">
+                </div>
+              </div>
+            </div>
+
+            <pre id="code-flexbox" class="bg-slate-900 text-slate-100 p-4 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed">.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}</pre>
+          </div>
+
+          <!-- Preview Flexbox -->
+          <div class="lg:col-span-7 bg-slate-100 rounded-xl border border-slate-200 p-5 flex flex-col justify-between gap-5">
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Simulasi .navbar</span>
+              <div id="sim-navbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;" class="bg-white p-3.5 rounded-xl border-2 border-slate-800 shadow-sm min-h-[76px] transition-all">
+                <span class="font-extrabold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-200 text-sm">BrandWeb</span>
+                <div class="flex gap-2 flex-wrap">
+                  <span class="px-3 py-1 bg-slate-100 rounded-md text-xs font-semibold text-slate-700">Beranda</span>
+                  <span class="px-3 py-1 bg-slate-100 rounded-md text-xs font-semibold text-slate-700">Produk</span>
+                  <span class="px-3 py-1 bg-slate-100 rounded-md text-xs font-semibold text-slate-700">Kontak</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Simulasi .card-row (<code class="font-mono text-slate-700">flex: 1 1 140px</code>)</span>
+              <div id="sim-card-row" style="display: flex; flex-wrap: wrap; gap: 12px;" class="bg-white p-3.5 rounded-xl border border-slate-300">
+                <div class="flex-[1_1_140px] bg-emerald-50 border border-emerald-300 text-emerald-900 p-4 rounded-lg text-center text-xs font-bold">Card 1</div>
+                <div class="flex-[1_1_140px] bg-emerald-50 border border-emerald-300 text-emerald-900 p-4 rounded-lg text-center text-xs font-bold">Card 2</div>
+                <div class="flex-[1_1_140px] bg-emerald-50 border border-emerald-300 text-emerald-900 p-4 rounded-lg text-center text-xs font-bold">Card 3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-LAB C: CSS Grid (Tata Letak 2 Dimensi) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-xs font-bold mb-1">C. CSS Grid (display: grid)</span>
+            <h3 class="text-lg font-bold text-slate-900">Membagi Area Halaman: Main Content & Sidebar</h3>
+          </div>
+          <button onclick="copyCode('code-grid')" class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Salin CSS
+          </button>
+        </div>
+
+        <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Kontrol CSS Grid -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div>
+                <label class="text-xs font-bold text-slate-700 block mb-1">grid-template-columns</label>
+                <select id="grid-cols" onchange="updateGrid()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-500">
+                  <option value="3fr 1fr" selected>3fr 1fr (Main 75% + Sidebar 25%)</option>
+                  <option value="2fr 1fr">2fr 1fr (Main 66% + Sidebar 33%)</option>
+                  <option value="1fr 1fr">1fr 1fr (2 Kolom Sama Lebar)</option>
+                  <option value="repeat(3, 1fr)">repeat(3, 1fr) (3 Kolom)</option>
+                  <option value="1fr">1fr (1 Kolom Penuh / Mode Mobile)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-xs font-bold text-slate-700 block mb-1">gap (Jarak Kolom & Baris): <span id="val-grid-gap" class="text-indigo-600 font-mono">16px</span></label>
+                <input type="range" id="grid-gap" min="0" max="32" value="16" oninput="updateGrid()" class="w-full accent-amber-600 cursor-pointer">
+              </div>
+            </div>
+
+            <pre id="code-grid" class="bg-slate-900 text-slate-100 p-4 rounded-xl text-xs font-mono overflow-x-auto leading-relaxed">.layout-utama {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 16px;
+}</pre>
+          </div>
+
+          <!-- Preview CSS Grid -->
+          <div class="lg:col-span-7 bg-slate-100 rounded-xl border border-slate-200 p-5 flex flex-col justify-center">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2">Simulasi .layout-utama</span>
+            <div id="sim-grid" style="display: grid; grid-template-columns: 3fr 1fr; gap: 16px;" class="transition-all">
+              <div class="bg-white border-2 border-slate-800 rounded-xl p-4 shadow-sm">
+                <span class="text-xs font-bold text-indigo-600 font-mono">&lt;main class="konten"&gt;</span>
+                <h4 class="font-bold text-slate-900 text-sm mt-1">Konten Utama</h4>
+                <p class="text-xs text-slate-500 mt-1">Area artikel atau daftar produk utama yang membutuhkan ruang baca luas.</p>
+              </div>
+              <div class="bg-amber-50 border-2 border-amber-500 rounded-xl p-4 shadow-sm">
+                <span class="text-xs font-bold text-amber-700 font-mono">&lt;aside class="sidebar"&gt;</span>
+                <h4 class="font-bold text-slate-900 text-sm mt-1">Sidebar</h4>
+                <p class="text-xs text-slate-600 mt-1">Info tambahan atau tautan cepat.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAGIAN 3: Perbandingan Langsung Sebelum vs Sesudah -->
+    <section id="perbandingan" class="scroll-mt-24">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900">3. Perbandingan Langsung: Sebelum vs. Sesudah CSS Layout</h2>
+          <p class="text-slate-600 text-sm sm:text-base mt-1">Struktur HTML tetap sama, namun penerapan Flexbox, CSS Grid, dan <code class="font-mono text-xs bg-slate-200 px-1.5 py-0.5 rounded">@media</code> mengubah tata letak secara drastis.</p>
+        </div>
+
+        <!-- Kontrol Simulasi Viewport & Kode -->
+        <div class="flex flex-wrap items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm self-start">
+          <button id="btn-view-desktop" onclick="setViewport('desktop')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            Desktop (&gt; 768px)
+          </button>
+          <button id="btn-view-mobile" onclick="setViewport('mobile')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            Mobile (&le; 768px)
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid Perbandingan Split-Screen -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- KIRI: SEBELUM CSS LAYOUT -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 bg-rose-50 border-b border-rose-100 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <h3 class="font-bold text-rose-950 text-sm">Sebelum CSS Layout (Aliran Normal)</h3>
+            </div>
+            <button onclick="toggleSourceCode('before')" class="text-xs font-semibold text-rose-700 hover:text-rose-900 underline">
+              Lihat Kode HTML
+            </button>
+          </div>
+
+          <div class="p-4 bg-slate-100/80 flex-1 flex justify-center overflow-x-auto">
+            <!-- Simulasi Browser Sebelum -->
+            <div id="preview-before" class="w-full transition-all duration-300 bg-white border border-slate-300 rounded-lg p-4 shadow-inner text-slate-900">
+              <div class="border-2 border-slate-700 p-3 mb-2.5 bg-slate-50">
+                <strong class="text-lg">Header</strong>
+              </div>
+              <div class="border-2 border-slate-700 p-3 mb-2.5 bg-slate-50 text-sm space-x-2">
+                <a href="javascript:void(0)" class="text-blue-700 underline">Beranda</a>
+                <a href="javascript:void(0)" class="text-blue-700 underline">Produk</a>
+                <a href="javascript:void(0)" class="text-blue-700 underline">Kontak</a>
+              </div>
+              <div class="border-2 border-slate-700 p-3 mb-2.5 bg-slate-50">
+                <strong class="text-base block mb-1">Konten Utama</strong>
+                <div class="border border-dashed border-slate-500 p-2 mt-2 bg-white text-xs">Card 1</div>
+                <div class="border border-dashed border-slate-500 p-2 mt-2 bg-white text-xs">Card 2</div>
+                <div class="border border-dashed border-slate-500 p-2 mt-2 bg-white text-xs">Card 3</div>
+              </div>
+              <div class="border-2 border-slate-700 p-3 mb-2.5 bg-slate-50">
+                <strong class="text-sm block">Sidebar</strong>
+                <span class="text-xs text-slate-600">Informasi samping menumpuk di bawah.</span>
+              </div>
+              <div class="border-2 border-slate-700 p-3 bg-slate-50 text-xs">
+                Footer
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-600">
+            <strong>Masalah:</strong> Semua elemen blok menumpuk vertikal ke bawah tanpa kolom, area kanan kosong pada layar lebar.
+          </div>
+        </div>
+
+        <!-- KANAN: SESUDAH CSS LAYOUT -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <h3 class="font-bold text-emerald-950 text-sm">Sesudah CSS Layout (Flexbox, Grid & @media)</h3>
+            </div>
+            <button onclick="toggleSourceCode('after')" class="text-xs font-semibold text-emerald-700 hover:text-emerald-900 underline">
+              Lihat Kode HTML
+            </button>
+          </div>
+
+          <div class="p-4 bg-slate-100/80 flex-1 flex justify-center overflow-x-auto">
+            <!-- Simulasi Browser Sesudah -->
+            <div id="preview-after" class="w-full transition-all duration-300 bg-slate-100 border border-slate-300 rounded-lg p-4 shadow-inner text-slate-900">
+              <div class="flex flex-col gap-3">
+                <div class="bg-white border-2 border-slate-800 rounded-md p-3.5">
+                  <strong class="text-lg">Header</strong>
+                </div>
+                <div id="after-nav" class="bg-white border-2 border-slate-800 rounded-md p-3 flex justify-between items-center flex-wrap gap-2">
+                  <div class="flex gap-2 flex-wrap">
+                    <span class="bg-slate-200 text-slate-900 px-3 py-1 rounded text-xs font-bold">Beranda</span>
+                    <span class="bg-slate-200 text-slate-900 px-3 py-1 rounded text-xs font-bold">Produk</span>
+                    <span class="bg-slate-200 text-slate-900 px-3 py-1 rounded text-xs font-bold">Kontak</span>
+                  </div>
+                  <span class="text-[11px] font-mono text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">display: flex</span>
+                </div>
+
+                <!-- Content Grid yang berubah saat toggle Desktop/Mobile -->
+                <div id="after-grid" style="display: grid; grid-template-columns: 3fr 1fr; gap: 12px;">
+                  <div class="bg-white border-2 border-slate-800 rounded-md p-3.5">
+                    <div class="flex items-center justify-between">
+                      <strong class="text-base">Konten Utama</strong>
+                      <span class="text-[10px] font-mono text-slate-400">3fr</span>
+                    </div>
+                    <div class="flex gap-2.5 mt-3 flex-wrap">
+                      <div class="flex-[1_1_90px] border border-slate-400 bg-slate-50 p-3 rounded text-center text-xs font-medium">Card 1</div>
+                      <div class="flex-[1_1_90px] border border-slate-400 bg-slate-50 p-3 rounded text-center text-xs font-medium">Card 2</div>
+                      <div class="flex-[1_1_90px] border border-slate-400 bg-slate-50 p-3 rounded text-center text-xs font-medium">Card 3</div>
+                    </div>
+                  </div>
+                  <div class="bg-white border-2 border-slate-800 rounded-md p-3.5">
+                    <div class="flex items-center justify-between">
+                      <strong class="text-sm">Sidebar</strong>
+                      <span class="text-[10px] font-mono text-slate-400">1fr</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-1.5">Informasi samping.</p>
+                  </div>
+                </div>
+
+                <div class="bg-white border-2 border-slate-800 rounded-md p-3 text-xs font-medium">
+                  Footer
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="after-caption" class="px-4 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-600">
+            <strong>Mode Desktop:</strong> Menggunakan <code class="font-mono text-indigo-600">grid-template-columns: 3fr 1fr</code> sehingga Konten Utama dan Sidebar berdampingan rapi.
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Kode Sumber Lengkap (Tersembunyi secara default, muncul jika diklik) -->
+      <div id="source-code-panel" class="hidden mt-6 bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-lg">
+        <div class="px-5 py-3.5 bg-slate-800/80 border-b border-slate-700 flex items-center justify-between">
+          <span id="source-code-title" class="text-xs font-mono font-bold text-emerald-400">Kode Sumber Lengkap</span>
+          <div class="flex items-center gap-2">
+            <button onclick="copyCode('source-code-content')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition">
+              Salin Kode Lengkap
+            </button>
+            <button onclick="document.getElementById('source-code-panel').classList.add('hidden')" class="px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs transition">
+              Tutup
+            </button>
+          </div>
+        </div>
+        <pre id="source-code-content" class="p-5 text-xs font-mono text-slate-200 overflow-x-auto max-h-96 leading-relaxed"></pre>
+      </div>
+    </section>
+
+    <!-- BAGIAN 4: Checklist Interaktif Pengujian di Browser -->
+    <section id="checklist" class="scroll-mt-24">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">4. Checklist Pengujian Layout di Browser</h2>
+            <p class="text-slate-600 text-sm mt-1">Tandai setiap langkah pengujian di bawah ini setelah Anda mempraktikkannya pada proyek web Anda.</p>
+          </div>
+          <div class="bg-indigo-50 px-4 py-2.5 rounded-xl border border-indigo-100 text-right shrink-0">
+            <span class="text-xs text-indigo-600 font-semibold block">Progres Pengujian</span>
+            <span id="checklist-progress" class="text-lg font-extrabold text-indigo-900">0 / 4 Selesai</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-6">
+          <div id="checklist-bar" class="h-full bg-indigo-600 transition-all duration-300 w-0"></div>
+        </div>
+
+        <!-- Daftar Item Checklist -->
+        <div class="space-y-3" id="checklist-items">
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer transition select-none">
+            <input type="checkbox" onchange="updateChecklist()" class="check-item mt-1 w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+            <div>
+              <span class="font-semibold text-slate-900 text-sm sm:text-base block">1. Aktifkan Inspect / DevTools</span>
+              <span class="text-xs sm:text-sm text-slate-600">Buka halaman di browser dan tekan <kbd class="px-1.5 py-0.5 bg-slate-100 border border-slate-300 rounded text-xs font-mono">F12</kbd> atau klik kanan &rarr; <strong>Inspect</strong> untuk memeriksa kotak elemen (Box Model).</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer transition select-none">
+            <input type="checkbox" onchange="updateChecklist()" class="check-item mt-1 w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+            <div>
+              <span class="font-semibold text-slate-900 text-sm sm:text-base block">2. Uji Mode Desktop & Mobile (&le; 768px)</span>
+              <span class="text-xs sm:text-sm text-slate-600">Gunakan ikon <em>Toggle Device Toolbar</em> di DevTools untuk memastikan kolom berubah menjadi 1 kolom penuh di layar ponsel.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer transition select-none">
+            <input type="checkbox" onchange="updateChecklist()" class="check-item mt-1 w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+            <div>
+              <span class="font-semibold text-slate-900 text-sm sm:text-base block">3. Bebas Horizontal Overflow</span>
+              <span class="text-xs sm:text-sm text-slate-600">Pastikan tidak ada elemen yang melebar keluar batas kontainer atau memunculkan scrollbar horizontal tak terduga.</span>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 cursor-pointer transition select-none">
+            <input type="checkbox" onchange="updateChecklist()" class="check-item mt-1 w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+            <div>
+              <span class="font-semibold text-slate-900 text-sm sm:text-base block">4. Konsistensi Jarak (<code class="font-mono text-xs bg-slate-100 px-1 rounded">gap</code> & <code class="font-mono text-xs bg-slate-100 px-1 rounded">padding</code>)</span>
+              <span class="text-xs sm:text-sm text-slate-600">Periksa keselarasan antar komponen agar jarak ruang putih konsisten dengan rancangan wireframe awal.</span>
+            </div>
+          </label>
+        </div>
+
+        <div id="checklist-complete-banner" class="hidden mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-medium flex items-center gap-3">
+          <svg class="w-6 h-6 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Luar biasa! Semua tahapan pengujian CSS Layout telah terpenuhi dan siap digunakan.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-8 px-4 sm:px-6 mt-12">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-500">
+      <p>Media Pembelajaran Interaktif — <strong>Praktik CSS Layout</strong></p>
+      <p>Fokus: Box Model &bull; Flexbox &bull; CSS Grid &bull; Responsive Design</p>
+    </div>
+  </footer>
+
+  <!-- Logika Interaktif JavaScript -->
+  <script>
+    // Data 5 Tahap Alur Kerja
+    const stepsData = [
+      {
+        title: "Tahap 1: Pemetaan Blok (Wireframe ke HTML Semantik)",
+        activity: "Mengenali zona visual pada wireframe dan memetakannya ke tag atau class HTML yang tepat.",
+        focus: "Struktur kontainer utama jelas (header, nav, main, aside, footer, card) sebelum menulis gaya detail.",
+        visual: `
+          <div class="bg-slate-900 text-slate-100 p-4 rounded-xl font-mono text-xs space-y-2 border border-slate-700">
+            <div class="border border-indigo-400/60 bg-indigo-950/50 p-2 rounded text-indigo-300">&lt;header&gt; Zona Judul &amp; Logo &lt;/header&gt;</div>
+            <div class="border border-emerald-400/60 bg-emerald-950/50 p-2 rounded text-emerald-300">&lt;nav&gt; Zona Navigasi &lt;/nav&gt;</div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="col-span-2 border border-amber-400/60 bg-amber-950/50 p-3 rounded text-amber-300">&lt;main&gt; Konten Utama &lt;/main&gt;</div>
+              <div class="border border-rose-400/60 bg-rose-950/50 p-3 rounded text-rose-300">&lt;aside&gt; Sidebar &lt;/aside&gt;</div>
+            </div>
+            <div class="border border-slate-500 bg-slate-800 p-2 rounded text-slate-300">&lt;footer&gt; Zona Kaki Halaman &lt;/footer&gt;</div>
+          </div>
+        `
+      },
+      {
+        title: "Tahap 2: Reset & Box-Sizing",
+        activity: "Mengatur box-sizing: border-box, menghapus margin/padding bawaan browser yang tidak seragam, dan menetapkan jarak dasar antar blok.",
+        focus: "Ukuran elemen terukur dan konsisten tanpa melebar akibat penambahan padding atau border.",
+        visual: `
+          <div class="bg-slate-900 text-slate-100 p-4 rounded-xl font-mono text-xs leading-relaxed border border-slate-700">
+            <span class="text-slate-400">/* Wajib di awal file CSS */</span><br>
+            <span class="text-amber-300">*, *::before, *::after</span> {<br>
+            &nbsp;&nbsp;<span class="text-sky-300">box-sizing</span>: <span class="text-emerald-300">border-box</span>;<br>
+            &nbsp;&nbsp;<span class="text-sky-300">margin</span>: <span class="text-rose-300">0</span>;<br>
+            &nbsp;&nbsp;<span class="text-sky-300">padding</span>: <span class="text-rose-300">0</span>;<br>
+            }
+          </div>
+        `
+      },
+      {
+        title: "Tahap 3: Penerapan CSS Layout (Flexbox & Grid)",
+        activity: "Menerapkan Flexbox untuk susunan satu dimensi (navbar, deretan kartu) dan CSS Grid untuk pembagian dua dimensi (main + sidebar).",
+        focus: "Susunan elemen presisi sesuai wireframe dengan jarak antar elemen yang rapi menggunakan properti gap.",
+        visual: `
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+            <div class="p-2.5 rounded-lg bg-emerald-100 text-emerald-900 font-medium flex justify-between">
+              <span><strong>Flexbox (1D):</strong> Baris atau Kolom</span>
+              <span class="font-mono">display: flex</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-amber-100 text-amber-900 font-medium flex justify-between">
+              <span><strong>CSS Grid (2D):</strong> Baris &amp; Kolom</span>
+              <span class="font-mono">display: grid</span>
+            </div>
+          </div>
+        `
+      },
+      {
+        title: "Tahap 4: Responsivitas (@media Query)",
+        activity: "Menambahkan aturan media query (@media) untuk menyesuaikan struktur kolom ketika diakses dari layar sempit seperti ponsel.",
+        focus: "Tata letak tetap nyaman dibaca di layar desktop maupun HP tanpa teks terpotong.",
+        visual: `
+          <div class="bg-slate-900 text-slate-100 p-4 rounded-xl font-mono text-xs leading-relaxed border border-slate-700">
+            <span class="text-amber-300">@media (max-width: 768px)</span> {<br>
+            &nbsp;&nbsp;<span class="text-sky-300">.content-grid</span> {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-slate-400">/* Ubah 2 kolom menjadi 1 kolom */</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-sky-300">grid-template-columns</span>: <span class="text-emerald-300">1fr</span>;<br>
+            &nbsp;&nbsp;}<br>
+            }
+          </div>
+        `
+      },
+      {
+        title: "Tahap 5: Pengujian di Browser & DevTools",
+        activity: "Memeriksa tampilan hasil akhir langsung di browser menggunakan Inspect Element (DevTools) pada berbagai ukuran viewport.",
+        focus: "Bebas elemen tumpang tindih (overlap) atau horizontal overflow (scroll ke samping) yang tidak diinginkan.",
+        visual: `
+          <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 text-xs text-indigo-950 space-y-2">
+            <div class="font-bold flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+              Tips Cepat DevTools:
+            </div>
+            <p>Gunakan fitur <strong>Layout Overlay</strong> di tab Elements DevTools untuk melihat garis bantu Grid dan Flexbox secara visual.</p>
+          </div>
+        `
+      }
+    ];
+
+    // Fungsi Pilih Tahap pada Bagian 1
+    function selectStep(index) {
+      const buttons = document.querySelectorAll('.step-btn');
+      buttons.forEach((btn, i) => {
+        const label = btn.querySelector('span:first-child');
+        const title = btn.querySelector('span:last-child');
+        if (i === index) {
+          btn.classList.add('border-indigo-600', 'bg-white');
+          btn.classList.remove('border-transparent');
+          label.classList.replace('text-slate-400', 'text-indigo-600');
+          title.classList.replace('text-slate-700', 'text-slate-900');
+        } else {
+          btn.classList.remove('border-indigo-600', 'bg-white');
+          btn.classList.add('border-transparent');
+          label.classList.replace('text-indigo-600', 'text-slate-400');
+          title.classList.replace('text-slate-900', 'text-slate-700');
+        }
+      });
+
+      const step = stepsData[index];
+      document.getElementById('step-content').innerHTML = `
+        <div class="lg:col-span-7 space-y-3">
+          <h3 class="text-lg sm:text-xl font-bold text-slate-900">${step.title}</h3>
+          <div class="space-y-2 text-sm text-slate-600">
+            <p><strong class="text-slate-800">Aktivitas Utama:</strong> ${step.activity}</p>
+            <p><strong class="text-indigo-700">Fokus Hasil:</strong> ${step.focus}</p>
+          </div>
+        </div>
+        <div class="lg:col-span-5">
+          ${step.visual}
+        </div>
+      `;
+    }
+
+    // Inisialisasi Tahap 1 saat halaman dimuat
+    selectStep(0);
+
+    // State & Fungsi Lab A: Box Model
+    let currentBoxSizing = 'border-box';
+
+    function setBoxSizing(mode) {
+      currentBoxSizing = mode;
+      const btnBorder = document.getElementById('btn-border-box');
+      const btnContent = document.getElementById('btn-content-box');
+
+      if (mode === 'border-box') {
+        btnBorder.className = "py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-indigo-600 text-white shadow-sm transition";
+        btnContent.className = "py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition";
+      } else {
+        btnContent.className = "py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-rose-600 text-white shadow-sm transition";
+        btnBorder.className = "py-2 px-3 rounded-lg text-xs font-mono font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition";
+      }
+      updateBoxModel();
+    }
+
+    function updateBoxModel() {
+      const padding = parseInt(document.getElementById('range-padding').value, 10);
+      const border = parseInt(document.getElementById('range-border').value, 10);
+      const baseWidth = 260;
+
+      document.getElementById('val-padding').textContent = `${padding}px`;
+      document.getElementById('val-border').textContent = `${border}px`;
+
+      const simBox = document.getElementById('sim-box');
+      const simInfo = document.getElementById('sim-box-info');
+      const simAlert = document.getElementById('sim-box-alert');
+
+      simBox.style.boxSizing = currentBoxSizing;
+      simBox.style.padding = `${padding}px`;
+      simBox.style.borderWidth = `${border}px`;
+
+      const totalWidth = currentBoxSizing === 'border-box'
+        ? baseWidth
+        : baseWidth + (padding * 2) + (border * 2);
+
+      if (currentBoxSizing === 'border-box') {
+        simInfo.textContent = `Total Lebar: ${totalWidth}px (Pas!)`;
+        simAlert.className = "mt-4 px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-medium text-center";
+        simAlert.innerHTML = `Total lebar tetap <strong>${totalWidth}px</strong> sesuai rencana wireframe!`;
+      } else {
+        simInfo.textContent = `Total Lebar: ${totalWidth}px (Melebar!)`;
+        simAlert.className = "mt-4 px-3 py-1.5 rounded-lg bg-rose-100 text-rose-800 text-xs font-medium text-center";
+        simAlert.innerHTML = `Membengkak menjadi <strong>${totalWidth}px</strong> (260 + ${padding*2} padding + ${border*2} border)!`;
+      }
+
+      document.getElementById('code-boxmodel').textContent = `*, *::before, *::after {
+  box-sizing: ${currentBoxSizing};
+  margin: 0;
+  padding: 0;
+}
+.kotak-ukur {
+  width: 260px;
+  padding: ${padding}px;
+  border: ${border}px solid #1e293b;
+  /* Total lebar aktual: ${totalWidth}px */
+}`;
+    }
+
+    // Fungsi Lab B: Flexbox
+    function updateFlexbox() {
+      const justify = document.getElementById('flex-justify').value;
+      const align = document.getElementById('flex-align').value;
+      const wrap = document.getElementById('flex-wrap').value;
+      const gap = document.getElementById('flex-gap').value;
+
+      document.getElementById('val-flex-gap').textContent = `${gap}px`;
+
+      const navbar = document.getElementById('sim-navbar');
+      const cardRow = document.getElementById('sim-card-row');
+
+      navbar.style.justifyContent = justify;
+      navbar.style.alignItems = align;
+      navbar.style.flexWrap = wrap;
+      navbar.style.gap = `${gap}px`;
+
+      cardRow.style.gap = `${gap}px`;
+      cardRow.style.flexWrap = wrap;
+
+      document.getElementById('code-flexbox').textContent = `.navbar {
+  display: flex;
+  justify-content: ${justify};
+  align-items: ${align};
+  flex-wrap: ${wrap};
+  gap: ${gap}px;
+}`;
+    }
+
+    // Fungsi Lab C: CSS Grid
+    function updateGrid() {
+      const cols = document.getElementById('grid-cols').value;
+      const gap = document.getElementById('grid-gap').value;
+
+      document.getElementById('val-grid-gap').textContent = `${gap}px`;
+
+      const gridEl = document.getElementById('sim-grid');
+      gridEl.style.gridTemplateColumns = cols;
+      gridEl.style.gap = `${gap}px`;
+
+      document.getElementById('code-grid').textContent = `.layout-utama {
+  display: grid;
+  grid-template-columns: ${cols};
+  gap: ${gap}px;
+}`;
+    }
+
+    // Fungsi Bagian 3: Toggle Viewport Desktop vs Mobile pada Perbandingan
+    function setViewport(mode) {
+      const btnDesktop = document.getElementById('btn-view-desktop');
+      const btnMobile = document.getElementById('btn-view-mobile');
+      const previewBefore = document.getElementById('preview-before');
+      const previewAfter = document.getElementById('preview-after');
+      const afterGrid = document.getElementById('after-grid');
+      const afterCaption = document.getElementById('after-caption');
+
+      if (mode === 'desktop') {
+        btnDesktop.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition";
+        btnMobile.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 transition";
+
+        previewBefore.style.maxWidth = "100%";
+        previewAfter.style.maxWidth = "100%";
+        afterGrid.style.gridTemplateColumns = "3fr 1fr";
+        afterCaption.innerHTML = `<strong>Mode Desktop:</strong> Menggunakan <code class="font-mono text-indigo-600">grid-template-columns: 3fr 1fr</code> sehingga Konten Utama dan Sidebar berdampingan rapi.`;
+      } else {
+        btnMobile.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white flex items-center gap-1.5 transition";
+        btnDesktop.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 transition";
+
+        previewBefore.style.maxWidth = "340px";
+        previewAfter.style.maxWidth = "340px";
+        afterGrid.style.gridTemplateColumns = "1fr";
+        afterCaption.innerHTML = `<strong>Mode Mobile (&le; 768px):</strong> Aturan <code class="font-mono text-indigo-600">@media (max-width: 768px)</code> mengubah grid menjadi <code class="font-mono text-indigo-600">1fr</code> agar nyaman dibaca di layar HP.`;
+      }
+    }
+
+    // Kode Lengkap Sebelum vs Sesudah untuk Panel Source Code
+    const fullCodeBefore = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebelum CSS Layout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 16px;
+    }
+    header, nav, main, aside, footer {
+      border: 2px solid #334155;
+      padding: 14px;
+      margin-bottom: 10px;
+      background-color: #f8fafc;
+    }
+    .card {
+      border: 1px dashed #64748b;
+      padding: 10px;
+      margin-top: 8px;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <header><h1>Header</h1></header>
+  <nav>
+    <a href="#">Beranda</a>
+    <a href="#">Produk</a>
+    <a href="#">Kontak</a>
+  </nav>
+  <main>
+    <h2>Konten Utama</h2>
+    <div class="card">Card 1</div>
+    <div class="card">Card 2</div>
+    <div class="card">Card 3</div>
+  </main>
+  <aside>
+    <h3>Sidebar</h3>
+    <p>Informasi samping.</p>
+  </aside>
+  <footer><p>Footer</p></footer>
+</body>
+</html>`;
+
+    const fullCodeAfter = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesudah CSS Layout</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      padding: 16px;
+      color: #0f172a;
+    }
+    .page-wrapper {
+      max-width: 1020px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    header, nav, main, aside, footer {
+      background-color: #ffffff;
+      border: 2px solid #1e293b;
+      border-radius: 6px;
+      padding: 16px;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #0f172a;
+      background-color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 12px;
+    }
+    .card-list {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1 1 150px;
+      border: 1px solid #94a3b8;
+      background-color: #f8fafc;
+      padding: 14px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header><h1>Header</h1></header>
+    <nav>
+      <a href="#">Beranda</a>
+      <a href="#">Produk</a>
+      <a href="#">Kontak</a>
+    </nav>
+    <div class="content-grid">
+      <main>
+        <h2>Konten Utama</h2>
+        <div class="card-list">
+          <div class="card">Card 1</div>
+          <div class="card">Card 2</div>
+          <div class="card">Card 3</div>
+        </div>
+      </main>
+      <aside>
+        <h3>Sidebar</h3>
+        <p>Informasi samping.</p>
+      </aside>
+    </div>
+    <footer><p>Footer</p></footer>
+  </div>
+</body>
+</html>`;
+
+    function toggleSourceCode(type) {
+      const panel = document.getElementById('source-code-panel');
+      const title = document.getElementById('source-code-title');
+      const content = document.getElementById('source-code-content');
+
+      panel.classList.remove('hidden');
+      if (type === 'before') {
+        title.textContent = "Kode HTML Lengkap: Sebelum CSS Layout";
+        title.className = "text-xs font-mono font-bold text-rose-400";
+        content.textContent = fullCodeBefore;
+      } else {
+        title.textContent = "Kode HTML Lengkap: Sesudah CSS Layout (Flexbox, Grid & @media)";
+        title.className = "text-xs font-mono font-bold text-emerald-400";
+        content.textContent = fullCodeAfter;
+      }
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Fungsi Salin Kode ke Clipboard (Menggunakan textarea sementara + execCommand agar kompatibel di semua iframe)
+    function copyCode(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Kode berhasil disalin ke clipboard!');
+      } catch (err) {
+        showToast('Gagal menyalin kode.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Fungsi Bagian 4: Checklist Pengujian
+    function updateChecklist() {
+      const checkboxes = document.querySelectorAll('.check-item');
+      const total = checkboxes.length;
+      let checked = 0;
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) checked++;
+      });
+
+      const percent = Math.round((checked / total) * 100);
+      document.getElementById('checklist-progress').textContent = `${checked} / ${total} Selesai`;
+      document.getElementById('checklist-bar').style.width = `${percent}%`;
+
+      const banner = document.getElementById('checklist-complete-banner');
+      if (checked === total) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
